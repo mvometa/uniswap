@@ -1,6 +1,7 @@
 import React from 'react';
 import { Field, FieldMetaState, Form } from 'react-final-form';
 import Button from '../button/button';
+import downArrow from './down-arrow.svg';
 
 import './swapForm.scss';
 import validate from './validate';
@@ -35,6 +36,9 @@ const SwapForm = ():React.ReactElement => {
                 </label>
               )}
             </Field>
+            <div className="swap-form__arrow">
+              <img className="swap-form__arrow-down" src={downArrow} alt="arrow down" />
+            </div>
             <Field name="toToken">
               {({ input, meta }) => (
                 <label className="swap-form__label">

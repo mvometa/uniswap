@@ -10,4 +10,11 @@
     max-width: 200px;
     height: 40px;
   }
+
+}
+
+@media (max-width:520px) {
+  .header .navbar{
+    display: none;
+  }
 }
