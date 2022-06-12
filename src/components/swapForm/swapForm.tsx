@@ -1,4 +1,5 @@
 import React from 'react';
+import { ethers } from 'ethers';
 import { Field, FieldMetaState, Form } from 'react-final-form';
 
 import Button from '../button/button';
@@ -7,10 +8,26 @@ import downArrow from './down-arrow.svg';
 import './swapForm.scss';
 import FormData from './Types';
 import validate from './validate';
+import getBalance from '../../utils/balance';
+
+declare global {
+  interface Window {
+    ethereum: any;
+  }
+}
 
 const SwapForm = ():React.ReactElement => {
-  const handleFormSubmit = (data:FormData) => {
+  const handleFormSubmit = async (data:FormData) => {
     console.log(data);
+    if (typeof window.ethereum !== undefined) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send('eth_requestAccounts', []);
+      const balance = await provider.getBalance('0xA2be0e1dFC02ce398e1Cf0D7c94fE058586F5CF0');
+      console.log(balance);
+      console.log(getBalance(balance));
+    } else {
+      window.alert('Установите Metamask');
+    }
   };
 
   const validationBlock = (meta: FieldMetaState<number>) => (
