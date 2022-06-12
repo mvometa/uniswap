@@ -9,7 +9,7 @@ const validate = (values: FormData): Record<string, string> => {
 
   REQUIRED_FIELDS.forEach((field) => {
     if (values[field] === undefined) {
-      errors[field] = 'This field is required to be filled in';
+      errors[field] = 'Пожалуйста заполните поле';
     }
   });
 

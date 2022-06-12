@@ -1,20 +1,22 @@
 import React from 'react';
 import { Field, FieldMetaState, Form } from 'react-final-form';
-import Button from '../button/button';
-import downArrow from './down-arrow.svg';
 
+import Button from '../button/button';
+
+import downArrow from './down-arrow.svg';
 import './swapForm.scss';
+import FormData from './Types';
 import validate from './validate';
 
 const SwapForm = ():React.ReactElement => {
-  const handleFormSubmit = () => {
-    console.log('submit');
+  const handleFormSubmit = (data:FormData) => {
+    console.log(data);
   };
 
-  const validationBlock = (meta: FieldMetaState<unknown>) => (
+  const validationBlock = (meta: FieldMetaState<number>) => (
     meta.error
     && meta.touched
-    && <span className="error-form">{meta.error}</span>
+    && <span className="swap-form__error">{meta.error}</span>
   );
 
   return (

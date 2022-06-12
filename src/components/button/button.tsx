@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
+
 import './button.scss';
 import { ButtonProps } from './types';
 

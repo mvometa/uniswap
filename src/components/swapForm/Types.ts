@@ -1,6 +1,6 @@
 type FormData = {
-  fromToken: string;
-  toToken: string;
+  fromToken: number;
+  toToken: number;
 };
 
 type FormKey =

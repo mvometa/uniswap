@@ -1,5 +1,7 @@
 import { FC } from 'react';
+
 import Button from '../button/button';
+
 import './navbar.scss';
 import { NavBarPropsType } from './types';
 
