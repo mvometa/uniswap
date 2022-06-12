@@ -1,0 +1,40 @@
+@import '../../styles/vars.scss';
+
+.button {
+  user-select: none;
+  cursor: pointer;
+  font-size: 1rem;
+  height: 100%;
+  max-height: 70px;
+  
+  &_type_base {
+    font-weight: 500;
+    border-radius: 20px;
+    background-color: $button-base-background-color;
+    color: $button-base-text-color;
+    font-weight: 500;
+    padding: 16px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &_type_base:hover{
+    background-color: $button-base-background-color-hover;
+  }
+
+  &_type_link{
+    border-radius: 14px;
+    background-color: $html-background-color;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 8px;
+    word-break: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}

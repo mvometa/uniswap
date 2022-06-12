@@ -1,20 +1,12 @@
 import { FC } from 'react';
+import Button from '../button/button';
 import './navbar.scss';
 import { NavBarPropsType } from './types';
 
-const NavBar:FC<NavBarPropsType> = (props) => {
-  const { swapCallback } = props;
-
-  return (
-    <nav className="navbar">
-      <button
-        type="button"
-        onPointerDown={swapCallback}
-      >
-        Обменять
-      </button>
-    </nav>
-  );
-};
+const NavBar:FC<NavBarPropsType> = () => (
+  <nav className="navbar">
+    <Button text="Обменять" type="button" link="/" />
+  </nav>
+);
 
 export default NavBar;

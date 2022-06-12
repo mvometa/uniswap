@@ -1,6 +1,6 @@
-import Header from './components/header/header';
+import Header from '../components/header/header';
 
-const Uniswap = ():JSX.Element => (
+const Swap = ():JSX.Element => (
   <>
     <div className="uniswap">
       <Header />
@@ -9,4 +9,4 @@ const Uniswap = ():JSX.Element => (
   </>
 );
 
-export default Uniswap;
+export default Swap;

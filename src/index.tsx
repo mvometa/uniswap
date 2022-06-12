@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import './index.scss';
-import Uniswap from './Uniswap';
+import RoutesSwitcher from './routes/routes';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -10,6 +10,6 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <Uniswap />
+    <RoutesSwitcher />
   </React.StrictMode>,
 );
