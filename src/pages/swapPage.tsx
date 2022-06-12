@@ -2,14 +2,16 @@ import Footer from '../components/footer/footer';
 import Header from '../components/header/header';
 import SwapForm from '../components/swapForm/swapForm';
 
+import './swapPage.scss';
+
 const SwapPage = ():JSX.Element => (
   <>
-    <div className="uniswap">
-      <Header />
+    <Header />
+    <main className="uniswap">
       <SwapForm />
-      <Footer />
-    </div>
+    </main>
     <div id="background-radial-gradient" />
+    <Footer />
   </>
 );
 
