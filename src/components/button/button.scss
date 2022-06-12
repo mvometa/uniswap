@@ -21,11 +21,11 @@
     align-items: center;
   }
 
-  &_type_base:hover{
+  &_type_base:hover {
     background-color: $button-base-background-color-hover;
   }
 
-  &_type_link{
+  &_type_link {
     border-radius: 14px;
     background-color: $html-background-color;
     color: white;

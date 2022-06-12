@@ -4,4 +4,4 @@ export type ButtonProps = {
   isDisabled?: boolean;
   link?: string;
   onPointerDown?: ()=>void;
-};
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;

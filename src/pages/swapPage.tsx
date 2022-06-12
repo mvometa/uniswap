@@ -1,12 +1,14 @@
 import Header from '../components/header/header';
+import SwapForm from '../components/swapForm/swapForm';
 
-const Swap = ():JSX.Element => (
+const SwapPage = ():JSX.Element => (
   <>
     <div className="uniswap">
       <Header />
+      <SwapForm />
     </div>
     <div id="background-radial-gradient" />
   </>
 );
 
-export default Swap;
+export default SwapPage;

@@ -3,12 +3,12 @@ import {
   Routes,
   BrowserRouter,
 } from 'react-router-dom';
-import Swap from '../pages/Swap';
+import SwapPage from '../pages/swapPage';
 
 const RoutesSwitcher = ():JSX.Element => (
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Swap />} />
+      <Route path="/" element={<SwapPage />} />
     </Routes>
   </BrowserRouter>
 );
