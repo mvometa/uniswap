@@ -1,15 +1,14 @@
 import React from 'react';
-import { ethers } from 'ethers';
 import { Field, FieldMetaState, Form } from 'react-final-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../button/button';
+import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 
 import downArrow from './down-arrow.svg';
 import './swapForm.scss';
 import validate from './validate';
-import getBalance from '../../utils/balance';
-import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
+import { RootState } from '../../store/store';
 
 declare global {
   interface Window {
@@ -21,19 +20,20 @@ declare global {
 const SwapForm = ():React.ReactElement => {
   const dispatch = useDispatch();
 
+  const {
+    success,
+  } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
+
   const handleFormSubmit = async () => {
-    dispatch(submitConnectWalletForm());
-    if (typeof window.ethereum !== undefined) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send('eth_requestAccounts', []);
-      const balance = await provider.getBalance('0xA2be0e1dFC02ce398e1Cf0D7c94fE058586F5CF0');
-      console.log(balance);
-      console.log(getBalance(balance));
-    } else {
-      // eslint-disable-next-line no-alert
-      window.alert('Установите Metamask');
-    }
   };
+
+  const handleConnectWallet = async () => {
+    dispatch(submitConnectWalletForm(true));
+  };
+
+  const formButton = success
+    ? <Button type="submit" text="Поменять пару" />
+    : <Button type="button" text="Подключить кошелек" onPointerDown={handleConnectWallet} />;
 
   const validationBlock = (meta: FieldMetaState<number>) => (
     meta.error
@@ -82,7 +82,7 @@ const SwapForm = ():React.ReactElement => {
             >
               Error.
             </span>
-            <Button type="submit" text="Подключить кошелек" />
+            {formButton}
           </form>
         )}
       </Form>

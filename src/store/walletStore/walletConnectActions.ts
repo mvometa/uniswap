@@ -3,8 +3,9 @@ import { AnyAction } from 'redux';
 import {
   SET_CONNECT_WALLET_ERROR,
   SET_CONNECT_WALLET_SUCCESS,
-  SUBMIT_CONNECT_WALLET_FORM,
+  SUBMIT_CONNECT_WALLET,
   SET_CONNECT_WALLET_SUBMITTING,
+  SET_WALLET_BALANCE,
 } from './Types';
 
 const setSubmitting = (payload: boolean): AnyAction => ({
@@ -12,8 +13,8 @@ const setSubmitting = (payload: boolean): AnyAction => ({
   payload,
 });
 
-const submitConnectWalletForm = (payload: void): AnyAction => ({
-  type: SUBMIT_CONNECT_WALLET_FORM,
+const submitConnectWalletForm = (payload: boolean): AnyAction => ({
+  type: SUBMIT_CONNECT_WALLET,
   payload,
 });
 
@@ -27,9 +28,15 @@ const setSuccess = (payload: boolean): AnyAction => ({
   payload,
 });
 
+const setWalletBalance = (payload: string): AnyAction => ({
+  type: SET_WALLET_BALANCE,
+  payload,
+});
+
 export {
   setSubmitting,
   submitConnectWalletForm,
   setError,
   setSuccess,
+  setWalletBalance,
 };

@@ -10,6 +10,7 @@ const Button:FC<ButtonProps> = (props) => {
     type,
     link,
     isDisabled,
+    onPointerDown,
   } = props;
   const btnClassName = `button ${link === undefined ? 'button_type_base' : 'button_type_link'}`;
   return link === undefined
@@ -18,6 +19,7 @@ const Button:FC<ButtonProps> = (props) => {
         className={btnClassName}
         disabled={isDisabled}
         type={type === 'button' ? 'button' : 'submit'}
+        onPointerDown={onPointerDown}
       >
         {text}
       </button>

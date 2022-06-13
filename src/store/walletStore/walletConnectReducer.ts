@@ -3,15 +3,16 @@ import { AnyAction } from 'redux';
 import WalletConnectionState, {
   SET_CONNECT_WALLET_ERROR,
   SET_CONNECT_WALLET_SUCCESS,
-  SUBMIT_CONNECT_WALLET_FORM,
+  SUBMIT_CONNECT_WALLET,
   SET_CONNECT_WALLET_SUBMITTING,
+  SET_WALLET_BALANCE,
 } from './Types';
 
 const initialState: WalletConnectionState = {
   submitting: false,
   error: false,
   success: false,
-  connected: false,
+  balance: '',
 };
 
 const WalletConnectReducer = (
@@ -25,6 +26,11 @@ const WalletConnectReducer = (
         ...state,
         error: action.payload,
       };
+    case SET_WALLET_BALANCE:
+      return {
+        ...state,
+        balance: action.payload,
+      };
     case SET_CONNECT_WALLET_SUBMITTING:
       return {
         ...state,
@@ -35,9 +41,10 @@ const WalletConnectReducer = (
         ...state,
         success: action.payload,
       };
-    case SUBMIT_CONNECT_WALLET_FORM:
+    case SUBMIT_CONNECT_WALLET:
       return {
         ...state,
+        submitting: action.payload,
       };
     default:
       return state;
