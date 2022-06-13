@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+
+import store from './store/store';
 
 import './index.scss';
 import RoutesSwitcher from './routes/routes';
@@ -10,6 +13,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <RoutesSwitcher />
+    <Provider store={store}>
+      <RoutesSwitcher />
+    </Provider>
   </React.StrictMode>,
 );

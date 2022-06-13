@@ -1,0 +1,19 @@
+const SET_CONNECT_WALLET_SUBMITTING = 'SET_CONNECT_WALLET_SUBMITTING';
+const SUBMIT_CONNECT_WALLET_FORM = 'SUBMIT_CONNECT_WALLET_FORM';
+const SET_CONNECT_WALLET_ERROR = 'SET_CONNECT_WALLET_ERROR';
+const SET_CONNECT_WALLET_SUCCESS = 'SET_CONNECT_WALLET_SUCCESS';
+
+type WalletConnectionState = {
+  submitting: boolean;
+  error: boolean;
+  success:boolean;
+  connected:boolean;
+};
+
+export default WalletConnectionState;
+export {
+  SET_CONNECT_WALLET_ERROR,
+  SET_CONNECT_WALLET_SUCCESS,
+  SUBMIT_CONNECT_WALLET_FORM,
+  SET_CONNECT_WALLET_SUBMITTING,
+};

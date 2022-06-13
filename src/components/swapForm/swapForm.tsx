@@ -1,24 +1,28 @@
 import React from 'react';
 import { ethers } from 'ethers';
 import { Field, FieldMetaState, Form } from 'react-final-form';
+import { useDispatch } from 'react-redux';
 
 import Button from '../button/button';
 
 import downArrow from './down-arrow.svg';
 import './swapForm.scss';
-import FormData from './Types';
 import validate from './validate';
 import getBalance from '../../utils/balance';
+import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 
 declare global {
   interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ethereum: any;
   }
 }
 
 const SwapForm = ():React.ReactElement => {
-  const handleFormSubmit = async (data:FormData) => {
-    console.log(data);
+  const dispatch = useDispatch();
+
+  const handleFormSubmit = async () => {
+    dispatch(submitConnectWalletForm());
     if (typeof window.ethereum !== undefined) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send('eth_requestAccounts', []);
@@ -26,6 +30,7 @@ const SwapForm = ():React.ReactElement => {
       console.log(balance);
       console.log(getBalance(balance));
     } else {
+      // eslint-disable-next-line no-alert
       window.alert('Установите Metamask');
     }
   };
