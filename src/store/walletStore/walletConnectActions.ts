@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 import { AnyAction } from 'redux';
 
 import {
@@ -6,6 +7,8 @@ import {
   SUBMIT_CONNECT_WALLET,
   SET_CONNECT_WALLET_SUBMITTING,
   SET_WALLET_BALANCE,
+  SET_WALLET_PROVIDER,
+  SET_WALLET_SIGNER,
 } from './Types';
 
 const setSubmitting = (payload: boolean): AnyAction => ({
@@ -28,6 +31,16 @@ const setSuccess = (payload: boolean): AnyAction => ({
   payload,
 });
 
+const setWalletProvider = (payload: ethers.providers.Web3Provider): AnyAction => ({
+  type: SET_WALLET_PROVIDER,
+  payload,
+});
+
+const setWalletSigner = (payload: ethers.providers.JsonRpcSigner): AnyAction => ({
+  type: SET_WALLET_SIGNER,
+  payload,
+});
+
 const setWalletBalance = (payload: string): AnyAction => ({
   type: SET_WALLET_BALANCE,
   payload,
@@ -39,4 +52,6 @@ export {
   setError,
   setSuccess,
   setWalletBalance,
+  setWalletProvider,
+  setWalletSigner,
 };

@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-type EthersProviders = {
+export type EthersProviders = {
   provider: ethers.providers.Web3Provider;
   signer: ethers.providers.JsonRpcSigner;
 };

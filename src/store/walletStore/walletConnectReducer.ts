@@ -6,6 +6,8 @@ import WalletConnectionState, {
   SUBMIT_CONNECT_WALLET,
   SET_CONNECT_WALLET_SUBMITTING,
   SET_WALLET_BALANCE,
+  SET_WALLET_PROVIDER,
+  SET_WALLET_SIGNER,
 } from './Types';
 
 const initialState: WalletConnectionState = {
@@ -13,6 +15,8 @@ const initialState: WalletConnectionState = {
   error: false,
   success: false,
   balance: '',
+  provider: null,
+  signer: null,
 };
 
 const WalletConnectReducer = (
@@ -25,6 +29,16 @@ const WalletConnectReducer = (
       return {
         ...state,
         error: action.payload,
+      };
+    case SET_WALLET_PROVIDER:
+      return {
+        ...state,
+        provider: action.payload,
+      };
+    case SET_WALLET_SIGNER:
+      return {
+        ...state,
+        signer: action.payload,
       };
     case SET_WALLET_BALANCE:
       return {
