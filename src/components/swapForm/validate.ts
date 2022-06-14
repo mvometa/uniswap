@@ -5,7 +5,12 @@ const validate = (values: FormData): Record<string, string> => {
   const REQUIRED_FIELDS: FormKey[] = [
     'fromToken',
     'toToken',
+    'slippage',
   ];
+
+  if (values.slippage && values.slippage > 50) {
+    errors.slippage = 'Проскальзывание не может быть больше 50%';
+  }
 
   REQUIRED_FIELDS.forEach((field) => {
     if (values[field] === undefined) {

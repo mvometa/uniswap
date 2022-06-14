@@ -76,6 +76,21 @@ const SwapForm = ():React.ReactElement => {
                 </label>
               )}
             </Field>
+            <Field name="slippage">
+              {({ input, meta }) => (
+                <label className="swap-form__label">
+                  Введите проскальзывание в %:
+                  <input
+                    className="swap-form__input"
+                    {...input}
+                    type="text"
+                    defaultValue={0.10}
+                    placeholder="0.10"
+                  />
+                  {validationBlock(meta)}
+                </label>
+              )}
+            </Field>
             <span
               className="swap-form__error"
               style={false ? { display: 'block' } : { display: 'none' }}

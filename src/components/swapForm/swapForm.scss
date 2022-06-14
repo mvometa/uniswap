@@ -22,7 +22,9 @@
     background-color: rgb(44, 47, 54);
     z-index: 1;
     width: 100%;
-    height: 72px;
+    min-height: 72px;
+    color: white;
+    text-align: center;
   }
 
   &__input {
@@ -42,7 +44,7 @@
   &__form {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 24px;
     align-items: center;
   }
 
