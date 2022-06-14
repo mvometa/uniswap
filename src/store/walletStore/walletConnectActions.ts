@@ -9,10 +9,16 @@ import {
   SET_WALLET_BALANCE,
   SET_WALLET_PROVIDER,
   SET_WALLET_SIGNER,
+  SET_WALLET_ADRESS,
 } from './Types';
 
 const setSubmitting = (payload: boolean): AnyAction => ({
   type: SET_CONNECT_WALLET_SUBMITTING,
+  payload,
+});
+
+const setWalletAdress = (payload: number): AnyAction => ({
+  type: SET_WALLET_ADRESS,
   payload,
 });
 
@@ -54,4 +60,5 @@ export {
   setWalletBalance,
   setWalletProvider,
   setWalletSigner,
+  setWalletAdress,
 };

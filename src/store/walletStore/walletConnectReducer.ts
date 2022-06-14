@@ -8,6 +8,7 @@ import WalletConnectionState, {
   SET_WALLET_BALANCE,
   SET_WALLET_PROVIDER,
   SET_WALLET_SIGNER,
+  SET_WALLET_ADRESS,
 } from './Types';
 
 const initialState: WalletConnectionState = {
@@ -17,6 +18,7 @@ const initialState: WalletConnectionState = {
   balance: '',
   provider: null,
   signer: null,
+  adress: 0,
 };
 
 const WalletConnectReducer = (
@@ -29,6 +31,11 @@ const WalletConnectReducer = (
       return {
         ...state,
         error: action.payload,
+      };
+    case SET_WALLET_ADRESS:
+      return {
+        ...state,
+        adress: action.payload,
       };
     case SET_WALLET_PROVIDER:
       return {

@@ -7,12 +7,14 @@ const SET_CONNECT_WALLET_SUCCESS = 'SET_CONNECT_WALLET_SUCCESS';
 const SET_WALLET_BALANCE = 'SET_WALLET_BALANCE';
 const SET_WALLET_PROVIDER = 'SET_WALLET_PROVIDER';
 const SET_WALLET_SIGNER = 'SET_WALLET_SIGNER';
+const SET_WALLET_ADRESS = 'SET_WALLET_ADRESS';
 
 type WalletConnectionState = {
   submitting: boolean;
   error: boolean;
   success:boolean;
   balance: string;
+  adress: number;
   provider: ethers.providers.Web3Provider | null;
   signer: ethers.providers.JsonRpcSigner | null;
 };
@@ -26,4 +28,5 @@ export {
   SET_WALLET_BALANCE,
   SET_WALLET_PROVIDER,
   SET_WALLET_SIGNER,
+  SET_WALLET_ADRESS,
 };
