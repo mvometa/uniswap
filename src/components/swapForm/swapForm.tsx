@@ -7,7 +7,7 @@ import { submitConnectWalletForm } from '../../store/walletStore/walletConnectAc
 
 import downArrow from './down-arrow.svg';
 import './swapForm.scss';
-import validate, { userRoles } from './validate';
+import validate from './validate';
 import { RootState } from '../../store/store';
 import SelectAdapter from '../selectAdapter/selectAdapter';
 import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
@@ -24,6 +24,7 @@ const SwapForm = ():React.ReactElement => {
 
   const {
     success,
+    tokenLabels,
   } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
 
   const handleFormSubmit = async () => {
@@ -65,7 +66,7 @@ const SwapForm = ():React.ReactElement => {
                 <Field
                   name="fromTokenLabel"
                   component={SelectAdapter}
-                  options={userRoles}
+                  options={tokenLabels}
                 />
               </div>
             </div>
@@ -88,7 +89,7 @@ const SwapForm = ():React.ReactElement => {
                 <Field
                   name="toTokenLabel"
                   component={SelectAdapter}
-                  options={userRoles}
+                  options={tokenLabels}
                 />
               </div>
             </div>

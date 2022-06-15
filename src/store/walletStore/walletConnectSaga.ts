@@ -4,21 +4,22 @@ import {
   setError,
   setSubmitting,
   setSuccess,
+  setTokenLabels,
   setWalletAdress,
   setWalletProvider,
   setWalletSigner,
 } from './walletConnectActions';
 import {
-  SUBMIT_CONNECT_WALLET,
+  SUBMIT_CONNECT_WALLET, TokenLabel,
 } from './Types';
 
 import connectMetaMask, { EthersProviders } from '../../api/connectMetaMask';
+import { tokens } from '../../utils/tokenConstants';
+import getNameOfToken from '../../api/tokenName';
 
 function* workerConnectWalletSaga() {
   yield put(setSubmitting(true));
   const result: Error & EthersProviders = yield call(async () => connectMetaMask());
-  // const res = connectMetaMask().then((result) => result).catch((error) => error);
-  console.log(result);
   if (result.constructor.name === 'Error') {
     yield put(setError(true));
     yield put(setSuccess(false));
@@ -28,7 +29,13 @@ function* workerConnectWalletSaga() {
     yield put(setWalletSigner(result.signer));
     yield put(setError(false));
     const adress: string = yield call(async () => result.signer.getAddress());
-    console.log(adress);
+    const temp:Array<TokenLabel> = [];
+    console.log(`adress= ${adress}`);
+    tokens.forEach(async (tokenAdress) => {
+      const tokenName = await getNameOfToken(tokenAdress, result.provider);
+      temp.push({ value: tokenName, label: tokenName });
+    });
+    yield put(setTokenLabels(temp));
     yield put(setWalletAdress(adress));
   }
   yield put(setSubmitting(false));

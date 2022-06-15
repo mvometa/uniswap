@@ -10,6 +10,8 @@ import {
   SET_WALLET_PROVIDER,
   SET_WALLET_SIGNER,
   SET_WALLET_ADRESS,
+  TokenLabel,
+  SET_WALLET_TOKEN_LABELS,
 } from './Types';
 
 const setSubmitting = (payload: boolean): AnyAction => ({
@@ -19,6 +21,11 @@ const setSubmitting = (payload: boolean): AnyAction => ({
 
 const setWalletAdress = (payload: string): AnyAction => ({
   type: SET_WALLET_ADRESS,
+  payload,
+});
+
+const setTokenLabels = (payload: Array<TokenLabel>): AnyAction => ({
+  type: SET_WALLET_TOKEN_LABELS,
   payload,
 });
 
@@ -61,4 +68,5 @@ export {
   setWalletProvider,
   setWalletSigner,
   setWalletAdress,
+  setTokenLabels,
 };

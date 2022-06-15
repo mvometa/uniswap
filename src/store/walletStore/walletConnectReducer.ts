@@ -9,6 +9,7 @@ import WalletConnectionState, {
   SET_WALLET_PROVIDER,
   SET_WALLET_SIGNER,
   SET_WALLET_ADRESS,
+  SET_WALLET_TOKEN_LABELS,
 } from './Types';
 
 const initialState: WalletConnectionState = {
@@ -19,8 +20,7 @@ const initialState: WalletConnectionState = {
   provider: undefined,
   signer: undefined,
   adress: 0,
-  tokensBalance: undefined,
-  tokensName: undefined,
+  tokenLabels: [],
 };
 
 const WalletConnectReducer = (
@@ -38,6 +38,11 @@ const WalletConnectReducer = (
       return {
         ...state,
         adress: action.payload,
+      };
+    case SET_WALLET_TOKEN_LABELS:
+      return {
+        ...state,
+        tokenLabels: action.payload,
       };
     case SET_WALLET_PROVIDER:
       return {

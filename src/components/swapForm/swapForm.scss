@@ -18,12 +18,17 @@
     position: relative;
     width: 100%;
 
+    .select-wrapper:first-child {
+      z-index: 6;
+    }
+
     .select-wrapper {
       position: absolute;
       right: 10px;
       top: 20%;
       z-index: 5;
     }
+
   }
 
   &__label {
