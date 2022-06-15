@@ -288,5 +288,3 @@ export const CONTRACT_ABI_ERC20 = [
     type: 'function',
   },
 ];
-
-export default adresses;

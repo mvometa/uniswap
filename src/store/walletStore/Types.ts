@@ -17,6 +17,8 @@ type WalletConnectionState = {
   adress: number;
   provider: ethers.providers.Web3Provider | undefined;
   signer: ethers.providers.JsonRpcSigner | undefined;
+  tokensName:[] | undefined;
+  tokensBalance:[] | undefined;
 };
 
 export default WalletConnectionState;

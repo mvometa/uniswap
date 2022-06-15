@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import getBalance, { getBalanceOfToken } from '../../api/getBalance';
+import getBalance, { getBalanceOfToken } from '../../api/balance';
 
 import { RootState } from '../../store/store';
-import { tokens } from '../../utils/constants';
+import { tokens } from '../../utils/tokenConstants';
 
 import Button from '../button/button';
 import { HeaderProps } from '../header/types';
@@ -26,7 +26,7 @@ const WalletData = (props: HeaderProps) => {
       getBalance('0x781F8B032eFd365e56EC96564874937966Fb00e1', provider).then((bal) => setBalance(bal));
       console.log(getBalanceOfToken(tokens[1], provider, signer));
     }
-  });
+  }, [provider, signer, balance, setBalance]);
 
   const connectWallet = success
     ? (

@@ -1,9 +1,8 @@
 import { BigNumber, ethers } from 'ethers';
-import { CONTRACT_ABI_ERC20 } from '../utils/constants';
+import { CONTRACT_ABI_ERC20 } from '../utils/tokenConstants';
 
 const getBalance = async (wallet: string, provider: ethers.providers.Web3Provider):Promise<string> => {
   const balance = await provider.getBalance(wallet);
-  // we use the code below to convert the balance from wei to eth
   const result = ethers.utils.formatEther(balance);
   return result;
 };
