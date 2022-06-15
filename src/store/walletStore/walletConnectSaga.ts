@@ -18,9 +18,7 @@ function* workerConnectWalletSaga() {
   yield put(setSubmitting(true));
   const result: Error & EthersProviders = yield call(async () => connectMetaMask());
   // const res = connectMetaMask().then((result) => result).catch((error) => error);
-  const adress: number = yield call(async () => result.signer.getAddress());
   console.log(result);
-  console.log(adress);
   if (result.constructor.name === 'Error') {
     yield put(setError(true));
     yield put(setSuccess(false));
@@ -29,6 +27,8 @@ function* workerConnectWalletSaga() {
     yield put(setWalletProvider(result.provider));
     yield put(setWalletSigner(result.signer));
     yield put(setError(false));
+    const adress: string = yield call(async () => result.signer.getAddress());
+    console.log(adress);
     yield put(setWalletAdress(adress));
   }
   yield put(setSubmitting(false));

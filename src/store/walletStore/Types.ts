@@ -15,8 +15,8 @@ type WalletConnectionState = {
   success:boolean;
   balance: string;
   adress: number;
-  provider: ethers.providers.Web3Provider | null;
-  signer: ethers.providers.JsonRpcSigner | null;
+  provider: ethers.providers.Web3Provider | undefined;
+  signer: ethers.providers.JsonRpcSigner | undefined;
 };
 
 export default WalletConnectionState;

@@ -84,8 +84,7 @@ const SwapForm = ():React.ReactElement => {
                     className="swap-form__input"
                     {...input}
                     type="text"
-                    defaultValue={0.10}
-                    placeholder="0.10"
+                    placeholder="0.0"
                   />
                   {validationBlock(meta)}
                 </label>

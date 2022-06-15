@@ -16,8 +16,8 @@ const initialState: WalletConnectionState = {
   error: false,
   success: false,
   balance: '',
-  provider: null,
-  signer: null,
+  provider: undefined,
+  signer: undefined,
   adress: 0,
 };
 

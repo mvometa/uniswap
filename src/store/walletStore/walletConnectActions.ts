@@ -17,7 +17,7 @@ const setSubmitting = (payload: boolean): AnyAction => ({
   payload,
 });
 
-const setWalletAdress = (payload: number): AnyAction => ({
+const setWalletAdress = (payload: string): AnyAction => ({
   type: SET_WALLET_ADRESS,
   payload,
 });
