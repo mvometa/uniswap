@@ -27,7 +27,8 @@ const SwapForm = ():React.ReactElement => {
     tokenLabels,
   } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
 
-  const handleFormSubmit = async () => {
+  const handleFormSubmit = (data:any) => {
+    console.log(data);
   };
 
   const handleConnectWallet = async () => {
@@ -53,21 +54,23 @@ const SwapForm = ():React.ReactElement => {
             <div className="swap-form__label-wrapper">
               <label className="swap-form__label">
                 <Field
-                  name="fromToken"
+                  name="fromTokenValue"
                   component="input"
                   type="text"
                   placeholder="0.0"
                   className="swap-form__input"
                   validate={requiredNotEmpty}
                 />
-                <ErrorForm name="fromToken" />
+                <ErrorForm name="fromTokenValue" />
               </label>
-              <div className="select-wrapper">
+              <div className="select-wrapper select-wrapper_first">
                 <Field
                   name="fromTokenLabel"
                   component={SelectAdapter}
                   options={tokenLabels}
+                  validate={requiredNotEmpty}
                 />
+                <ErrorForm name="fromTokenLabel" />
               </div>
             </div>
             <div className="swap-form__arrow">
@@ -76,21 +79,23 @@ const SwapForm = ():React.ReactElement => {
             <div className="swap-form__label-wrapper">
               <label className="swap-form__label">
                 <Field
-                  name="toToken"
+                  name="toTokenValue"
                   component="input"
                   type="text"
                   placeholder="0.0"
                   className="swap-form__input"
                   validate={requiredNotEmpty}
                 />
-                <ErrorForm name="toToken" />
+                <ErrorForm name="toTokenValue" />
               </label>
               <div className="select-wrapper">
                 <Field
                   name="toTokenLabel"
                   component={SelectAdapter}
                   options={tokenLabels}
+                  validate={requiredNotEmpty}
                 />
+                <ErrorForm name="toTokenLabel" />
               </div>
             </div>
             <Field name="slippage">

@@ -18,14 +18,14 @@
     position: relative;
     width: 100%;
 
-    .select-wrapper:first-child {
+    .select-wrapper.select-wrapper_first {
       z-index: 6;
     }
 
     .select-wrapper {
       position: absolute;
       right: 10px;
-      top: 20%;
+      top: 5%;
       z-index: 5;
     }
 
