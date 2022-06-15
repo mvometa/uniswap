@@ -7,8 +7,9 @@ import { submitConnectWalletForm } from '../../store/walletStore/walletConnectAc
 
 import downArrow from './down-arrow.svg';
 import './swapForm.scss';
-import validate from './validate';
+import validate, { userRoles } from './validate';
 import { RootState } from '../../store/store';
+import SelectAdapter from '../selectAdapter/selectAdapter';
 
 declare global {
   interface Window {
@@ -60,6 +61,11 @@ const SwapForm = ():React.ReactElement => {
                 </label>
               )}
             </Field>
+            <Field
+              name="token1"
+              component={SelectAdapter}
+              options={userRoles}
+            />
             <div className="swap-form__arrow">
               <img className="swap-form__arrow-down" src={downArrow} alt="arrow down" />
             </div>
@@ -76,6 +82,11 @@ const SwapForm = ():React.ReactElement => {
                 </label>
               )}
             </Field>
+            <Field
+              name="token2"
+              component={SelectAdapter}
+              options={userRoles}
+            />
             <Field name="slippage">
               {({ input, meta }) => (
                 <label className="swap-form__label">

@@ -1,0 +1,11 @@
+@import '../../styles/vars.scss';
+
+.react-select {
+  &__control {
+    background-color: $background-color-select !important;
+    border-radius: 16px !important;
+  }
+  &__placeholder {
+    color: white !important;
+  }
+}

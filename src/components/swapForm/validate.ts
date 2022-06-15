@@ -21,4 +21,9 @@ const validate = (values: FormData): Record<string, string> => {
   return errors;
 };
 
+export const userRoles = [
+  { value: 'manager', label: 'Manager' },
+  { value: 'client', label: 'Client' },
+];
+
 export default validate;
