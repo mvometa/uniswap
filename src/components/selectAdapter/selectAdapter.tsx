@@ -1,0 +1,7 @@
+import { FieldRenderProps } from 'react-final-form';
+import Select from 'react-select';
+import { OptionsValue } from './types';
+
+const SelectAdapter = ({ input, ...rest }:FieldRenderProps<string, HTMLElement> & OptionsValue) => <Select {...input} {...rest} />;
+
+export default SelectAdapter;
