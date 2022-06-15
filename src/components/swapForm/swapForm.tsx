@@ -10,6 +10,7 @@ import './swapForm.scss';
 import validate, { userRoles } from './validate';
 import { RootState } from '../../store/store';
 import SelectAdapter from '../selectAdapter/selectAdapter';
+import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
 
 declare global {
   interface Window {
@@ -48,45 +49,49 @@ const SwapForm = ():React.ReactElement => {
       <Form onSubmit={handleFormSubmit} validate={validate}>
         {({ handleSubmit }) => (
           <form className="swap-form__form" onSubmit={handleSubmit}>
-            <Field name="fromToken">
-              {({ input, meta }) => (
-                <label className="swap-form__label">
-                  <input
-                    className="swap-form__input"
-                    {...input}
-                    type="text"
-                    placeholder="0.0"
-                  />
-                  {validationBlock(meta)}
-                </label>
-              )}
-            </Field>
-            <Field
-              name="token1"
-              component={SelectAdapter}
-              options={userRoles}
-            />
+            <div className="swap-form__label-wrapper">
+              <label className="swap-form__label">
+                <Field
+                  name="fromToken"
+                  component="input"
+                  type="text"
+                  placeholder="0.0"
+                  className="swap-form__input"
+                  validate={requiredNotEmpty}
+                />
+                <ErrorForm name="fromToken" />
+              </label>
+              <div className="select-wrapper">
+                <Field
+                  name="fromTokenLabel"
+                  component={SelectAdapter}
+                  options={userRoles}
+                />
+              </div>
+            </div>
             <div className="swap-form__arrow">
               <img className="swap-form__arrow-down" src={downArrow} alt="arrow down" />
             </div>
-            <Field name="toToken">
-              {({ input, meta }) => (
-                <label className="swap-form__label">
-                  <input
-                    className="swap-form__input"
-                    {...input}
-                    type="text"
-                    placeholder="0.0"
-                  />
-                  {validationBlock(meta)}
-                </label>
-              )}
-            </Field>
-            <Field
-              name="token2"
-              component={SelectAdapter}
-              options={userRoles}
-            />
+            <div className="swap-form__label-wrapper">
+              <label className="swap-form__label">
+                <Field
+                  name="toToken"
+                  component="input"
+                  type="text"
+                  placeholder="0.0"
+                  className="swap-form__input"
+                  validate={requiredNotEmpty}
+                />
+                <ErrorForm name="toToken" />
+              </label>
+              <div className="select-wrapper">
+                <Field
+                  name="toTokenLabel"
+                  component={SelectAdapter}
+                  options={userRoles}
+                />
+              </div>
+            </div>
             <Field name="slippage">
               {({ input, meta }) => (
                 <label className="swap-form__label">

@@ -1,12 +1,12 @@
 type FormData = {
-  fromToken: number;
-  toToken: number;
+  fromTokenValue: number;
+  toTokenValue: number;
   slippage: number;
 };
 
 type FormKey =
-  | 'fromToken'
-  | 'toToken'
+  | 'fromTokenValue'
+  | 'toTokenValue'
   | 'slippage';
 
 export default FormData;

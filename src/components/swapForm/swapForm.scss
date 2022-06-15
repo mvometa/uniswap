@@ -14,6 +14,18 @@
     padding: 1rem 1.25rem 0.5rem;
   }
 
+  &__label-wrapper{
+    position: relative;
+    width: 100%;
+
+    .select-wrapper {
+      position: absolute;
+      right: 10px;
+      top: 20%;
+      z-index: 5;
+    }
+  }
+
   &__label {
     display: flex;
     flex-flow: column nowrap;
@@ -25,7 +37,9 @@
     min-height: 72px;
     color: white;
     text-align: center;
+
   }
+
 
   &__input {
     border-radius: 20px;
@@ -58,5 +72,7 @@
     padding: 2px;
     text-align: center;
   }
+
+
 
 }

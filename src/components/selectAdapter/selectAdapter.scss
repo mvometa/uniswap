@@ -5,7 +5,14 @@
     background-color: $background-color-select !important;
     border-radius: 16px !important;
   }
+
+  &__menu {
+    max-width: 200px;
+    position: relative;
+  }
+
   &__placeholder {
     color: white !important;
   }
+
 }
