@@ -30,7 +30,6 @@ function* workerConnectWalletSaga() {
     yield put(setError(false));
     const adress: string = yield call(async () => result.signer.getAddress());
     const temp:Array<TokenLabel> = [];
-    console.log(`adress= ${adress}`);
     tokens.forEach(async (tokenAdress) => {
       const tokenName = await getNameOfToken(tokenAdress, result.provider);
       temp.push({ value: tokenName, label: tokenName });
