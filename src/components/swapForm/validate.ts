@@ -1,6 +1,7 @@
-import FormData, { FormKey } from './Types';
+import { SwapFormData } from '../../store/swapFormStore/Types';
+import { FormKey } from './Types';
 
-const validate = (values: FormData): Record<string, string> => {
+const validate = (values: SwapFormData): Record<string, string> => {
   const errors: Record<string, string> = {};
   const REQUIRED_FIELDS: FormKey[] = [
     'fromTokenValue',

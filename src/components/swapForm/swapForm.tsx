@@ -11,6 +11,8 @@ import validate from './validate';
 import { RootState } from '../../store/store';
 import SelectAdapter from '../selectAdapter/selectAdapter';
 import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
+import { SwapFormData } from '../../store/swapFormStore/Types';
+import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
 
 declare global {
   interface Window {
@@ -27,8 +29,8 @@ const SwapForm = ():React.ReactElement => {
     tokenLabels,
   } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
 
-  const handleFormSubmit = (data:any) => {
-    console.log(data);
+  const handleFormSubmit = (data:SwapFormData) => {
+    dispatch(submitSwapForm(data));
   };
 
   const handleConnectWallet = async () => {

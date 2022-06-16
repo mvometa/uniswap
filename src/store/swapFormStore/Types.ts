@@ -7,6 +7,24 @@ type SwapFormState = {
   error: boolean;
 };
 
+type SwapFormSelectType = {
+  value: string;
+  label: string;
+};
+
+export type SagaSwapFormType = {
+  type: string;
+  payload:SwapFormData;
+};
+
+export type SwapFormData = {
+  fromTokenValue: number;
+  toTokenValue: number;
+  slippage: number;
+  toTokeLabel: SwapFormSelectType;
+  fromTokenLabel: SwapFormSelectType;
+};
+
 export default SwapFormState;
 export {
   SUBMIT_SWAP_FORM,
