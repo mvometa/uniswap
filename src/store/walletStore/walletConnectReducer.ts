@@ -10,10 +10,12 @@ import WalletConnectionState, {
   SET_WALLET_SIGNER,
   SET_WALLET_ADRESS,
   SET_WALLET_TOKEN_LABELS,
+  SET_WALLET_ERROR_MESSAGE,
 } from './Types';
 
 const initialState: WalletConnectionState = {
   submitting: false,
+  message: '',
   error: false,
   success: false,
   balance: '',
@@ -33,6 +35,11 @@ const WalletConnectReducer = (
       return {
         ...state,
         error: action.payload,
+      };
+    case SET_WALLET_ERROR_MESSAGE:
+      return {
+        ...state,
+        message: action.payload,
       };
     case SET_WALLET_ADRESS:
       return {
