@@ -8,9 +8,11 @@ const validate = (values: SwapFormData): Record<string, string> => {
     'toTokenValue',
     'slippage',
   ];
-  const tokenLabelsHasChoosen = values.fromTokenLabel !== undefined && values.toTokenLabel;
+
+  const tokenLabelsHasChoosen = values.fromTokenLabel && values.toTokenLabel;
   if (tokenLabelsHasChoosen && values.fromTokenLabel.value === values.toTokenLabel.value) {
     errors.fromTokenLabel = 'Токены совпадают';
+    errors.toTokenLabel = 'Токены совпадают';
   }
 
   if (values.slippage && values.slippage > 50) {
