@@ -21,7 +21,7 @@ export type SwapFormData = {
   fromTokenValue: number;
   toTokenValue: number;
   slippage: number;
-  toTokeLabel: SwapFormSelectType;
+  toTokenLabel: SwapFormSelectType;
   fromTokenLabel: SwapFormSelectType;
 };
 

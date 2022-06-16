@@ -1,8 +1,8 @@
 import { call, takeEvery } from 'redux-saga/effects';
-import { SagaSwapFormType, SUBMIT_SWAP_FORM } from './Types';
+import { SUBMIT_SWAP_FORM } from './Types';
 
-function* workerSwapFormSaga(data:SagaSwapFormType) {
-  yield call(() => console.log(data));
+function* workerSwapFormSaga() {
+  yield call(() => console.log('inside'));
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
