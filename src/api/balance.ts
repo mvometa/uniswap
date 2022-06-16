@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from 'ethers';
-import { CONTRACT_ABI_ERC20 } from '../utils/tokenConstants';
+import { ERC20ABI } from '../utils/abi';
 
 const getBalance = async (wallet: string, provider: ethers.providers.Web3Provider):Promise<string> => {
   const balance = await provider.getBalance(wallet);
@@ -12,7 +12,7 @@ export const getBalanceOfToken = (
   provider: ethers.providers.Web3Provider,
   signer: ethers.providers.JsonRpcSigner,
 ): Promise<number> => {
-  const contract = new ethers.Contract(tokenContractAddress, CONTRACT_ABI_ERC20, provider);
+  const contract = new ethers.Contract(tokenContractAddress, ERC20ABI, provider);
   const result = contract.balanceOf(signer?.getAddress())
     .then((res:BigNumber) => ethers.utils.formatEther(res));
   return result;

@@ -1,11 +1,11 @@
 import { ethers } from 'ethers';
 import { parseUnits } from 'ethers/lib/utils';
-import { CONTRACT_ABI_ERC20 } from '../utils/tokenConstants';
+import { ERC20ABI } from '../utils/abi';
 
 const swapTokens = (signer:ethers.Signer, tokenAmount:number) => {
   const contract = new ethers.Contract(
     '0x63706eDd35835972F46dd3EB09Ad4405d4e3A168',
-    CONTRACT_ABI_ERC20,
+    ERC20ABI,
     signer,
   );
   console.log(contract);

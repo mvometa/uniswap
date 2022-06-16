@@ -1,11 +1,11 @@
 import { ethers } from 'ethers';
-import { CONTRACT_ABI_ERC20 } from '../utils/tokenConstants';
+import { ERC20ABI } from '../utils/abi';
 
 const getNameOfToken = (
   tokenContractAddress:string,
   provider: ethers.providers.Web3Provider,
 ): Promise<string> => {
-  const contract = new ethers.Contract(tokenContractAddress, CONTRACT_ABI_ERC20, provider);
+  const contract = new ethers.Contract(tokenContractAddress, ERC20ABI, provider);
   const result = contract.name();
   return result;
 };
