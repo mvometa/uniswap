@@ -39,8 +39,7 @@ function* workerConnectWalletSaga() {
       const tokenName = await getNameOfToken(tokenAdress, result.provider);
       temp.push({ value: tokenName, label: tokenName });
     });
-    // swapToken2(tokens[0], tokens[1], result.signer, result.provider, '0.2');
-    removeLiquidity(tokens[0], tokens[1], '2', result.signer);
+    removeLiquidity(tokens[0], tokens[2], '0.02', result.signer);
     yield put(setTokenLabels(temp));
     yield put(setWalletAdress(adress));
   }
