@@ -55,7 +55,7 @@ const setWalletProvider = (payload: ethers.providers.Web3Provider): AnyAction =>
   payload,
 });
 
-const setWalletSigner = (payload: ethers.providers.JsonRpcSigner): AnyAction => ({
+const setWalletSigner = (payload: ethers.Signer): AnyAction => ({
   type: SET_WALLET_SIGNER,
   payload,
 });

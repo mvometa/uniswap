@@ -1,18 +1,54 @@
 import { ethers } from 'ethers';
 import { parseUnits } from 'ethers/lib/utils';
 
-import { ERC20ABI } from '../utils/abi';
+import {
+  ERC20ABI,
+  registryABI,
+  routerABI,
+} from '../utils/abi';
+import contracts from '../utils/contractConstants';
 
-const swapTokens = (signer:ethers.Signer, tokenAmount:number) => {
-  const contract = new ethers.Contract(
-    '0x63706eDd35835972F46dd3EB09Ad4405d4e3A168',
+const swapTokens = async (
+  tokenFromAdress: string,
+  tokenToAdress: string,
+  signer: ethers.Signer,
+  provider: ethers.providers.Provider,
+  tokenAmount:string,
+) => {
+  const registryContract = new ethers.Contract(
+    contracts.registry.address,
+    registryABI,
+    provider,
+  );
+
+  const pairAddress = await registryContract.getPair(tokenFromAdress, tokenToAdress);
+
+  if (pairAddress === undefined) {
+    return Promise.reject(new Error('registryContract.getPair result is undefined'));
+  }
+
+  const tokenInContract = new ethers.Contract(
+    tokenFromAdress,
     ERC20ABI,
     signer,
   );
-  console.log(contract);
-  const tx = contract.transfer('0x781F8B032eFd365e56EC96564874937966Fb00e1', parseUnits(`${tokenAmount}`));
-  console.log(tx);
-  // tx.wait();
+
+  const txTokenIn = await tokenInContract.approve(pairAddress, parseUnits(tokenAmount));
+  await txTokenIn.wait();
+
+  const routerContract = new ethers.Contract(
+    contracts.router.address,
+    routerABI,
+    signer,
+  );
+
+  const txRouter = await routerContract.swapIn(tokenFromAdress, tokenToAdress, parseUnits(
+    tokenAmount,
+  ), parseUnits('0.05'));
+
+  await txRouter.swapIn.wait();
+
+  return undefined;
 };
 
 export default swapTokens;

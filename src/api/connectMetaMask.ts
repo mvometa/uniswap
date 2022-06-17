@@ -1,4 +1,6 @@
 import { ethers } from 'ethers';
+import { useDispatch } from 'react-redux';
+import { setErrorMessage } from '../store/walletStore/walletConnectActions';
 
 import chainIDs from '../utils/chainIDs';
 
@@ -15,6 +17,7 @@ export type EthersProviders = {
 };
 
 const connectMetaMask = async ():Promise< Error | EthersProviders > => {
+  const dispatch = useDispatch();
   if (window?.ethereum === undefined) {
     return new Error('Ethereum is undefined, plaese install MetaMask');
   }
@@ -40,6 +43,7 @@ const connectMetaMask = async ():Promise< Error | EthersProviders > => {
 
     return { provider, signer };
   } catch (error) {
+    dispatch(setErrorMessage(String(error)));
     return <globalThis.Error>error;
   }
 };

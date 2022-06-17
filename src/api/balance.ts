@@ -11,7 +11,7 @@ const getBalance = async (wallet: string, provider: ethers.providers.Web3Provide
 export const getBalanceOfToken = (
   tokenContractAddress:string,
   provider: ethers.providers.Web3Provider,
-  signer: ethers.providers.JsonRpcSigner,
+  signer: ethers.Signer,
 ): Promise<number> => {
   const contract = new ethers.Contract(tokenContractAddress, ERC20ABI, provider);
   const result = contract.balanceOf(signer?.getAddress())
