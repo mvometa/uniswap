@@ -37,4 +37,8 @@
     white-space: nowrap;
     overflow: hidden;
   }
+  
+  &_type_link:hover {
+    background-color: $button-link-background-color-hover;
+  }
 }
