@@ -13,6 +13,7 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
   yield call(() => console.log(data.payload));
   yield put(delay(3000));
   yield put(setSwapFormSubmitting(false));
+  // swapTokens(tokens[1], tokens[0], result.signer, result.provider, '3.03');
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

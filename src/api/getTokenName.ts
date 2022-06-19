@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 
 import { ERC20ABI } from '../utils/abi';
 
-const getNameOfToken = (
+const getTokenName = (
   tokenContractAddress:string,
   provider: ethers.providers.Web3Provider,
 ): Promise< string > => {
@@ -11,4 +11,4 @@ const getNameOfToken = (
   return result;
 };
 
-export default getNameOfToken;
+export default getTokenName;
