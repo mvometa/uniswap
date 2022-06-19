@@ -30,7 +30,8 @@ declare global {
 
 const SwapForm = ():React.ReactElement => {
   const dispatch = useDispatch();
-  const [max, setMax] = useState(0);
+  const [max, setMax] = useState(0.0);
+  const [maxInputValue, setMaxInputValue] = useState(0.0);
 
   const {
     successWallet,
@@ -69,7 +70,9 @@ const SwapForm = ():React.ReactElement => {
   };
 
   const handleMaxClick = () => {
-    console.log('max clicked');
+    // eslint-disable-next-line prefer-template
+    console.log('handleMaxClick' + max);
+    setMaxInputValue(max);
   };
 
   const spinner = submittingWallet && <Spinner />;
@@ -78,7 +81,6 @@ const SwapForm = ():React.ReactElement => {
     <button
       className="swap-form__max-button"
       onClick={handleMaxClick}
-      onKeyDown={handleMaxClick}
       type="button"
     >
       <span className="max-value">
@@ -102,6 +104,7 @@ const SwapForm = ():React.ReactElement => {
                   type="text"
                   placeholder="0.0"
                   className="swap-form__input"
+                  initialValue={maxInputValue}
                   validate={requiredNotEmpty}
                 />
                 <ErrorForm name="fromTokenValue" />
