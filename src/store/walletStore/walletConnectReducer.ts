@@ -14,14 +14,14 @@ import WalletConnectionState, {
 } from './Types';
 
 const initialState: WalletConnectionState = {
-  submitting: false,
+  submittingWallet: false,
   message: '',
-  error: false,
-  success: false,
-  balance: '',
+  errorWallet: false,
+  successWallet: false,
+  balanceWallet: '',
   provider: undefined,
   signer: undefined,
-  adress: 0,
+  adressWallet: 0,
   tokenLabels: [],
   tokenBalances: [],
 };
@@ -35,7 +35,7 @@ const WalletConnectReducer = (
     case SET_CONNECT_WALLET_ERROR:
       return {
         ...state,
-        error: action.payload,
+        errorWallet: action.payload,
       };
     case SET_WALLET_ERROR_MESSAGE:
       return {
@@ -45,7 +45,7 @@ const WalletConnectReducer = (
     case SET_WALLET_ADRESS:
       return {
         ...state,
-        adress: action.payload,
+        adressWallet: action.payload,
       };
     case SET_WALLET_TOKEN_LABELS:
       return {
@@ -65,22 +65,22 @@ const WalletConnectReducer = (
     case SET_WALLET_BALANCE:
       return {
         ...state,
-        balance: action.payload,
+        balanceWallet: action.payload,
       };
     case SET_CONNECT_WALLET_SUBMITTING:
       return {
         ...state,
-        submitting: action.payload,
+        submittingWallet: action.payload,
       };
     case SET_CONNECT_WALLET_SUCCESS:
       return {
         ...state,
-        success: action.payload,
+        successWallet: action.payload,
       };
     case SUBMIT_CONNECT_WALLET:
       return {
         ...state,
-        submitting: action.payload,
+        submittingWallet: action.payload,
       };
     default:
       return state;

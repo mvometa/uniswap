@@ -11,15 +11,13 @@ const WalletData = (props: HeaderProps) => {
   const { handlerConnectWallet } = props;
 
   const {
-    success,
-    adress,
+    successWallet,
   } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
 
-  const connectWallet = success
+  const connectWallet = successWallet
     ? (
       <div className="connect-wallet">
-        Connected.Adress:
-        {adress}
+        Connected.
       </div>
     )
     : <Button text="Подключить кошелек" type="button" onPointerDown={handlerConnectWallet} />;

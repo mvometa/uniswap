@@ -12,11 +12,11 @@ const SET_WALLET_TOKEN_LABELS = 'SET_WALLET_TOKEN_LABELS';
 const SET_WALLET_ERROR_MESSAGE = 'SET_WALLET_ERROR_MESSAGE';
 
 type WalletConnectionState = {
-  submitting: boolean;
-  error: boolean;
-  success:boolean;
-  balance: string;
-  adress: number;
+  submittingWallet: boolean;
+  errorWallet: boolean;
+  successWallet:boolean;
+  balanceWallet: string;
+  adressWallet: number;
   message: string;
   provider: ethers.providers.Web3Provider | undefined;
   signer: ethers.providers.JsonRpcSigner | undefined;

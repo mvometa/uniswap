@@ -33,11 +33,11 @@ const SwapForm = ():React.ReactElement => {
   const [max, setMax] = useState(0);
 
   const {
-    success,
+    successWallet,
     tokenLabels,
     provider,
     signer,
-    submitting,
+    submittingWallet,
   } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
 
   const handleFormSubmit = (data:SwapFormData) => {
@@ -48,7 +48,7 @@ const SwapForm = ():React.ReactElement => {
     dispatch(submitConnectWalletForm(true));
   };
 
-  const formButton = success
+  const formButton = successWallet
     ? <Button type="submit" text="Поменять пару" />
     : <Button type="button" text="Подключить кошелек" onPointerDown={handleConnectWallet} />;
 
@@ -72,9 +72,9 @@ const SwapForm = ():React.ReactElement => {
     console.log('max clicked');
   };
 
-  const spinner = submitting && <Spinner />;
+  const spinner = submittingWallet && <Spinner />;
 
-  const maxButton = success && (
+  const maxButton = successWallet && (
     <button
       className="swap-form__max-button"
       onClick={handleMaxClick}
@@ -89,7 +89,6 @@ const SwapForm = ():React.ReactElement => {
 
   return (
     <div className="swap-form">
-      <Spinner />
       <h2 className="swap-form__header">Обменять</h2>
       {spinner}
       <Form onSubmit={handleFormSubmit} validate={validate}>
