@@ -2,23 +2,24 @@
 import React, { useState } from 'react';
 import { Field, FieldMetaState, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
-
-import Button from '../button/button';
-import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
+import { Circles } from 'react-loader-spinner';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 import downArrow from './down-arrow.svg';
 import './swapForm.scss';
 import validate from './validate';
+
+import Button from '../button/button';
+import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 import { RootState } from '../../store/store';
 import SelectAdapter from '../selectAdapter/selectAdapter';
 import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
 import { SwapFormData } from '../../store/swapFormStore/Types';
 import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
 import { TokenLabel } from '../../store/walletStore/Types';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { getBalanceOfToken } from '../../api/getBalance';
 import { tokens } from '../../utils/tokenConstants';
-// import { TokenLabel } from '../../store/walletStore/Types';
+import Spinner from '../spinner/spinner';
 
 declare global {
   interface Window {
@@ -36,6 +37,7 @@ const SwapForm = ():React.ReactElement => {
     tokenLabels,
     provider,
     signer,
+    submitting,
   } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
 
   const handleFormSubmit = (data:SwapFormData) => {
@@ -70,9 +72,26 @@ const SwapForm = ():React.ReactElement => {
     console.log('max clicked');
   };
 
+  const spinner = submitting && <Spinner />;
+
+  const maxButton = success && (
+    <button
+      className="swap-form__max-button"
+      onClick={handleMaxClick}
+      onKeyDown={handleMaxClick}
+      type="button"
+    >
+      <span className="max-value">
+        {`Максимум: ${max}`}
+      </span>
+    </button>
+  );
+
   return (
     <div className="swap-form">
+      <Spinner />
       <h2 className="swap-form__header">Обменять</h2>
+      {spinner}
       <Form onSubmit={handleFormSubmit} validate={validate}>
         {({ handleSubmit }) => (
           <form className="swap-form__form" onSubmit={handleSubmit}>
@@ -87,16 +106,7 @@ const SwapForm = ():React.ReactElement => {
                   validate={requiredNotEmpty}
                 />
                 <ErrorForm name="fromTokenValue" />
-                <button
-                  className="swap-form__max-button"
-                  onClick={handleMaxClick}
-                  onKeyDown={handleMaxClick}
-                  type="button"
-                >
-                  <span className="max-value">
-                    {`Максимум: ${max}`}
-                  </span>
-                </button>
+                {maxButton}
               </label>
               <div className="select-wrapper select-wrapper_first">
                 <Field
