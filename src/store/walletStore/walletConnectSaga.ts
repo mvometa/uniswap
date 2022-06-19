@@ -17,8 +17,8 @@ import {
 import connectMetaMask, { EthersProviders } from '../../api/connectMetaMask';
 import { tokens } from '../../utils/tokenConstants';
 import getNameOfToken from '../../api/tokenName';
-// import { swapToken2 } from '../../api/swapTokens';
-import removeLiquidity from '../../api/removeLiquidity';
+// import removeLiquidity from '../../api/removeLiquidity';
+import swapTokens from '../../api/swapTokens';
 
 function* workerConnectWalletSaga() {
   yield put(setSubmitting(true));
@@ -39,7 +39,7 @@ function* workerConnectWalletSaga() {
       const tokenName = await getNameOfToken(tokenAdress, result.provider);
       temp.push({ value: tokenName, label: tokenName });
     });
-    removeLiquidity(tokens[0], tokens[2], '0.02', result.signer);
+    swapTokens(tokens[1], tokens[0], result.signer, result.provider, '3.03');
     yield put(setTokenLabels(temp));
     yield put(setWalletAdress(adress));
   }

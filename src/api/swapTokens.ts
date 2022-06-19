@@ -27,13 +27,13 @@ const swapTokens = async (
     return Promise.reject(new Error('registryContract.getPair result is undefined'));
   }
 
-  const tokenInContract = new ethers.Contract(
+  const tokenFromContract = new ethers.Contract(
     tokenFromAdress,
     ERC20ABI,
     signer,
   );
 
-  const txTokenIn = await tokenInContract.approve(pairAddress, parseUnits(tokenAmount));
+  const txTokenIn = await tokenFromContract.approve(contracts.router.address, parseUnits(tokenAmount));
   await txTokenIn.wait();
 
   const routerContract = new ethers.Contract(
@@ -46,7 +46,7 @@ const swapTokens = async (
     tokenAmount,
   ), parseUnits('0.05'));
 
-  await txRouter.swapIn.wait();
+  await txRouter.wait();
 
   return undefined;
 };
