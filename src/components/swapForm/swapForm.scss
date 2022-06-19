@@ -1,3 +1,5 @@
+@import '../../styles/vars.scss';
+
 .swap-form {
   max-width: 480px;
   width: 100%;
@@ -78,6 +80,19 @@
     text-align: center;
   }
 
+  &__max-button{
+    background-color: transparent;
+    border: none;
+    width: auto;
+  }
 
+  .max-value{
+    cursor: pointer;
+    border: none;
+    color: $background-color-select;
+  }
 
+  .max-value:hover{
+    color: white;
+  }
 }

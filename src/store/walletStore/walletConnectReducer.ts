@@ -23,6 +23,7 @@ const initialState: WalletConnectionState = {
   signer: undefined,
   adress: 0,
   tokenLabels: [],
+  tokenBalances: [],
 };
 
 const WalletConnectReducer = (

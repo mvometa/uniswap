@@ -20,7 +20,8 @@ type WalletConnectionState = {
   message: string;
   provider: ethers.providers.Web3Provider | undefined;
   signer: ethers.providers.JsonRpcSigner | undefined;
-  tokenLabels: Array<TokenLabel>[]
+  tokenLabels: Array<TokenLabel> [];
+  tokenBalances: Array<number> [];
 };
 
 export type TokenLabel = {

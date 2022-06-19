@@ -17,8 +17,7 @@ import {
 import connectMetaMask, { EthersProviders } from '../../api/connectMetaMask';
 import { tokens } from '../../utils/tokenConstants';
 import getNameOfToken from '../../api/tokenName';
-// import removeLiquidity from '../../api/removeLiquidity';
-import swapTokens from '../../api/swapTokens';
+import { getBalanceOfToken } from '../../api/getBalance';
 
 function* workerConnectWalletSaga() {
   yield put(setSubmitting(true));
@@ -34,13 +33,18 @@ function* workerConnectWalletSaga() {
     yield put(setError(false));
     yield put(setErrorMessage(''));
     const adress: string = yield call(async () => result.signer.getAddress());
-    const temp:Array<TokenLabel> = [];
-    tokens.forEach(async (tokenAdress) => {
+    const tempLabels:Array<TokenLabel> = [];
+    const tempBalances:Array<number> = [];
+    tokens.forEach(async (tokenAdress, index) => {
       const tokenName = await getNameOfToken(tokenAdress, result.provider);
-      temp.push({ value: tokenName, label: tokenName });
+      const tokenBalance = await getBalanceOfToken(tokens[index], result.provider, result.signer);
+      tempLabels.push({ value: tokenName, label: tokenName });
+      if (tokenBalance !== undefined) {
+        tempBalances.push(tokenBalance);
+      }
     });
-    swapTokens(tokens[1], tokens[0], result.signer, result.provider, '3.03');
-    yield put(setTokenLabels(temp));
+    // swapTokens(tokens[1], tokens[0], result.signer, result.provider, '3.03');
+    yield put(setTokenLabels(tempLabels));
     yield put(setWalletAdress(adress));
   }
   yield put(setSubmitting(false));

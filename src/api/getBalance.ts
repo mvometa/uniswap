@@ -10,13 +10,16 @@ const getBalance = async (wallet: string, provider: ethers.providers.Web3Provide
 
 export const getBalanceOfToken = (
   tokenContractAddress:string,
-  provider: ethers.providers.Web3Provider,
-  signer: ethers.Signer,
-): Promise<number> => {
-  const contract = new ethers.Contract(tokenContractAddress, ERC20ABI, provider);
-  const result = contract.balanceOf(signer?.getAddress())
-    .then((res:BigNumber) => ethers.utils.formatEther(res));
-  return result;
+  provider: ethers.providers.Web3Provider | undefined,
+  signer: ethers.Signer | undefined,
+): Promise<number> | undefined => {
+  if (provider && signer) {
+    const contract = new ethers.Contract(tokenContractAddress, ERC20ABI, provider);
+    const result = contract.balanceOf(signer?.getAddress())
+      .then((res:BigNumber) => ethers.utils.formatEther(res));
+    return result;
+  }
+  return undefined;
 };
 
 export default getBalance;

@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState } from 'react';
 import { Field, FieldMetaState, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -13,6 +14,11 @@ import SelectAdapter from '../selectAdapter/selectAdapter';
 import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
 import { SwapFormData } from '../../store/swapFormStore/Types';
 import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
+import { TokenLabel } from '../../store/walletStore/Types';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { getBalanceOfToken } from '../../api/getBalance';
+import { tokens } from '../../utils/tokenConstants';
+// import { TokenLabel } from '../../store/walletStore/Types';
 
 declare global {
   interface Window {
@@ -23,10 +29,13 @@ declare global {
 
 const SwapForm = ():React.ReactElement => {
   const dispatch = useDispatch();
+  const [max, setMax] = useState(0);
 
   const {
     success,
     tokenLabels,
+    provider,
+    signer,
   } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
 
   const handleFormSubmit = (data:SwapFormData) => {
@@ -47,6 +56,20 @@ const SwapForm = ():React.ReactElement => {
     && <span className="swap-form__error">{meta.error}</span>
   );
 
+  const handleSelectChangeFrom = async (item:TokenLabel) => {
+    if (item) {
+      const index = tokenLabels.findIndex((elem:any) => elem.value === item.value);
+      const balance = await getBalanceOfToken(tokens[index], provider, signer);
+      if (balance) {
+        setMax(balance);
+      }
+    }
+  };
+
+  const handleMaxClick = () => {
+    console.log('max clicked');
+  };
+
   return (
     <div className="swap-form">
       <h2 className="swap-form__header">Обменять</h2>
@@ -64,6 +87,16 @@ const SwapForm = ():React.ReactElement => {
                   validate={requiredNotEmpty}
                 />
                 <ErrorForm name="fromTokenValue" />
+                <button
+                  className="swap-form__max-button"
+                  onClick={handleMaxClick}
+                  onKeyDown={handleMaxClick}
+                  type="button"
+                >
+                  <span className="max-value">
+                    {`Максимум: ${max}`}
+                  </span>
+                </button>
               </label>
               <div className="select-wrapper select-wrapper_first">
                 <Field
@@ -71,6 +104,7 @@ const SwapForm = ():React.ReactElement => {
                   component={SelectAdapter}
                   options={tokenLabels}
                   validate={requiredNotEmpty}
+                  onSelectCallback={handleSelectChangeFrom}
                 />
                 <ErrorForm name="fromTokenLabel" />
               </div>
