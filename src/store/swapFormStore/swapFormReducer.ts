@@ -6,8 +6,8 @@ import SwapFormState, {
 } from './Types';
 
 const initialState: SwapFormState = {
-  submitting: false,
-  error: false,
+  submittingSwapForm: false,
+  errorSwapForm: false,
 };
 
 const SwapFormReducer = (
@@ -19,12 +19,12 @@ const SwapFormReducer = (
     case SET_SWAP_FORM_ERROR:
       return {
         ...state,
-        error: action.payload,
+        errorSwapForm: action.payload,
       };
     case SET_SWAP_FORM_SUBMITTING:
       return {
         ...state,
-        submitting: action.payload,
+        submittingSwapForm: action.payload,
       };
     default:
       return state;

@@ -1,5 +1,4 @@
-import { SwapFormData } from '../../store/swapFormStore/Types';
-import { FormKey } from './Types';
+import { FormKey, SwapFormData } from './Types';
 
 const validate = (values: SwapFormData): Record<string, string> => {
   const errors: Record<string, string> = {};
@@ -13,6 +12,18 @@ const validate = (values: SwapFormData): Record<string, string> => {
   if (tokenLabelsHasChoosen && values.fromTokenLabel.value === values.toTokenLabel.value) {
     errors.fromTokenLabel = 'Токены совпадают';
     errors.toTokenLabel = 'Токены совпадают';
+  }
+
+  if (values.slippage && Number.isNaN(Number(values.slippage))) {
+    errors.slippage = 'Пожалуйста введите числовое значение';
+  }
+
+  if (values.fromTokenValue && Number.isNaN(Number(values.fromTokenValue))) {
+    errors.fromTokenValue = 'Пожалуйста введите числовое значение';
+  }
+
+  if (values.toTokenValue && Number.isNaN(Number(values.toTokenValue))) {
+    errors.toTokenValue = 'Пожалуйста введите числовое значение';
   }
 
   if (values.slippage && values.slippage > 50) {

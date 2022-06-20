@@ -14,7 +14,7 @@ import { submitConnectWalletForm } from '../../store/walletStore/walletConnectAc
 import { RootState } from '../../store/store';
 import SelectAdapter from '../selectAdapter/selectAdapter';
 import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
-import { SwapFormData } from '../../store/swapFormStore/Types';
+import { SwapFormData } from './Types';
 import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
 import { TokenLabel } from '../../store/walletStore/Types';
 import { getBalanceOfToken } from '../../api/getBalance';
@@ -41,8 +41,22 @@ const SwapForm = ():React.ReactElement => {
     submittingWallet,
   } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
 
+  const {
+    submittingSwapForm,
+  } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
+
   const handleFormSubmit = (data:SwapFormData) => {
-    dispatch(submitSwapForm(data));
+    const indexFrom = tokenLabels.findIndex((elem:any) => elem.value === data.fromTokenLabel.value);
+    const indexTo = tokenLabels.findIndex((elem:any) => elem.value === data.toTokenLabel.value);
+    dispatch(submitSwapForm({
+      toTokenIndex: indexTo,
+      fromTokenIndex: indexFrom,
+      toTokenValue: data.toTokenValue,
+      fromTokenValue: data.fromTokenValue,
+      slippage: data.slippage,
+      provider,
+      signer,
+    }));
   };
 
   const handleConnectWallet = async () => {
@@ -59,7 +73,7 @@ const SwapForm = ():React.ReactElement => {
     && <span className="swap-form__error">{meta.error}</span>
   );
 
-  const handleSelectChangeFrom = async (item:TokenLabel) => {
+  const handleSelectChangeTokenFrom = async (item:TokenLabel) => {
     if (item) {
       const index = tokenLabels.findIndex((elem:any) => elem.value === item.value);
       const balance = await getBalanceOfToken(tokens[index], provider, signer);
@@ -70,12 +84,10 @@ const SwapForm = ():React.ReactElement => {
   };
 
   const handleMaxClick = () => {
-    // eslint-disable-next-line prefer-template
-    console.log('handleMaxClick' + max);
     setMaxInputValue(max);
   };
 
-  const spinner = submittingWallet && <Spinner />;
+  const spinner = (submittingWallet || submittingSwapForm) && <Spinner />;
 
   const maxButton = successWallet && (
     <button
@@ -116,7 +128,7 @@ const SwapForm = ():React.ReactElement => {
                   component={SelectAdapter}
                   options={tokenLabels}
                   validate={requiredNotEmpty}
-                  onSelectCallback={handleSelectChangeFrom}
+                  onSelectCallback={handleSelectChangeTokenFrom}
                 />
                 <ErrorForm name="fromTokenLabel" />
               </div>

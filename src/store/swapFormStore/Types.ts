@@ -1,15 +1,12 @@
+import { ethers } from 'ethers';
+
 const SUBMIT_SWAP_FORM = 'SUBMIT_SWAP_FORM';
 const SET_SWAP_FORM_ERROR = 'SET_SWAP_FORM_ERROR';
 const SET_SWAP_FORM_SUBMITTING = 'SET_SWAP_FORM_SUBMITTING';
 
 type SwapFormState = {
-  submitting: boolean;
-  error: boolean;
-};
-
-type SwapFormSelectType = {
-  value: string;
-  label: string;
+  submittingSwapForm: boolean;
+  errorSwapForm: boolean;
 };
 
 export type SagaSwapFormType = {
@@ -21,8 +18,10 @@ export type SwapFormData = {
   fromTokenValue: number;
   toTokenValue: number;
   slippage: number;
-  toTokenLabel: SwapFormSelectType;
-  fromTokenLabel: SwapFormSelectType;
+  toTokenIndex: number;
+  fromTokenIndex: number;
+  provider: ethers.providers.Web3Provider | undefined;
+  signer: ethers.Signer | undefined;
 };
 
 export default SwapFormState;

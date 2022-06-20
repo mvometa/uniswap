@@ -12,9 +12,10 @@ import isErrorLike from '../utils/isErrorLike';
 const swapTokens = async (
   tokenFromAdress: string,
   tokenToAdress: string,
-  signer: ethers.Signer,
-  provider: ethers.providers.Provider,
-  tokenAmount:string,
+  signer: ethers.Signer | undefined,
+  provider: ethers.providers.Provider | undefined,
+  tokenAmountFrom:string,
+  tokenAmountTo: string,
 ) => {
   try {
     const registryContract = new ethers.Contract(
@@ -35,7 +36,7 @@ const swapTokens = async (
       signer,
     );
 
-    const txTokenIn = await tokenFromContract.approve(contracts.router.address, parseUnits(tokenAmount));
+    const txTokenIn = await tokenFromContract.approve(contracts.router.address, parseUnits(tokenAmountFrom));
     await txTokenIn.wait();
 
     const routerContract = new ethers.Contract(
@@ -45,8 +46,8 @@ const swapTokens = async (
     );
 
     const txRouter = await routerContract.swapIn(tokenFromAdress, tokenToAdress, parseUnits(
-      tokenAmount,
-    ), parseUnits('0.05'));
+      tokenAmountFrom,
+    ), parseUnits(tokenAmountTo));
 
     await txRouter.wait();
   } catch (error) {
