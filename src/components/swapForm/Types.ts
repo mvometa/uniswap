@@ -1,7 +1,7 @@
 type FormData = {
   fromTokenValue: number;
   toTokenValue: number;
-  slippage: number;
+  slippage?: number;
 };
 
 type FormKey =

@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { TypeLiquid } from '../../components/swapFormLiquid/Types';
 import { TokenInfo } from '../walletStore/Types';
 
 const SUBMIT_SWAP_FORM = 'SUBMIT_SWAP_FORM';
@@ -18,11 +19,12 @@ export type SagaSwapFormType = {
 export type SwapFormData = {
   fromTokenValue: number;
   toTokenValue: number;
-  slippage: number;
+  slippage?: number;
   toTokenIndex: TokenInfo;
   fromTokenIndex: TokenInfo;
   provider: ethers.providers.Web3Provider | undefined;
   signer: ethers.Signer | undefined;
+  type?: TypeLiquid;
 };
 
 export default SwapFormState;

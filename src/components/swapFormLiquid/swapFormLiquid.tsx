@@ -15,6 +15,7 @@ import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
 import './swapFormLiquid.scss';
 import validate from './validate';
 import { SwapFormData, SwapFormLiquidProps } from './Types';
+import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
 
 declare global {
   interface Window {
@@ -33,6 +34,8 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
     submittingWallet,
     errorWallet,
     tokens,
+    provider,
+    signer,
   } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
 
   const {
@@ -42,6 +45,19 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
 
   const handleFormSubmit = (data:SwapFormData) => {
     console.log(data);
+    const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === data.fromTokenLabel.value);
+    const tokenTo = tokens.find((elem:TokenInfo) => elem.name === data.toTokenLabel.value);
+    if (tokenFrom && tokenTo) {
+      dispatch(submitSwapForm({
+        toTokenIndex: tokenTo,
+        fromTokenIndex: tokenFrom,
+        toTokenValue: data.toTokenValue,
+        fromTokenValue: data.fromTokenValue,
+        provider,
+        signer,
+        type: 'add',
+      }));
+    }
   };
 
   const handleConnectWallet = async () => {

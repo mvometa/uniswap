@@ -21,8 +21,10 @@ export type SwapFormData = {
 
 export type SwapFormLiquidProps = {
   header: string;
-  type: 'add' | 'delete';
+  type: TypeLiquid;
 };
+
+export type TypeLiquid = 'add' | 'delete';
 
 export default FormData;
 export type { FormKey };
