@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { TokenInfo } from '../walletStore/Types';
 
 const SUBMIT_SWAP_FORM = 'SUBMIT_SWAP_FORM';
 const SET_SWAP_FORM_ERROR = 'SET_SWAP_FORM_ERROR';
@@ -18,8 +19,8 @@ export type SwapFormData = {
   fromTokenValue: number;
   toTokenValue: number;
   slippage: number;
-  toTokenIndex: number;
-  fromTokenIndex: number;
+  toTokenIndex: TokenInfo;
+  fromTokenIndex: TokenInfo;
   provider: ethers.providers.Web3Provider | undefined;
   signer: ethers.Signer | undefined;
 };

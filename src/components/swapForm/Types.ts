@@ -9,7 +9,7 @@ type FormKey =
   | 'toTokenValue'
   | 'slippage';
 
-type SwapFormSelectType = {
+export type SwapFormSelectType = {
   value: string;
   label: string;
 };

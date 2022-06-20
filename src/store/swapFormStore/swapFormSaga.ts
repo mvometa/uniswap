@@ -17,8 +17,8 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
   yield call(() => delay(3000));
   if (payload.provider && payload.signer) {
     yield call(async () => swapTokens(
-      tokens[payload.fromTokenIndex],
-      tokens[payload.toTokenIndex],
+      payload.fromTokenIndex?.adress,
+      payload.toTokenIndex?.adress,
       payload.signer,
       payload.provider,
       String(payload.fromTokenValue),

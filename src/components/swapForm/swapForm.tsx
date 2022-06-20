@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Field, FieldMetaState, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { Circles } from 'react-loader-spinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 import downArrow from './down-arrow.svg';
@@ -16,10 +15,10 @@ import SelectAdapter from '../selectAdapter/selectAdapter';
 import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
 import { SwapFormData } from './Types';
 import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
-import { TokenLabel } from '../../store/walletStore/Types';
-import { getBalanceOfToken } from '../../api/getBalance';
-import { tokens } from '../../utils/tokenConstants';
+import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
+// import { getBalanceOfToken } from '../../api/getBalance';
 import Spinner from '../spinner/spinner';
+import getMax from '../../api/getMax';
 
 declare global {
   interface Window {
@@ -39,24 +38,33 @@ const SwapForm = ():React.ReactElement => {
     provider,
     signer,
     submittingWallet,
+    errorWallet,
+    tokens,
   } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
 
   const {
     submittingSwapForm,
+    errorSwapForm,
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
 
   const handleFormSubmit = (data:SwapFormData) => {
-    const indexFrom = tokenLabels.findIndex((elem:any) => elem.value === data.fromTokenLabel.value);
-    const indexTo = tokenLabels.findIndex((elem:any) => elem.value === data.toTokenLabel.value);
-    dispatch(submitSwapForm({
-      toTokenIndex: indexTo,
-      fromTokenIndex: indexFrom,
-      toTokenValue: data.toTokenValue,
-      fromTokenValue: data.fromTokenValue,
-      slippage: data.slippage,
-      provider,
-      signer,
-    }));
+    console.log('inside handle form submit');
+    console.log(data);
+    const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === data.fromTokenLabel.value);
+    const tokenTo = tokens.find((elem:TokenInfo) => elem.name === data.toTokenLabel.value);
+    if (tokenFrom && tokenTo) {
+      dispatch(submitSwapForm({
+        toTokenIndex: tokenTo,
+        fromTokenIndex: tokenFrom,
+        toTokenValue: data.toTokenValue,
+        fromTokenValue: data.fromTokenValue,
+        slippage: data.slippage,
+        provider,
+        signer,
+      }));
+    }
+    // eslint-disable-next-line prefer-template
+    console.log(tokenFrom + ' ' + tokenTo);
   };
 
   const handleConnectWallet = async () => {
@@ -73,13 +81,10 @@ const SwapForm = ():React.ReactElement => {
     && <span className="swap-form__error">{meta.error}</span>
   );
 
-  const handleSelectChangeTokenFrom = async (item:TokenLabel) => {
+  const handleSelectChangeTokenFrom = (item:TokenLabel) => {
     if (item) {
-      const index = tokenLabels.findIndex((elem:any) => elem.value === item.value);
-      const balance = await getBalanceOfToken(tokens[index], provider, signer);
-      if (balance) {
-        setMax(balance);
-      }
+      const index = tokens.findIndex((elem:TokenInfo) => elem.name === item.value);
+      // setMax(getMax(tokens[index].adress, ));
     }
   };
 
@@ -174,7 +179,7 @@ const SwapForm = ():React.ReactElement => {
             </Field>
             <span
               className="swap-form__error"
-              style={false ? { display: 'block' } : { display: 'none' }}
+              style={(errorWallet || errorSwapForm) ? { display: 'block' } : { display: 'none' }}
             >
               Error.
             </span>

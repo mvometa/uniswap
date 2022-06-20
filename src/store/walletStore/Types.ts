@@ -10,6 +10,7 @@ const SET_WALLET_SIGNER = 'SET_WALLET_SIGNER';
 const SET_WALLET_ADRESS = 'SET_WALLET_ADRESS';
 const SET_WALLET_TOKEN_LABELS = 'SET_WALLET_TOKEN_LABELS';
 const SET_WALLET_ERROR_MESSAGE = 'SET_WALLET_ERROR_MESSAGE';
+const SET_WALLET_TOKENS = 'SET_WALLET_TOKENS';
 
 type WalletConnectionState = {
   submittingWallet: boolean;
@@ -22,6 +23,13 @@ type WalletConnectionState = {
   signer: ethers.providers.JsonRpcSigner | undefined;
   tokenLabels: Array<TokenLabel> [];
   tokenBalances: Array<number> [];
+  tokens:Array<TokenInfo>;
+};
+
+export type TokenInfo = {
+  balance: number | undefined;
+  name: string;
+  adress: string;
 };
 
 export type TokenLabel = {
@@ -41,4 +49,5 @@ export {
   SET_WALLET_ADRESS,
   SET_WALLET_TOKEN_LABELS,
   SET_WALLET_ERROR_MESSAGE,
+  SET_WALLET_TOKENS,
 };
