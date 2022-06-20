@@ -1,10 +1,9 @@
 import React from 'react';
-import { Field, FieldMetaState, Form } from 'react-final-form';
+import { Field, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
-import downArrow from './down-arrow.svg';
-import './swapForm.scss';
+import './swapFormLiquid.scss';
 import validate from './validate';
 
 import Button from '../button/button';
@@ -13,7 +12,6 @@ import { RootState } from '../../store/store';
 import SelectAdapter from '../selectAdapter/selectAdapter';
 import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
 import { SwapFormData } from './Types';
-import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
 
 import Spinner from '../spinner/spinner';
@@ -25,14 +23,12 @@ declare global {
   }
 }
 
-const SwapForm = ():React.ReactElement => {
+const SwapFormLiquid = ():React.ReactElement => {
   const dispatch = useDispatch();
 
   const {
     successWallet,
     tokenLabels,
-    provider,
-    signer,
     submittingWallet,
     errorWallet,
     tokens,
@@ -44,19 +40,7 @@ const SwapForm = ():React.ReactElement => {
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
 
   const handleFormSubmit = (data:SwapFormData) => {
-    const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === data.fromTokenLabel.value);
-    const tokenTo = tokens.find((elem:TokenInfo) => elem.name === data.toTokenLabel.value);
-    if (tokenFrom && tokenTo) {
-      dispatch(submitSwapForm({
-        toTokenIndex: tokenTo,
-        fromTokenIndex: tokenFrom,
-        toTokenValue: data.toTokenValue,
-        fromTokenValue: data.fromTokenValue,
-        slippage: data.slippage,
-        provider,
-        signer,
-      }));
-    }
+    console.log(data);
   };
 
   const handleConnectWallet = async () => {
@@ -64,14 +48,8 @@ const SwapForm = ():React.ReactElement => {
   };
 
   const formButton = successWallet
-    ? <Button type="submit" text="Поменять пару" />
+    ? <Button type="submit" text="Добавить ликвидность" />
     : <Button type="button" text="Подключить кошелек" onPointerDown={handleConnectWallet} />;
-
-  const validationBlock = (meta: FieldMetaState<number>) => (
-    meta.error
-    && meta.touched
-    && <span className="swap-form__error">{meta.error}</span>
-  );
 
   const handleSelectChangeTokenFrom = (item:TokenLabel) => {
     if (item) {
@@ -80,27 +58,11 @@ const SwapForm = ():React.ReactElement => {
     }
   };
 
-  const handleMaxClick = () => {
-    console.log('handleMaxClick');
-  };
-
   const spinner = (submittingWallet || submittingSwapForm) && <Spinner />;
-
-  const maxButton = successWallet && (
-    <button
-      className="swap-form__max-button"
-      onClick={handleMaxClick}
-      type="button"
-    >
-      <span className="max-value">
-        {`Максимум: ${0}`}
-      </span>
-    </button>
-  );
 
   return (
     <div className="swap-form">
-      <h2 className="swap-form__header">Обменять</h2>
+      <h2 className="swap-form__header">Добавить ликвидность</h2>
       {spinner}
       <Form onSubmit={handleFormSubmit} validate={validate}>
         {({ handleSubmit }) => (
@@ -116,7 +78,6 @@ const SwapForm = ():React.ReactElement => {
                   validate={requiredNotEmpty}
                 />
                 <ErrorForm name="fromTokenValue" />
-                {maxButton}
               </label>
               <div className="select-wrapper select-wrapper_first">
                 <Field
@@ -128,9 +89,6 @@ const SwapForm = ():React.ReactElement => {
                 />
                 <ErrorForm name="fromTokenLabel" />
               </div>
-            </div>
-            <div className="swap-form__arrow">
-              <img className="swap-form__arrow-down" src={downArrow} alt="arrow down" />
             </div>
             <div className="swap-form__label-wrapper">
               <label className="swap-form__label">
@@ -154,20 +112,6 @@ const SwapForm = ():React.ReactElement => {
                 <ErrorForm name="toTokenLabel" />
               </div>
             </div>
-            <Field name="slippage">
-              {({ input, meta }) => (
-                <label className="swap-form__label">
-                  Введите проскальзывание в %:
-                  <input
-                    className="swap-form__input"
-                    {...input}
-                    type="text"
-                    placeholder="0.0"
-                  />
-                  {validationBlock(meta)}
-                </label>
-              )}
-            </Field>
             <span
               className="swap-form__error"
               style={(errorWallet || errorSwapForm) ? { display: 'block' } : { display: 'none' }}
@@ -182,4 +126,4 @@ const SwapForm = ():React.ReactElement => {
   );
 };
 
-export default SwapForm;
+export default SwapFormLiquid;

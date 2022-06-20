@@ -17,8 +17,10 @@ const getFee = async (
     );
     const fee = await swapContract.swapFee();
     const feeDecimals = await swapContract.feeDecimals();
-    console.log(fee);
-    console.log(feeDecimals);
+    return {
+      fee,
+      feeDecimals,
+    };
   } catch (error) {
     if (isErrorLike(error)) {
       return new Error(error.message);

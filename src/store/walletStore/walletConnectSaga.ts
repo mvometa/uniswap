@@ -20,7 +20,6 @@ import { tokens } from '../../utils/tokenConstants';
 import getTokenName from '../../api/getTokenName';
 import { getBalanceOfToken } from '../../api/getBalance';
 import getFee from '../../api/getFee';
-import getMax from '../../api/getMax';
 
 function* workerConnectWalletSaga() {
   yield put(setSubmitting(true));
@@ -35,7 +34,6 @@ function* workerConnectWalletSaga() {
     yield put(setWalletSigner(result.signer));
     yield put(setError(false));
     yield put(setErrorMessage(''));
-    getMax('', '', result.provider, result.signer);
     const adress: string = yield call(async () => result.signer.getAddress());
     const temp: Array <TokenInfo> = [];
     const tempLabels:Array<TokenLabel> = [];

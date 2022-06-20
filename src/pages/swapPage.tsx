@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+
 import Footer from '../components/footer/footer';
 import GlobalError from '../components/globalError/globalError';
 import Header from '../components/header/header';

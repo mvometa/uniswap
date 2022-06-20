@@ -8,7 +8,7 @@ import { NavBarPropsType } from './types';
 const NavBar:FC<NavBarPropsType> = () => (
   <nav className="navbar">
     <Button text="Обменять" type="button" link="/" />
-    <Button text="Добавить ликвидность" type="button" link="/" />
+    <Button text="Добавить ликвидность" type="button" link="/add" />
     <Button text="Удалить ликвидность" type="button" link="/" />
   </nav>
 );
