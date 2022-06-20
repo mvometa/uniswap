@@ -23,7 +23,7 @@ declare global {
   }
 }
 
-const SwapFormLiquid = (props: SwapFormLiquidProps):React.ReactElement => {
+const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
   const { header } = props;
   const dispatch = useDispatch();
 

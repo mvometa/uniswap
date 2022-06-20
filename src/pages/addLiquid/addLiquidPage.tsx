@@ -22,6 +22,7 @@ const AddLiquidPage = ():React.ReactElement => {
         <GlobalError />
         <SwapFormLiquid
           header="Добавить ликвидность"
+          type="add"
         />
       </main>
       <div id="background-radial-gradient" />
