@@ -3,18 +3,18 @@ import { Field, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
-import './swapFormLiquid.scss';
-import validate from './validate';
-
-import Button from '../button/button';
-import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 import { RootState } from '../../store/store';
-import SelectAdapter from '../selectAdapter/selectAdapter';
-import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
-import { SwapFormData } from './Types';
+import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
 
+import Button from '../button/button';
 import Spinner from '../spinner/spinner';
+import SelectAdapter from '../selectAdapter/selectAdapter';
+import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
+
+import './swapFormLiquid.scss';
+import validate from './validate';
+import { SwapFormData, SwapFormLiquidProps } from './Types';
 
 declare global {
   interface Window {
@@ -23,7 +23,8 @@ declare global {
   }
 }
 
-const SwapFormLiquid = ():React.ReactElement => {
+const SwapFormLiquid = (props: SwapFormLiquidProps):React.ReactElement => {
+  const { header } = props;
   const dispatch = useDispatch();
 
   const {
@@ -62,7 +63,7 @@ const SwapFormLiquid = ():React.ReactElement => {
 
   return (
     <div className="swap-form">
-      <h2 className="swap-form__header">Добавить ликвидность</h2>
+      <h2 className="swap-form__header">{header}</h2>
       {spinner}
       <Form onSubmit={handleFormSubmit} validate={validate}>
         {({ handleSubmit }) => (

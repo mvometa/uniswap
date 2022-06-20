@@ -14,12 +14,15 @@ const AddLiquidPage = ():React.ReactElement => {
   const handlerConnectWallet = () => {
     dispatch(submitConnectWalletForm(true));
   };
+
   return (
     <>
       <Header handlerConnectWallet={handlerConnectWallet} />
       <main className="uniswap">
         <GlobalError />
-        <SwapFormLiquid />
+        <SwapFormLiquid
+          header="Добавить ликвидность"
+        />
       </main>
       <div id="background-radial-gradient" />
       <Footer />
