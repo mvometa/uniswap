@@ -1,9 +1,9 @@
 import {
   call,
-  delay,
   put,
   takeEvery,
 } from 'redux-saga/effects';
+import addLiquidity from '../../api/addLiquidity';
 
 import swapTokens from '../../api/swapTokens';
 
@@ -13,12 +13,20 @@ import { SagaSwapFormType, SUBMIT_SWAP_FORM } from './Types';
 function* workerSwapFormSaga(data: SagaSwapFormType) {
   const { payload } = data;
   if (payload.type === 'add') {
-    console.log('add');
+    yield put(setSwapFormSubmitting(true));
+    yield call(async () => addLiquidity(
+      payload.fromTokenValue,
+      payload.toTokenValue,
+      payload.fromTokenIndex?.adress,
+      payload.toTokenIndex?.adress,
+      payload.provider,
+      payload.signer,
+    ));
+    yield put(setSwapFormSubmitting(false));
   } else if (payload.type === 'delete') {
     console.log('delete');
   } else {
     yield put(setSwapFormSubmitting(true));
-    yield call(() => delay(3000));
     if (payload.provider && payload.signer) {
       yield call(async () => swapTokens(
         payload.fromTokenIndex?.adress,
