@@ -21,7 +21,7 @@ const AddLiquidPage = ():React.ReactElement => {
       <main className="uniswap">
         <GlobalError />
         <SwapFormLiquid
-          header="Добавить ликвидность"
+          header="Добавить ликвидность в пул"
           type="add"
         />
       </main>

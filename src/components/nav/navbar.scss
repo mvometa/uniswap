@@ -8,3 +8,9 @@
   width: fit-content;
 }
 
+@media (max-width:830px) {
+  .navbar{
+    flex-direction: column;
+  }
+}
+

@@ -23,8 +23,8 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
       payload.signer,
     ));
     yield put(setSwapFormSubmitting(false));
-  } else if (payload.type === 'delete') {
-    console.log('delete');
+  } else if (payload.type === 'get') {
+    console.log('get');
   } else {
     yield put(setSwapFormSubmitting(true));
     if (payload.provider && payload.signer) {
