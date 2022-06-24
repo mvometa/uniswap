@@ -75,8 +75,8 @@ const SwapForm = ():React.ReactElement => {
 
   const handleSelectChangeTokenFrom = (item:TokenLabel) => {
     if (item) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const index = tokens.findIndex((elem:TokenInfo) => elem.name === item.value);
-      console.log(index);
     }
   };
 

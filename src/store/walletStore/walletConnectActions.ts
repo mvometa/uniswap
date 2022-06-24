@@ -15,6 +15,8 @@ import {
   SET_WALLET_ERROR_MESSAGE,
   SET_WALLET_TOKENS,
   TokenInfo,
+  SET_WALLET_FEE,
+  FeeType,
 } from './Types';
 
 const setSubmitting = (payload: boolean): AnyAction => ({
@@ -34,6 +36,11 @@ const setTokenLabels = (payload: Array<TokenLabel>): AnyAction => ({
 
 const setTokens = (payload: Array<TokenInfo>): AnyAction => ({
   type: SET_WALLET_TOKENS,
+  payload,
+});
+
+const setFee = (payload: FeeType): AnyAction => ({
+  type: SET_WALLET_FEE,
   payload,
 });
 
@@ -84,4 +91,5 @@ export {
   setTokenLabels,
   setErrorMessage,
   setTokens,
+  setFee,
 };

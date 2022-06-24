@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   call,
   put,
@@ -14,14 +15,14 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
   const { payload } = data;
   if (payload.type === 'add') {
     yield put(setSwapFormSubmitting(true));
-    yield call(async () => addLiquidity(
-      payload.fromTokenValue,
-      payload.toTokenValue,
-      payload.fromTokenIndex?.adress,
-      payload.toTokenIndex?.adress,
-      payload.provider,
-      payload.signer,
-    ));
+    // yield call(async () => addLiquidity(
+    //   payload.fromTokenValue,
+    //   payload.toTokenValue,
+    //   payload.fromTokenIndex?.adress,
+    //   payload.toTokenIndex?.adress,
+    //   payload.provider,
+    //   payload.signer,
+    // ));
     yield put(setSwapFormSubmitting(false));
   } else if (payload.type === 'get') {
     console.log('get');

@@ -12,6 +12,7 @@ import WalletConnectionState, {
   SET_WALLET_TOKEN_LABELS,
   SET_WALLET_ERROR_MESSAGE,
   SET_WALLET_TOKENS,
+  SET_WALLET_FEE,
 } from './Types';
 
 const initialState: WalletConnectionState = {
@@ -22,10 +23,11 @@ const initialState: WalletConnectionState = {
   balanceWallet: '',
   provider: undefined,
   signer: undefined,
-  adressWallet: 0,
+  adressWallet: '',
   tokenLabels: [],
   tokenBalances: [],
   tokens: [],
+  fee: undefined,
 };
 
 const WalletConnectReducer = (
@@ -38,6 +40,11 @@ const WalletConnectReducer = (
       return {
         ...state,
         errorWallet: action.payload,
+      };
+    case SET_WALLET_FEE:
+      return {
+        ...state,
+        fee: action.payload,
       };
     case SET_WALLET_ERROR_MESSAGE:
       return {

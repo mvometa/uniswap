@@ -101,8 +101,13 @@
   &__balance {
     color: white;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 8px;
+  }
+
+  &__proportion {
+    color: white;
   }
 }
 

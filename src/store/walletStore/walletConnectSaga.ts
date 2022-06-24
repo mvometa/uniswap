@@ -3,6 +3,7 @@ import { takeEvery, put, call } from 'redux-saga/effects';
 import {
   setError,
   setErrorMessage,
+  setFee,
   setSubmitting,
   setSuccess,
   setTokenLabels,
@@ -12,6 +13,7 @@ import {
   setWalletSigner,
 } from './walletConnectActions';
 import {
+  Fee,
   SUBMIT_CONNECT_WALLET, TokenInfo, TokenLabel,
 } from './Types';
 
@@ -19,6 +21,7 @@ import connectMetaMask, { EthersProviders } from '../../api/connectMetaMask';
 import { tokens } from '../../utils/tokenConstants';
 import getTokenName from '../../api/getTokenName';
 import { getBalanceOfToken } from '../../api/getBalance';
+import getFee from '../../api/getFee';
 
 function* workerConnectWalletSaga() {
   yield put(setSubmitting(true));
@@ -28,14 +31,13 @@ function* workerConnectWalletSaga() {
     yield put(setSuccess(false));
     yield put(setErrorMessage(result.message));
   } else {
-    if (!result.provider && !result.signer) {
-      window.location.reload();
-    }
     yield put(setSuccess(true));
     yield put(setWalletProvider(result.provider));
     yield put(setWalletSigner(result.signer));
     yield put(setError(false));
     yield put(setErrorMessage(''));
+    const fee: Fee | undefined = yield call(async () => getFee(result.provider));
+    yield put(setFee(fee));
     const adress: string = yield call(async () => result.signer.getAddress());
     const temp: Array <TokenInfo> = [];
     const tempLabels:Array<TokenLabel> = [];

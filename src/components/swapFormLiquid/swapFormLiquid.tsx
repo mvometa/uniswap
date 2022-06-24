@@ -10,6 +10,9 @@ import { RootState } from '../../store/store';
 import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
 import BigNumber from '../../utils/bigNumberConfig';
+import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
+import parseUnits from '../../utils/parseUnits';
+import getPairData from '../../api/getPairData';
 
 import Button from '../button/button';
 import Spinner from '../spinner/spinner';
@@ -19,9 +22,6 @@ import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
 import './swapFormLiquid.scss';
 import validate from './validate';
 import { SwapFormData, SwapFormLiquidProps } from './Types';
-import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
-import getProportion from '../../api/getProportion';
-import parseUnits from '../../utils/parseUnits';
 
 declare global {
   interface Window {
@@ -33,11 +33,14 @@ declare global {
 const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
   const { header } = props;
   const dispatch = useDispatch();
-  const [fromTokenLabel, setFromTokenLabel] = useState<TokenLabel | undefined>(undefined);
-  const [toTokenLabel, setToTokenLabel] = useState<TokenLabel | undefined>(undefined);
+  const [fromTokenLabel, setToken1Label] = useState<TokenLabel | undefined>(undefined);
+  const [toTokenLabel, setToken2Label] = useState<TokenLabel | undefined>(undefined);
   const [toTokenValue, setToTokenValue] = useState<string | undefined>(undefined);
   const [balance1token, setBalance1token] = useState<number | undefined>(undefined);
   const [balance2token, setBalance2token] = useState<number | undefined>(undefined);
+  const [balance1Max, setBalance1Max] = useState<number | undefined>(undefined);
+  const [balance2Max, setBalance2Max] = useState<number | undefined>(undefined);
+  const [proportion, setProportion] = useState< string | undefined>('');
 
   const {
     successWallet,
@@ -47,6 +50,7 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
     tokens,
     provider,
     signer,
+    adressWallet,
   } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
 
   const {
@@ -58,75 +62,103 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
     console.log(data);
     const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === data.fromTokenLabel.value);
     const tokenTo = tokens.find((elem:TokenInfo) => elem.name === data.toTokenLabel.value);
-    if (tokenFrom && tokenTo) {
-      dispatch(submitSwapForm({
-        toTokenIndex: tokenTo,
-        fromTokenIndex: tokenFrom,
-        toTokenValue: data.toTokenValue,
-        fromTokenValue: data.fromTokenValue,
-        provider,
-        signer,
-        type: 'add',
-      }));
-    }
+    // if (tokenFrom && tokenTo) {
+    //   dispatch(submitSwapForm({
+    //     toTokenIndex: tokenTo,
+    //     fromTokenIndex: tokenFrom,
+    //     toTokenValue: data.toTokenValue,
+    //     fromTokenValue: data.fromTokenValue,
+    //     provider,
+    //     signer,
+    //     type: 'add',
+    //   }));
+    // }
   };
 
   const handleConnectWallet = async () => {
     dispatch(submitConnectWalletForm(true));
   };
 
-  const handlerOnChangeFromTokenValue = async (value:string) => {
-    console.log('handlerOnChangeFromTokenValue');
-    const tokensAreChoosen = fromTokenLabel !== undefined && toTokenLabel !== undefined;
-    const inputAreValid = value.length > 0 && !Number.isNaN(Number(value));
-    if (inputAreValid && tokensAreChoosen) {
-      const tokenFrom = tokens.findIndex((elem:TokenInfo) => elem.name === fromTokenLabel.value);
-      const tokenTo = tokens.findIndex((elem:TokenInfo) => elem.name === toTokenLabel.value);
-      const fromTokenValueBigNumber = parseUnits(value);
-      const pair = await getProportion(
-        tokens[tokenFrom].adress,
-        tokens[tokenTo].adress,
-        provider,
-        signer,
-      );
-      if (pair.proportion !== undefined && pair.proportion !== 'any') {
-        const resultToken2 = fromTokenValueBigNumber.div(parseUnits(pair.proportion.toString()));
-        setToTokenValue(ethers.utils.formatEther(resultToken2));
-      } else if (pair.proportion === 'any') {
-        setToTokenValue(tokens[tokenTo].balance?.toString());
+  const handleOnChangeFromTokenValue = async (value:string) => {
+    console.log('inside');
+    // const tokensAreChoosen = fromTokenLabel !== undefined && toTokenLabel !== undefined;
+    // const inputAreValid = value.length > 0 && !Number.isNaN(Number(value));
+    // if (inputAreValid && tokensAreChoosen) {
+    //   const tokenFrom = tokens.findIndex((elem:TokenInfo) => elem.name === fromTokenLabel.value);
+    //   const tokenTo = tokens.findIndex((elem:TokenInfo) => elem.name === toTokenLabel.value);
+    //   const fromTokenValueBigNumber = parseUnits(value);
+    //   const pair = await getPairData(
+    //     tokens[tokenFrom].adress,
+    //     tokens[tokenTo].adress,
+    //     adressWallet,
+    //     provider,
+    //     signer,
+    //   );
+    //   if (pair.proportion !== undefined && pair.proportion !== 'any') {
+    //     const resultToken2 = fromTokenValueBigNumber.div(parseUnits(pair.proportion.toString()));
+    //     setToTokenValue(ethers.utils.formatEther(resultToken2));
+    //     setProportion((new BigNumber(pair.proportion)).decimalPlaces(6).toString());
+    //     console.log(pair);
+    //   } else if (pair.proportion === 'any') {
+    //     setToTokenValue(tokens[tokenTo].balance?.toString());
+    //   }
+    // }
+  };
+
+  const handlerOnChangeFromTokenLabel = async (token1:TokenLabel) => {
+    if (token1) {
+      const tokenFrom = tokens.findIndex((elem:TokenInfo) => elem.name === token1.value);
+      setBalance1token(tokens[tokenFrom].balance);
+      setToken1Label(token1);
+      if (toTokenLabel && token1.value !== toTokenLabel.value) {
+        const tokenTo = tokens.findIndex((elem:TokenInfo) => elem.name === toTokenLabel.value);
+        const pair = await getPairData(
+          tokens[tokenFrom].adress,
+          tokens[tokenTo].adress,
+          adressWallet,
+          provider,
+          signer,
+        );
+        if (pair.proportion !== undefined && pair.proportion !== 'any') {
+          setProportion((new BigNumber(pair.proportion)).decimalPlaces(6).toString());
+        } else if (pair.proportion === 'any') {
+          setProportion('любая');
+        }
       }
     }
   };
 
-  const handlerOnChangeFromTokenLabel = (value:TokenLabel) => {
-    setFromTokenLabel(value);
-  };
-
-  const handlerOnChangeToTokenLabel = (value:TokenLabel) => {
-    setToTokenLabel(value);
+  const handlerOnChangeToTokenLabel = async (token2:TokenLabel) => {
+    if (token2) {
+      const tokenTo = tokens.findIndex((elem:TokenInfo) => elem.name === token2.value);
+      setBalance2token(tokens[tokenTo].balance);
+      setToken2Label(token2);
+      if (fromTokenLabel && token2.value !== fromTokenLabel.value) {
+        const tokenFrom = tokens.findIndex((elem:TokenInfo) => elem.name === fromTokenLabel.value);
+        const pair = await getPairData(
+          tokens[tokenFrom].adress,
+          tokens[tokenTo].adress,
+          adressWallet,
+          provider,
+          signer,
+        );
+        if (pair.proportion !== undefined && pair.proportion !== 'any') {
+          setProportion((new BigNumber(pair.proportion)).decimalPlaces(6).toString());
+        } else if (pair.proportion === 'any') {
+          setProportion('любая');
+        }
+      }
+    }
   };
 
   const formButton = successWallet
     ? <Button type="submit" text="Добавить ликвидность" />
     : <Button type="button" text="Подключить кошелек" onPointerDown={handleConnectWallet} />;
 
-  const handleSelectChangeToken1 = (item:TokenLabel) => {
-    if (item) {
-      const index = tokens.findIndex((elem:TokenInfo) => elem.name === item.value);
-      setBalance1token(tokens[index].balance);
-    }
-  };
-
-  const handleSelectChangeToken2 = (item:TokenLabel) => {
-    if (item) {
-      const index = tokens.findIndex((elem:TokenInfo) => elem.name === item.value);
-      setBalance2token(tokens[index].balance);
-    }
-  };
-
   const spinner = (submittingWallet || submittingSwapForm) && <Spinner />;
-  const balance1 = balance1token === undefined ? null : balance1token;
-  const balance2 = balance2token === undefined ? null : balance2token;
+  const balance1 = balance1token === undefined ? null : Number(balance1token).toFixed(6);
+  const balance2 = balance2token === undefined ? null : Number(balance2token).toFixed(6);
+  const prop = proportion === undefined ? null : `Пропорция:${proportion}`;
 
   return (
     <div className="swap-form">
@@ -156,10 +188,7 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
                 />
                 <ErrorForm name="fromTokenLabel" />
                 <OnChange name="fromTokenValue">
-                  {handlerOnChangeFromTokenValue}
-                </OnChange>
-                <OnChange name="fromTokenLabel">
-                  {handleSelectChangeToken1}
+                  {handleOnChangeFromTokenValue}
                 </OnChange>
                 <OnChange name="fromTokenLabel">
                   {handlerOnChangeFromTokenLabel}
@@ -191,11 +220,8 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
                   validate={requiredNotEmpty}
                 />
                 <ErrorForm name="toTokenLabel" />
-                <OnChange name="toTokenValue">
-                  {handlerOnChangeToTokenLabel}
-                </OnChange>
                 <OnChange name="toTokenLabel">
-                  {handleSelectChangeToken2}
+                  {handlerOnChangeToTokenLabel}
                 </OnChange>
               </div>
               <div className="swap-form__balance">
@@ -213,6 +239,7 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
           </form>
         )}
       </Form>
+      <span className="swap-form__proportion">{prop}</span>
     </div>
   );
 };

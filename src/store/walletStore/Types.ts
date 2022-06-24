@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 
 const SET_CONNECT_WALLET_SUBMITTING = 'SET_CONNECT_WALLET_SUBMITTING';
 const SUBMIT_CONNECT_WALLET = 'SUBMIT_CONNECT_WALLET';
@@ -11,19 +11,21 @@ const SET_WALLET_ADRESS = 'SET_WALLET_ADRESS';
 const SET_WALLET_TOKEN_LABELS = 'SET_WALLET_TOKEN_LABELS';
 const SET_WALLET_ERROR_MESSAGE = 'SET_WALLET_ERROR_MESSAGE';
 const SET_WALLET_TOKENS = 'SET_WALLET_TOKENS';
+const SET_WALLET_FEE = 'SET_WALLET_FEE';
 
 type WalletConnectionState = {
   submittingWallet: boolean;
   errorWallet: boolean;
   successWallet:boolean;
   balanceWallet: string;
-  adressWallet: number;
+  adressWallet: string;
   message: string;
   provider: ethers.providers.Web3Provider | undefined;
   signer: ethers.providers.JsonRpcSigner | undefined;
   tokenLabels: Array<TokenLabel> [];
   tokenBalances: Array<number> [];
   tokens:Array<TokenInfo>;
+  fee: FeeType;
 };
 
 export type TokenInfo = {
@@ -31,6 +33,13 @@ export type TokenInfo = {
   name: string;
   adress: string;
 };
+
+export type Fee = {
+  feeValue: BigNumber;
+  feeDecimals: BigNumber;
+};
+
+export type FeeType = Fee | undefined;
 
 export type TokenLabel = {
   value: string;
@@ -50,4 +59,5 @@ export {
   SET_WALLET_TOKEN_LABELS,
   SET_WALLET_ERROR_MESSAGE,
   SET_WALLET_TOKENS,
+  SET_WALLET_FEE,
 };
