@@ -36,6 +36,8 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
   const [fromTokenLabel, setFromTokenLabel] = useState<TokenLabel | undefined>(undefined);
   const [toTokenLabel, setToTokenLabel] = useState<TokenLabel | undefined>(undefined);
   const [toTokenValue, setToTokenValue] = useState<string | undefined>(undefined);
+  const [balance1token, setBalance1token] = useState<number | undefined>(undefined);
+  const [balance2token, setBalance2token] = useState<number | undefined>(undefined);
 
   const {
     successWallet,
@@ -74,22 +76,23 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
   };
 
   const handlerOnChangeFromTokenValue = async (value:string) => {
+    console.log('handlerOnChangeFromTokenValue');
     const tokensAreChoosen = fromTokenLabel !== undefined && toTokenLabel !== undefined;
     const inputAreValid = value.length > 0 && !Number.isNaN(Number(value));
     if (inputAreValid && tokensAreChoosen) {
       const tokenFrom = tokens.findIndex((elem:TokenInfo) => elem.name === fromTokenLabel.value);
       const tokenTo = tokens.findIndex((elem:TokenInfo) => elem.name === toTokenLabel.value);
       const fromTokenValueBigNumber = parseUnits(value);
-      const proportion = await getProportion(
+      const pair = await getProportion(
         tokens[tokenFrom].adress,
         tokens[tokenTo].adress,
         provider,
         signer,
       );
-      if (proportion !== undefined && proportion !== 'any') {
-        const resultToken2 = fromTokenValueBigNumber.div(proportion.toString());
+      if (pair.proportion !== undefined && pair.proportion !== 'any') {
+        const resultToken2 = fromTokenValueBigNumber.div(parseUnits(pair.proportion.toString()));
         setToTokenValue(ethers.utils.formatEther(resultToken2));
-      } else if (proportion === 'any') {
+      } else if (pair.proportion === 'any') {
         setToTokenValue(tokens[tokenTo].balance?.toString());
       }
     }
@@ -107,13 +110,23 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
     ? <Button type="submit" text="Добавить ликвидность" />
     : <Button type="button" text="Подключить кошелек" onPointerDown={handleConnectWallet} />;
 
-  const handleSelectChangeTokenFrom = (item:TokenLabel) => {
+  const handleSelectChangeToken1 = (item:TokenLabel) => {
     if (item) {
       const index = tokens.findIndex((elem:TokenInfo) => elem.name === item.value);
+      setBalance1token(tokens[index].balance);
+    }
+  };
+
+  const handleSelectChangeToken2 = (item:TokenLabel) => {
+    if (item) {
+      const index = tokens.findIndex((elem:TokenInfo) => elem.name === item.value);
+      setBalance2token(tokens[index].balance);
     }
   };
 
   const spinner = (submittingWallet || submittingSwapForm) && <Spinner />;
+  const balance1 = balance1token === undefined ? null : balance1token;
+  const balance2 = balance2token === undefined ? null : balance2token;
 
   return (
     <div className="swap-form">
@@ -140,15 +153,21 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
                   component={SelectAdapter}
                   options={tokenLabels}
                   validate={requiredNotEmpty}
-                  onSelectCallback={handleSelectChangeTokenFrom}
                 />
                 <ErrorForm name="fromTokenLabel" />
                 <OnChange name="fromTokenValue">
                   {handlerOnChangeFromTokenValue}
                 </OnChange>
                 <OnChange name="fromTokenLabel">
+                  {handleSelectChangeToken1}
+                </OnChange>
+                <OnChange name="fromTokenLabel">
                   {handlerOnChangeFromTokenLabel}
                 </OnChange>
+              </div>
+              <div className="swap-form__balance">
+                Баланс:
+                {balance1}
               </div>
             </div>
             <div className="swap-form__label-wrapper">
@@ -172,9 +191,16 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
                   validate={requiredNotEmpty}
                 />
                 <ErrorForm name="toTokenLabel" />
-                <OnChange name="toTokenLabel">
+                <OnChange name="toTokenValue">
                   {handlerOnChangeToTokenLabel}
                 </OnChange>
+                <OnChange name="toTokenLabel">
+                  {handleSelectChangeToken2}
+                </OnChange>
+              </div>
+              <div className="swap-form__balance">
+                Баланс:
+                {balance2}
               </div>
             </div>
             <span

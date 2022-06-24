@@ -97,6 +97,13 @@
   .max-value:hover{
     color: white;
   }
+
+  &__balance {
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
 }
 
 @media (max-width:500px) {

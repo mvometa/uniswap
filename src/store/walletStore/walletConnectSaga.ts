@@ -19,7 +19,6 @@ import connectMetaMask, { EthersProviders } from '../../api/connectMetaMask';
 import { tokens } from '../../utils/tokenConstants';
 import getTokenName from '../../api/getTokenName';
 import { getBalanceOfToken } from '../../api/getBalance';
-import getFee from '../../api/getFee';
 
 function* workerConnectWalletSaga() {
   yield put(setSubmitting(true));
@@ -29,6 +28,9 @@ function* workerConnectWalletSaga() {
     yield put(setSuccess(false));
     yield put(setErrorMessage(result.message));
   } else {
+    if (!result.provider && !result.signer) {
+      window.location.reload();
+    }
     yield put(setSuccess(true));
     yield put(setWalletProvider(result.provider));
     yield put(setWalletSigner(result.signer));
@@ -51,7 +53,6 @@ function* workerConnectWalletSaga() {
         name: tokenName,
       });
     }));
-    yield call(async () => getFee(result.provider));
     yield put(setTokenLabels(tempLabels));
     yield put(setWalletAdress(adress));
     yield put(setTokens(temp));

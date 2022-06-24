@@ -1,19 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ethers } from 'ethers';
-import { concat, formatUnits } from 'ethers/lib/utils';
-import { TokenInfo } from '../store/walletStore/Types';
-import { ERC20ABI, registryABI, routerABI } from '../utils/abi';
+import { formatUnits } from 'ethers/lib/utils';
+import { ERC20ABI, registryABI } from '../utils/abi';
 import BigNumber from '../utils/bigNumberConfig';
 import contracts from '../utils/contractConstants';
-import parseUnits from '../utils/parseUnits';
-import { tokens } from '../utils/tokenConstants';
+
+type Proportion = {
+  proportion: string | undefined | 'any';
+  token1Balance:string;
+  token2Balance:string;
+};
 
 const getProportion = async (
   token1adress:string,
   token2adress:string,
   provider: ethers.providers.Web3Provider | undefined,
   signer: ethers.providers.JsonRpcSigner | undefined,
-):Promise< BigNumber | undefined | 'any'> => {
+):Promise< Proportion > => {
   if (provider && signer) {
     const registryContract = new ethers.Contract(
       contracts.registry.address,
@@ -23,7 +26,11 @@ const getProportion = async (
     const pairAdress = await registryContract.getPair(token1adress, token2adress);
     const hasPair = !/^0x0+$/.test(pairAdress);
     if (!hasPair) {
-      return undefined;
+      return {
+        proportion: undefined,
+        token1Balance: '',
+        token2Balance: '',
+      };
     }
     const token1Contract = new ethers.Contract(
       token1adress,
@@ -45,16 +52,35 @@ const getProportion = async (
     || token2Balance.isZero();
 
     if (isProportionUndefined) {
-      return 'any';
+      return {
+        proportion: 'any',
+        token1Balance,
+        token2Balance,
+      };
     }
 
-    const formattedBalanceOfToken0 = formatUnits(token1Balance);
-    const formattedBalanceOfToken1 = formatUnits(token2Balance);
-    const proportion = new BigNumber(formattedBalanceOfToken0)
-      .div(formattedBalanceOfToken1);
-    return proportion;
+    const formattedBalanceOfToken1 = formatUnits(token1Balance, 78);
+    const formattedBalanceOfToken2 = formatUnits(token2Balance, 78);
+    console.log('tokrnbalance');
+    console.log(token1Balance.toString());
+    console.log(token2Balance.toString());
+    console.log('formsttedbalance');
+    console.log(formattedBalanceOfToken1.toString());
+    console.log(formattedBalanceOfToken2.toString());
+    const proportion = new BigNumber(formattedBalanceOfToken1)
+      .div(formattedBalanceOfToken2).toString();
+    console.log(proportion);
+    return {
+      proportion,
+      token1Balance,
+      token2Balance,
+    };
   }
-  return undefined;
+  return {
+    proportion: undefined,
+    token1Balance: '',
+    token2Balance: '',
+  };
 };
 
 export default getProportion;
