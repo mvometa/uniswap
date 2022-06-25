@@ -9,13 +9,13 @@ import { tokens } from '../utils/tokenConstants';
 const addLiquidity = async (
   token1value:number,
   token2value:number,
-  token1:string,
-  token2:string,
   token1adress:string,
   token2adress:string,
   provider: ethers.providers.Web3Provider | undefined,
   signer: ethers.Signer | undefined,
 ) => {
+  console.log('inside add liquidity');
+  console.log(token1value);
   if (provider && signer) {
     const registryContract = new ethers.Contract(
       contracts.registry.address,
@@ -35,18 +35,22 @@ const addLiquidity = async (
     const token1Contract = new ethers.Contract(
       token1adress,
       ERC20ABI,
-      provider,
+      signer,
     );
-    await token1Contract.approve(contracts.router.address, token1value);
+    const txToken1 = await token1Contract.approve(contracts.router.address, parseUnits(token1value.toString()));
+    await txToken1.wait();
+
     const token2Contract = new ethers.Contract(
       token2adress,
       ERC20ABI,
-      provider,
+      signer,
     );
-    await token2Contract.approve(contracts.router.address, token2value);
+    const txToken2 = await token2Contract.approve(contracts.router.address, parseUnits(token2value.toString()));
+    await txToken2.wait();
+
     const txRouter = await routerContract.addLiquidity(
-      token1,
-      token2,
+      token1adress,
+      token2adress,
       parseUnits(token1value.toString()),
       parseUnits(token2value.toString()),
     );

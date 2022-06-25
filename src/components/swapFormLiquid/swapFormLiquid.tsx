@@ -61,13 +61,12 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
 
   const handleFormSubmit = (data:SwapFormData) => {
-    console.log(data);
     const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === data.fromTokenLabel.value);
     const tokenTo = tokens.find((elem:TokenInfo) => elem.name === data.toTokenLabel.value);
     if (tokenFrom && tokenTo) {
       dispatch(submitSwapForm({
-        toTokenIndex: tokenTo,
         fromTokenIndex: tokenFrom,
+        toTokenIndex: tokenTo,
         toTokenValue: data.toTokenValue,
         fromTokenValue: data.fromTokenValue,
         provider,
@@ -86,7 +85,7 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
     const inputAreValid = token1.length > 0 && !Number.isNaN(Number(token1));
     if (inputAreValid && tokensAreChoosen) {
       if (proportion !== undefined && proportion !== 'any') {
-        const resultToken2 = new BigNumber(token1).div(proportion).toFixed(6).toString();
+        const resultToken2 = new BigNumber(token1).div(proportion).toString();
         setToTokenValue(resultToken2);
       }
     }
@@ -97,7 +96,7 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
     const inputAreValid = token2.length > 0 && !Number.isNaN(Number(token2));
     if (inputAreValid && tokensAreChoosen) {
       if (proportion !== undefined && proportion !== 'any') {
-        const resultToken1 = new BigNumber(token2).multipliedBy(proportion).toFixed(6).toString();
+        const resultToken1 = new BigNumber(token2).multipliedBy(proportion).toString();
         setTokenFromValue(resultToken1);
       }
     }

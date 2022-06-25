@@ -13,16 +13,24 @@ import { SagaSwapFormType, SUBMIT_SWAP_FORM } from './Types';
 
 function* workerSwapFormSaga(data: SagaSwapFormType) {
   const { payload } = data;
+  const {
+    fromTokenValue,
+    toTokenValue,
+    fromTokenIndex,
+    toTokenIndex,
+    provider,
+    signer,
+  } = payload;
   if (payload.type === 'add') {
     yield put(setSwapFormSubmitting(true));
-    // yield call(async () => addLiquidity(
-    //   payload.fromTokenValue,
-    //   payload.toTokenValue,
-    //   payload.fromTokenIndex?.adress,
-    //   payload.toTokenIndex?.adress,
-    //   payload.provider,
-    //   payload.signer,
-    // ));
+    yield call(async () => addLiquidity(
+      fromTokenValue,
+      toTokenValue,
+      fromTokenIndex?.adress,
+      toTokenIndex?.adress,
+      provider,
+      signer,
+    ));
     yield put(setSwapFormSubmitting(false));
   } else if (payload.type === 'get') {
     console.log('get');
