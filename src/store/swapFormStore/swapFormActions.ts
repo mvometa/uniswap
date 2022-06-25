@@ -3,6 +3,7 @@ import { AnyAction } from 'redux';
 import {
   SET_SWAP_FORM_ERROR,
   SET_SWAP_FORM_SUBMITTING,
+  SET_SWAP_FORM_SUCCESS,
   SUBMIT_SWAP_FORM,
   SwapFormData,
 } from './Types';
@@ -22,8 +23,14 @@ const setSwapFormError = (payload: boolean): AnyAction => ({
   payload,
 });
 
+const setSwapFormSuccess = (payload: boolean): AnyAction => ({
+  type: SET_SWAP_FORM_SUCCESS,
+  payload,
+});
+
 export {
   setSwapFormSubmitting,
   setSwapFormError,
   submitSwapForm,
+  setSwapFormSuccess,
 };

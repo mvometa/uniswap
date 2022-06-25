@@ -5,10 +5,12 @@ import { TokenInfo } from '../walletStore/Types';
 const SUBMIT_SWAP_FORM = 'SUBMIT_SWAP_FORM';
 const SET_SWAP_FORM_ERROR = 'SET_SWAP_FORM_ERROR';
 const SET_SWAP_FORM_SUBMITTING = 'SET_SWAP_FORM_SUBMITTING';
+const SET_SWAP_FORM_SUCCESS = 'SET_SWAP_FORM_SUCCESS';
 
 type SwapFormState = {
   submittingSwapForm: boolean;
   errorSwapForm: boolean;
+  successSwapForm: boolean;
 };
 
 export type SagaSwapFormType = {
@@ -32,4 +34,5 @@ export {
   SUBMIT_SWAP_FORM,
   SET_SWAP_FORM_ERROR,
   SET_SWAP_FORM_SUBMITTING,
+  SET_SWAP_FORM_SUCCESS,
 };

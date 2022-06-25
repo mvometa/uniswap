@@ -5,11 +5,17 @@ import Footer from '../../components/footer/footer';
 import GlobalError from '../../components/globalError/globalError';
 import Header from '../../components/header/header';
 import SwapFormLiquid from '../../components/swapFormLiquid/swapFormLiquid';
+import { TypeLiquid } from '../../components/swapFormLiquid/Types';
 import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 
 import './addLiquidPage.scss';
 
-const AddLiquidPage = ():React.ReactElement => {
+type LiquidPageProps = {
+  type: TypeLiquid;
+};
+
+const LiquidPage = (props: LiquidPageProps):React.ReactElement => {
+  const { type } = props;
   const dispatch = useDispatch();
   const handlerConnectWallet = () => {
     dispatch(submitConnectWalletForm(true));
@@ -21,8 +27,7 @@ const AddLiquidPage = ():React.ReactElement => {
       <main className="uniswap">
         <GlobalError />
         <SwapFormLiquid
-          header="Добавить ликвидность в пул"
-          type="add"
+          type={type}
         />
       </main>
       <div id="background-radial-gradient" />
@@ -31,4 +36,4 @@ const AddLiquidPage = ():React.ReactElement => {
   );
 };
 
-export default AddLiquidPage;
+export default LiquidPage;

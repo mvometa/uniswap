@@ -14,8 +14,6 @@ const addLiquidity = async (
   provider: ethers.providers.Web3Provider | undefined,
   signer: ethers.Signer | undefined,
 ) => {
-  console.log('inside add liquidity');
-  console.log(token1value);
   if (provider && signer) {
     const registryContract = new ethers.Contract(
       contracts.registry.address,

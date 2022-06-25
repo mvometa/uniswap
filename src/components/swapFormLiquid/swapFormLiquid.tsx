@@ -1,18 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { OnChange } from 'react-final-form-listeners';
 
-import { parseEther } from 'ethers/lib/utils';
-import { ethers } from 'ethers';
 import { RootState } from '../../store/store';
 import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
 import BigNumber from '../../utils/bigNumberConfig';
 import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
-import parseUnits from '../../utils/parseUnits';
 import getPairData from '../../api/getPairData';
 
 import Button from '../button/button';
@@ -32,7 +28,13 @@ declare global {
 }
 
 const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
-  const { header } = props;
+  const { type } = props;
+  let header = '';
+  if (type === 'add') {
+    header = 'Добавить ликвидность в пул';
+  } else {
+    header = 'Взять ликвидность из пула';
+  }
   const dispatch = useDispatch();
   const [fromTokenLabel, setToken1Label] = useState< TokenLabel | undefined >(undefined);
   const [toTokenLabel, setToken2Label] = useState< TokenLabel | undefined >(undefined);
@@ -40,8 +42,8 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
   const [fromTokenValue, setTokenFromValue] = useState< string | undefined >(undefined);
   const [balance1token, setBalance1token] = useState< number | undefined >(undefined);
   const [balance2token, setBalance2token] = useState< number | undefined >(undefined);
-  const [balance1Max, setBalance1Max] = useState< number | undefined >(undefined);
-  const [balance2Max, setBalance2Max] = useState< number | undefined >(undefined);
+  // const [balance1Max, setBalance1Max] = useState< number | undefined >(undefined);
+  // const [balance2Max, setBalance2Max] = useState< number | undefined >(undefined);
   const [proportion, setProportion] = useState< string | undefined >(undefined);
 
   const {

@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   call,
+  delay,
   put,
   takeEvery,
 } from 'redux-saga/effects';
+
 import addLiquidity from '../../api/addLiquidity';
-
 import swapTokens from '../../api/swapTokens';
+import { submitConnectWalletForm } from '../walletStore/walletConnectActions';
 
-import { setSwapFormSubmitting } from './swapFormActions';
+import { setSwapFormError, setSwapFormSubmitting, setSwapFormSuccess } from './swapFormActions';
 import { SagaSwapFormType, SUBMIT_SWAP_FORM } from './Types';
 
 function* workerSwapFormSaga(data: SagaSwapFormType) {
@@ -22,8 +24,13 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
     signer,
   } = payload;
   if (payload.type === 'add') {
+    if (!fromTokenIndex.adress || !toTokenIndex.adress) {
+      yield put(submitConnectWalletForm(true));
+    }
+    yield put(setSwapFormSuccess(false));
     yield put(setSwapFormSubmitting(true));
-    yield call(async () => addLiquidity(
+    let result;
+    yield call(result = async () => addLiquidity(
       fromTokenValue,
       toTokenValue,
       fromTokenIndex?.adress,
@@ -31,6 +38,13 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
       provider,
       signer,
     ));
+    if (result?.constructor.name === 'Error') {
+      yield put(setSwapFormError(true));
+      yield put(setSwapFormSuccess(false));
+    } else {
+      yield put(setSwapFormSuccess(true));
+      yield put(setSwapFormError(false));
+    }
     yield put(setSwapFormSubmitting(false));
   } else if (payload.type === 'get') {
     console.log('get');

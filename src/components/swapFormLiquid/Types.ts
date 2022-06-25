@@ -20,7 +20,6 @@ export type SwapFormData = {
 };
 
 export type SwapFormLiquidProps = {
-  header: string;
   type: TypeLiquid;
 };
 
