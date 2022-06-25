@@ -73,8 +73,8 @@ const getProportion = async (
       };
     }
 
-    const formattedBalanceOfToken1 = formatUnits(token1Balance, 18);
-    const formattedBalanceOfToken2 = formatUnits(token2Balance, 18);
+    const formattedBalanceOfToken1 = formatUnits(token1Balance);
+    const formattedBalanceOfToken2 = formatUnits(token2Balance);
     const proportion = new BigNumber(formattedBalanceOfToken1)
       .div(formattedBalanceOfToken2).toString();
     return {

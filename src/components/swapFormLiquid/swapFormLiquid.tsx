@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
-import { ethers } from 'ethers';
 import { Field, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { OnChange } from 'react-final-form-listeners';
 
+import { parseEther } from 'ethers/lib/utils';
+import { ethers } from 'ethers';
 import { RootState } from '../../store/store';
 import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
@@ -40,7 +41,7 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
   const [balance2token, setBalance2token] = useState<number | undefined>(undefined);
   const [balance1Max, setBalance1Max] = useState<number | undefined>(undefined);
   const [balance2Max, setBalance2Max] = useState<number | undefined>(undefined);
-  const [proportion, setProportion] = useState< string | undefined>('');
+  const [proportion, setProportion] = useState< string | undefined>(undefined);
 
   const {
     successWallet,
@@ -79,30 +80,15 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
     dispatch(submitConnectWalletForm(true));
   };
 
-  const handleOnChangeFromTokenValue = async (value:string) => {
-    console.log('inside');
-    // const tokensAreChoosen = fromTokenLabel !== undefined && toTokenLabel !== undefined;
-    // const inputAreValid = value.length > 0 && !Number.isNaN(Number(value));
-    // if (inputAreValid && tokensAreChoosen) {
-    //   const tokenFrom = tokens.findIndex((elem:TokenInfo) => elem.name === fromTokenLabel.value);
-    //   const tokenTo = tokens.findIndex((elem:TokenInfo) => elem.name === toTokenLabel.value);
-    //   const fromTokenValueBigNumber = parseUnits(value);
-    //   const pair = await getPairData(
-    //     tokens[tokenFrom].adress,
-    //     tokens[tokenTo].adress,
-    //     adressWallet,
-    //     provider,
-    //     signer,
-    //   );
-    //   if (pair.proportion !== undefined && pair.proportion !== 'any') {
-    //     const resultToken2 = fromTokenValueBigNumber.div(parseUnits(pair.proportion.toString()));
-    //     setToTokenValue(ethers.utils.formatEther(resultToken2));
-    //     setProportion((new BigNumber(pair.proportion)).decimalPlaces(6).toString());
-    //     console.log(pair);
-    //   } else if (pair.proportion === 'any') {
-    //     setToTokenValue(tokens[tokenTo].balance?.toString());
-    //   }
-    // }
+  const handleOnChangeFromTokenValue = async (token1:string) => {
+    const tokensAreChoosen = fromTokenLabel !== undefined && toTokenLabel !== undefined;
+    const inputAreValid = token1.length > 0 && !Number.isNaN(Number(token1));
+    if (inputAreValid && tokensAreChoosen) {
+      if (proportion !== undefined && proportion !== 'any') {
+        const resultToken2 = new BigNumber(token1).div(proportion).toFixed(6).toString();
+        setToTokenValue(resultToken2);
+      }
+    }
   };
 
   const handlerOnChangeFromTokenLabel = async (token1:TokenLabel) => {
@@ -120,7 +106,7 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
           signer,
         );
         if (pair.proportion !== undefined && pair.proportion !== 'any') {
-          setProportion((new BigNumber(pair.proportion)).decimalPlaces(6).toString());
+          setProportion((pair.proportion));
         } else if (pair.proportion === 'any') {
           setProportion('любая');
         }
@@ -143,7 +129,7 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
           signer,
         );
         if (pair.proportion !== undefined && pair.proportion !== 'any') {
-          setProportion((new BigNumber(pair.proportion)).decimalPlaces(6).toString());
+          setProportion(pair.proportion);
         } else if (pair.proportion === 'any') {
           setProportion('любая');
         }
@@ -158,7 +144,9 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
   const spinner = (submittingWallet || submittingSwapForm) && <Spinner />;
   const balance1 = balance1token === undefined ? null : Number(balance1token).toFixed(6);
   const balance2 = balance2token === undefined ? null : Number(balance2token).toFixed(6);
-  const prop = proportion === undefined ? null : `Пропорция:${proportion}`;
+  const prop = proportion === undefined || ''
+    ? null
+    : `Пропорция:${new BigNumber(proportion).decimalPlaces(6).toString()}`;
 
   return (
     <div className="swap-form">
