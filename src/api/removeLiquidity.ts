@@ -4,15 +4,30 @@ import { routerABI } from '../constants/abi';
 import contracts from '../constants/contractConstants';
 import parseUnits from '../utils/parseUnits';
 
-const removeLiquidity = async (token1: string, token2: string, amountLP:string, signer:ethers.Signer) => {
+const removeLiquidity = async (
+  token1adress: string,
+  token2adress: string,
+  amountLP:string | undefined,
+  signer:ethers.Signer | undefined,
+) => {
+  if (signer === undefined) {
+    return new Error('Signer is undefined');
+  }
   const routerContract = new ethers.Contract(
     contracts.router.address,
     routerABI,
     signer,
   );
-  const txRouter = await routerContract.removeLiquidity(token1, token2, parseUnits(amountLP));
-  await txRouter.removeLiquidity.wait();
-  return undefined;
+  if (amountLP !== undefined) {
+    const txRouter = await routerContract.removeLiquidity(
+      token1adress,
+      token2adress,
+      parseUnits(amountLP),
+    );
+    await txRouter.wait();
+    return undefined;
+  }
+  return new Error('Balance to remove is undefined');
 };
 
 export default removeLiquidity;

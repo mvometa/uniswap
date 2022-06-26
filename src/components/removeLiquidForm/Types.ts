@@ -10,8 +10,8 @@ export type SwapFormSelectType = {
   label: string;
 };
 
-export type SwapFormData = {
-  balanceToRemove: number;
+export type RemoveLiquidFormData = {
+  balanceToRemove: string;
   token1Label: SwapFormSelectType;
   token2Label: SwapFormSelectType;
 };

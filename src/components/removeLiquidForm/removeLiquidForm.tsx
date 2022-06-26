@@ -17,8 +17,8 @@ import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
 
 import './removeLiquidForm.scss';
 import validate from './validate';
-import { SwapFormData } from './Types';
 import getPairData from '../../api/getPairData';
+import { RemoveLiquidFormData } from './Types';
 
 declare global {
   interface Window {
@@ -50,18 +50,19 @@ const RemoveLiquidForm = (): React.ReactElement => {
     errorSwapForm,
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
 
-  const handleFormSubmit = (data:SwapFormData) => {
+  const handleFormSubmit = (data:RemoveLiquidFormData) => {
     const token1 = tokens.find((elem:TokenInfo) => elem.name === data.token1Label.value);
     const token2 = tokens.find((elem:TokenInfo) => elem.name === data.token2Label.value);
     if (token1 && token2) {
       dispatch(submitSwapForm({
-        fromTokenIndex: token1,
+        balanceToRemove: data.balanceToRemove,
         toTokenIndex: token2,
-        toTokenValue: 0,
+        fromTokenIndex: token1,
+        type: 'get',
         fromTokenValue: 0,
+        toTokenValue: 0,
         provider,
         signer,
-        type: 'get',
       }));
     }
   };
@@ -109,7 +110,7 @@ const RemoveLiquidForm = (): React.ReactElement => {
   const formButton = successWallet
     ? <Button type="submit" text="Вывести ликвидность" />
     : <Button type="button" text="Подключить кошелек" onPointerDown={handleConnectWallet} />;
-
+  console.log(submittingSwapForm);
   const spinner = (submittingWallet || submittingSwapForm) && <Spinner />;
 
   return (

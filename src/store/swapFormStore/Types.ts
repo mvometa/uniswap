@@ -22,6 +22,7 @@ export type SwapFormData = {
   fromTokenValue: number;
   toTokenValue: number;
   slippage?: number;
+  balanceToRemove?: string;
   toTokenIndex: TokenInfo;
   fromTokenIndex: TokenInfo;
   provider: ethers.providers.Web3Provider | undefined;

@@ -1,6 +1,6 @@
-import { FormKey, SwapFormData } from './Types';
+import { FormKey, RemoveLiquidFormData } from './Types';
 
-const validate = (values: SwapFormData): Record<string, string> => {
+const validate = (values: RemoveLiquidFormData): Record<string, string> => {
   const errors: Record<string, string> = {};
   const REQUIRED_FIELDS: FormKey[] = [
     'balanceToRemove',

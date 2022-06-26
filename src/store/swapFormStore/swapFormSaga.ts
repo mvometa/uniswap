@@ -7,6 +7,7 @@ import {
 } from 'redux-saga/effects';
 
 import addLiquidity from '../../api/addLiquidity';
+import removeLiquidity from '../../api/removeLiquidity';
 import swapTokens from '../../api/swapTokens';
 import { submitConnectWalletForm } from '../walletStore/walletConnectActions';
 
@@ -22,6 +23,7 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
     toTokenIndex,
     provider,
     signer,
+    balanceToRemove,
   } = payload;
   if (payload.type === 'add') {
     if (!fromTokenIndex.adress || !toTokenIndex.adress) {
@@ -29,8 +31,7 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
     }
     yield put(setSwapFormSuccess(false));
     yield put(setSwapFormSubmitting(true));
-    let result;
-    yield call(result = async () => addLiquidity(
+    yield call(async () => addLiquidity(
       fromTokenValue,
       toTokenValue,
       fromTokenIndex?.adress,
@@ -38,16 +39,20 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
       provider,
       signer,
     ));
-    if (result?.constructor.name === 'Error') {
-      yield put(setSwapFormError(true));
-      yield put(setSwapFormSuccess(false));
-    } else {
-      yield put(setSwapFormSuccess(true));
-      yield put(setSwapFormError(false));
-    }
     yield put(setSwapFormSubmitting(false));
   } else if (payload.type === 'get') {
-    console.log('get');
+    if (!fromTokenIndex.adress || !toTokenIndex.adress) {
+      yield put(submitConnectWalletForm(true));
+    }
+    yield put(setSwapFormSuccess(false));
+    yield put(setSwapFormSubmitting(true));
+    yield call(async () => removeLiquidity(
+      fromTokenIndex?.adress,
+      toTokenIndex?.adress,
+      balanceToRemove,
+      signer,
+    ));
+    yield put(setSwapFormSubmitting(false));
   } else {
     yield put(setSwapFormSubmitting(true));
     if (payload.provider && payload.signer) {
