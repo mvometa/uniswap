@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { TypeLiquid } from '../../components/swapFormLiquid/Types';
+import { TypeLiquid } from '../../components/addLiquidForm/Types';
 import { TokenInfo } from '../walletStore/Types';
 
 const SUBMIT_SWAP_FORM = 'SUBMIT_SWAP_FORM';

@@ -16,7 +16,7 @@ import Spinner from '../spinner/spinner';
 import SelectAdapter from '../selectAdapter/selectAdapter';
 import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
 
-import './swapFormLiquid.scss';
+import './A.scss';
 import validate from './validate';
 import { SwapFormData, SwapFormLiquidProps } from './Types';
 
@@ -27,14 +27,8 @@ declare global {
   }
 }
 
-const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
-  const { type } = props;
-  let header = '';
-  if (type === 'add') {
-    header = 'Добавить ликвидность в пул';
-  } else {
-    header = 'Вывести ликвидность';
-  }
+const AddLiquidForm = (): React.ReactElement => {
+
   const dispatch = useDispatch();
   const [fromTokenLabel, setToken1Label] = useState< TokenLabel | undefined >(undefined);
   const [toTokenLabel, setToken2Label] = useState< TokenLabel | undefined >(undefined);
@@ -163,7 +157,7 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
 
   return (
     <div className="swap-form">
-      <h2 className="swap-form__header">{header}</h2>
+      <h2 className="swap-form__header">"Добавить ликвидность в пул"</h2>
       {spinner}
       <Form onSubmit={handleFormSubmit} validate={validate}>
         {({ handleSubmit }) => (
@@ -249,4 +243,4 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
   );
 };
 
-export default SwapFormLiquid;
+export default AddLiquidForm;

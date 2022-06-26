@@ -3,11 +3,12 @@ import { useDispatch } from 'react-redux';
 
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
-import SwapFormLiquid from '../../components/swapFormLiquid/swapFormLiquid';
-import { TypeLiquid } from '../../components/swapFormLiquid/Types';
+import AddLiquidForm from '../../components/addLiquidForm/addLiquidForm';
+import { TypeLiquid } from '../../components/addLiquidForm/Types';
 import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 
 import './addLiquidPage.scss';
+import RemoveLiquidForm from '../../components/removeLiquidForm/removeLiquidForm';
 
 type LiquidPageProps = {
   type: TypeLiquid;
@@ -20,13 +21,13 @@ const LiquidPage = (props: LiquidPageProps):React.ReactElement => {
     dispatch(submitConnectWalletForm(true));
   };
 
+  const form = type === 'add' ? <AddLiquidForm /> : <RemoveLiquidForm />
+
   return (
     <>
       <Header handlerConnectWallet={handlerConnectWallet} />
       <main className="uniswap">
-        <SwapFormLiquid
-          type={type}
-        />
+        {form}
       </main>
       <div id="background-radial-gradient" />
       <Footer />
