@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   call,
-  delay,
   put,
   takeEvery,
 } from 'redux-saga/effects';
@@ -11,7 +9,7 @@ import removeLiquidity from '../../api/removeLiquidity';
 import swapTokens from '../../api/swapTokens';
 import { submitConnectWalletForm } from '../walletStore/walletConnectActions';
 
-import { setSwapFormError, setSwapFormSubmitting, setSwapFormSuccess } from './swapFormActions';
+import { setSwapFormSubmitting, setSwapFormSuccess } from './swapFormActions';
 import { SagaSwapFormType, SUBMIT_SWAP_FORM } from './Types';
 
 function* workerSwapFormSaga(data: SagaSwapFormType) {

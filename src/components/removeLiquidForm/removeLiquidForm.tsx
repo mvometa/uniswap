@@ -8,7 +8,6 @@ import { RootState } from '../../store/store';
 import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
 import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
-// import getPairData from '../../api/getPairData';
 
 import Button from '../button/button';
 import Spinner from '../spinner/spinner';
@@ -31,7 +30,6 @@ const RemoveLiquidForm = (): React.ReactElement => {
   const dispatch = useDispatch();
   const [fromTokenLabel, setToken1Label] = useState< TokenLabel | undefined >(undefined);
   const [toTokenLabel, setToken2Label] = useState< TokenLabel | undefined >(undefined);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [balance, setBalance] = useState< string | undefined >(undefined);
 
   const {
