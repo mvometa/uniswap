@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from 'ethers';
 
-import { ERC20ABI } from '../utils/abi';
+import { ERC20ABI } from '../constants/abi';
 
 const getBalance = async (wallet: string, provider: ethers.providers.Web3Provider):Promise<string> => {
   const balance = await provider.getBalance(wallet);

@@ -2,9 +2,9 @@
 import { ethers } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 
-import { ERC20ABI, registryABI } from '../utils/abi';
-import BigNumber from '../utils/bigNumberConfig';
-import contracts from '../utils/contractConstants';
+import { ERC20ABI, registryABI } from '../constants/abi';
+import BigNumber from '../constants/bigNumberConfig';
+import contracts from '../constants/contractConstants';
 
 type Proportion = {
   proportion: string | undefined | 'any';

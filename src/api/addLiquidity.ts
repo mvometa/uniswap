@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ethers } from 'ethers';
 
-import { ERC20ABI, registryABI, routerABI } from '../utils/abi';
-import contracts from '../utils/contractConstants';
+import { ERC20ABI, registryABI, routerABI } from '../constants/abi';
+import contracts from '../constants/contractConstants';
 import parseUnits from '../utils/parseUnits';
-import { tokens } from '../utils/tokenConstants';
+import { tokens } from '../constants/tokenConstants';
 
 const addLiquidity = async (
   token1value:number,

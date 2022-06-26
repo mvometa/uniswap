@@ -2,8 +2,8 @@ import { ethers } from 'ethers';
 
 import {
   feeABI,
-} from '../utils/abi';
-import contracts from '../utils/contractConstants';
+} from '../constants/abi';
+import contracts from '../constants/contractConstants';
 
 const getFee = async (
   provider: ethers.providers.Provider,

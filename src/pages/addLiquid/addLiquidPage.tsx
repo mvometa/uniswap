@@ -2,7 +2,6 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import Footer from '../../components/footer/footer';
-import GlobalError from '../../components/globalError/globalError';
 import Header from '../../components/header/header';
 import SwapFormLiquid from '../../components/swapFormLiquid/swapFormLiquid';
 import { TypeLiquid } from '../../components/swapFormLiquid/Types';
@@ -25,7 +24,6 @@ const LiquidPage = (props: LiquidPageProps):React.ReactElement => {
     <>
       <Header handlerConnectWallet={handlerConnectWallet} />
       <main className="uniswap">
-        <GlobalError />
         <SwapFormLiquid
           type={type}
         />

@@ -5,8 +5,8 @@ import {
   ERC20ABI,
   registryABI,
   routerABI,
-} from '../utils/abi';
-import contracts from '../utils/contractConstants';
+} from '../constants/abi';
+import contracts from '../constants/contractConstants';
 import isErrorLike from '../utils/isErrorLike';
 
 const swapTokens = async (

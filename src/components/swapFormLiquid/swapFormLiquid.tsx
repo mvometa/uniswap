@@ -7,7 +7,7 @@ import { OnChange } from 'react-final-form-listeners';
 import { RootState } from '../../store/store';
 import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
-import BigNumber from '../../utils/bigNumberConfig';
+import BigNumber from '../../constants/bigNumberConfig';
 import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
 import getPairData from '../../api/getPairData';
 
@@ -33,7 +33,7 @@ const SwapFormLiquid = (props: SwapFormLiquidProps): React.ReactElement => {
   if (type === 'add') {
     header = 'Добавить ликвидность в пул';
   } else {
-    header = 'Взять ликвидность из пула';
+    header = 'Вывести ликвидность';
   }
   const dispatch = useDispatch();
   const [fromTokenLabel, setToken1Label] = useState< TokenLabel | undefined >(undefined);

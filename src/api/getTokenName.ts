@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 
-import { ERC20ABI } from '../utils/abi';
+import { ERC20ABI } from '../constants/abi';
 
 const getTokenName = (
   tokenContractAddress:string,
