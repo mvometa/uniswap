@@ -18,6 +18,7 @@ import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
 import './removeLiquidForm.scss';
 import validate from './validate';
 import { SwapFormData } from './Types';
+import getPairData from '../../api/getPairData';
 
 declare global {
   interface Window {
@@ -41,6 +42,7 @@ const RemoveLiquidForm = (): React.ReactElement => {
     tokens,
     provider,
     signer,
+    adressWallet,
   } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
 
   const {
@@ -49,14 +51,14 @@ const RemoveLiquidForm = (): React.ReactElement => {
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
 
   const handleFormSubmit = (data:SwapFormData) => {
-    const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === data.fromTokenLabel.value);
-    const tokenTo = tokens.find((elem:TokenInfo) => elem.name === data.toTokenLabel.value);
-    if (tokenFrom && tokenTo) {
+    const token1 = tokens.find((elem:TokenInfo) => elem.name === data.token1Label.value);
+    const token2 = tokens.find((elem:TokenInfo) => elem.name === data.token2Label.value);
+    if (token1 && token2) {
       dispatch(submitSwapForm({
-        fromTokenIndex: tokenFrom,
-        toTokenIndex: tokenTo,
-        toTokenValue: data.toTokenValue,
-        fromTokenValue: data.fromTokenValue,
+        fromTokenIndex: token1,
+        toTokenIndex: token2,
+        toTokenValue: 0,
+        fromTokenValue: 0,
         provider,
         signer,
         type: 'get',
@@ -68,22 +70,38 @@ const RemoveLiquidForm = (): React.ReactElement => {
     dispatch(submitConnectWalletForm(true));
   };
 
-  const handlerOnChangeFromTokenLabel = async (token1:TokenLabel) => {
+  const handlerOnChangeToken1Label = async (token1:TokenLabel) => {
     if (token1) {
-      // const tokenFrom = tokens.findIndex((elem:TokenInfo) => elem.name === token1.value);
+      const tokenFrom = tokens.findIndex((elem:TokenInfo) => elem.name === token1.value);
       setToken1Label(token1);
       if (toTokenLabel && token1.value !== toTokenLabel.value) {
-        // const tokenTo = tokens.findIndex((elem:TokenInfo) => elem.name === toTokenLabel.value);
+        const tokenTo = tokens.findIndex((elem:TokenInfo) => elem.name === toTokenLabel.value);
+        const pair = await getPairData(
+          tokens[tokenFrom].adress,
+          tokens[tokenTo].adress,
+          adressWallet,
+          provider,
+          signer,
+        );
+        setBalance(pair.userBalance);
       }
     }
   };
 
-  const handlerOnChangeToTokenLabel = async (token2:TokenLabel) => {
+  const handlerOnChangeToken2Label = async (token2:TokenLabel) => {
     if (token2) {
-      // const tokenTo = tokens.findIndex((elem:TokenInfo) => elem.name === token2.value);
+      const tokenTo = tokens.findIndex((elem:TokenInfo) => elem.name === token2.value);
       setToken2Label(token2);
       if (fromTokenLabel && token2.value !== fromTokenLabel.value) {
-        // const tokenFrom = tokens.findIndex((elem:TokenInfo) => elem.name === fromTokenLabel.value);
+        const tokenFrom = tokens.findIndex((elem:TokenInfo) => elem.name === fromTokenLabel.value);
+        const pair = await getPairData(
+          tokens[tokenFrom].adress,
+          tokens[tokenTo].adress,
+          adressWallet,
+          provider,
+          signer,
+        );
+        setBalance(Number(pair.userBalance).toFixed(6));
       }
     }
   };
@@ -104,26 +122,26 @@ const RemoveLiquidForm = (): React.ReactElement => {
             <div className="swap-form-remove__label-wrapper">
               <div className="select-wrapper">
                 <Field
-                  name="fromTokenLabel"
+                  name="token1Label"
                   component={SelectAdapter}
                   options={tokenLabels}
                   validate={requiredNotEmpty}
                 />
-                <ErrorForm name="fromTokenLabel" />
-                <OnChange name="fromTokenLabel">
-                  {handlerOnChangeFromTokenLabel}
+                <ErrorForm name="token1Label" />
+                <OnChange name="token1Label">
+                  {handlerOnChangeToken1Label}
                 </OnChange>
               </div>
               <div className="select-wrapper">
                 <Field
-                  name="toTokenLabel"
+                  name="token2Label"
                   component={SelectAdapter}
                   options={tokenLabels}
                   validate={requiredNotEmpty}
                 />
-                <ErrorForm name="toTokenLabel" />
-                <OnChange name="toTokenLabel">
-                  {handlerOnChangeToTokenLabel}
+                <ErrorForm name="token2Label" />
+                <OnChange name="token2Label">
+                  {handlerOnChangeToken2Label}
                 </OnChange>
               </div>
             </div>

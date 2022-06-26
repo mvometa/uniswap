@@ -3,9 +3,7 @@ type FormData = {
   toTokenValue: number;
 };
 
-type FormKey =
-  | 'fromTokenValue'
-  | 'toTokenValue';
+type FormKey = 'balanceToRemove';
 
 export type SwapFormSelectType = {
   value: string;
@@ -13,13 +11,10 @@ export type SwapFormSelectType = {
 };
 
 export type SwapFormData = {
-  fromTokenValue: number;
-  toTokenValue: number;
-  toTokenLabel: SwapFormSelectType;
-  fromTokenLabel: SwapFormSelectType;
+  balanceToRemove: number;
+  token1Label: SwapFormSelectType;
+  token2Label: SwapFormSelectType;
 };
-
-export type TypeLiquid = 'add' | 'get';
 
 export default FormData;
 export type { FormKey };
