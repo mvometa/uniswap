@@ -19,10 +19,6 @@ export type SwapFormData = {
   fromTokenLabel: SwapFormSelectType;
 };
 
-export type SwapFormLiquidProps = {
-  type: TypeLiquid;
-};
-
 export type TypeLiquid = 'add' | 'get';
 
 export default FormData;

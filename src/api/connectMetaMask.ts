@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 
-import chainIDs from '../utils/chainIDs';
+import chainIDs from '../constants/chainIDs';
 
 declare global {
   interface Window {

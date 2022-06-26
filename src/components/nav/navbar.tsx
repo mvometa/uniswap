@@ -9,7 +9,7 @@ const NavBar:FC<NavBarPropsType> = () => (
   <nav className="navbar">
     <Button text="Обменять" type="button" link="/" />
     <Button text="Добавить ликвидность в пул" type="button" link="/add" />
-    <Button text="Взять ликвидность из пула" type="button" link="/remove" />
+    <Button text="Вывести ликвидность" type="button" link="/remove" />
   </nav>
 );
 

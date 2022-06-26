@@ -21,7 +21,7 @@ const LiquidPage = (props: LiquidPageProps):React.ReactElement => {
     dispatch(submitConnectWalletForm(true));
   };
 
-  const form = type === 'add' ? <AddLiquidForm /> : <RemoveLiquidForm />
+  const form = type === 'add' ? <AddLiquidForm /> : <RemoveLiquidForm />;
 
   return (
     <>

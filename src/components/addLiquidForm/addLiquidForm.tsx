@@ -16,9 +16,9 @@ import Spinner from '../spinner/spinner';
 import SelectAdapter from '../selectAdapter/selectAdapter';
 import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
 
-import './A.scss';
+import './addLiquidForm.scss';
 import validate from './validate';
-import { SwapFormData, SwapFormLiquidProps } from './Types';
+import { SwapFormData } from './Types';
 
 declare global {
   interface Window {
@@ -28,7 +28,6 @@ declare global {
 }
 
 const AddLiquidForm = (): React.ReactElement => {
-
   const dispatch = useDispatch();
   const [fromTokenLabel, setToken1Label] = useState< TokenLabel | undefined >(undefined);
   const [toTokenLabel, setToken2Label] = useState< TokenLabel | undefined >(undefined);
@@ -157,7 +156,7 @@ const AddLiquidForm = (): React.ReactElement => {
 
   return (
     <div className="swap-form">
-      <h2 className="swap-form__header">"Добавить ликвидность в пул"</h2>
+      <h2 className="swap-form__header">Добавить ликвидность в пул</h2>
       {spinner}
       <Form onSubmit={handleFormSubmit} validate={validate}>
         {({ handleSubmit }) => (

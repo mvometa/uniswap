@@ -18,7 +18,7 @@ import {
 } from './Types';
 
 import connectMetaMask, { EthersProviders } from '../../api/connectMetaMask';
-import { tokens } from '../../utils/tokenConstants';
+import { tokens } from '../../constants/tokenConstants';
 import getTokenName from '../../api/getTokenName';
 import { getBalanceOfToken } from '../../api/getBalance';
 import getFee from '../../api/getFee';
