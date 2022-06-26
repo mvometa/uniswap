@@ -50,6 +50,7 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
       balanceToRemove,
       signer,
     ));
+    yield put(setSwapFormSuccess(true));
     yield put(setSwapFormSubmitting(false));
   } else {
     yield put(setSwapFormSubmitting(true));

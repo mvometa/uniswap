@@ -5,4 +5,5 @@ export type OptionsValue = {
 
 export type SelectCallback = {
   onSelectCallback?: (selectValue: string) => void | undefined;
+  onReset?: boolean;
 };

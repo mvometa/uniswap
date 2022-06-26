@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { OnChange } from 'react-final-form-listeners';
 
+import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../store/store';
 import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
@@ -28,6 +29,7 @@ declare global {
 
 const RemoveLiquidForm = (): React.ReactElement => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [fromTokenLabel, setToken1Label] = useState< TokenLabel | undefined >(undefined);
   const [toTokenLabel, setToken2Label] = useState< TokenLabel | undefined >(undefined);
   const [balance, setBalance] = useState< string | undefined >(undefined);
@@ -46,7 +48,15 @@ const RemoveLiquidForm = (): React.ReactElement => {
   const {
     submittingSwapForm,
     errorSwapForm,
+    successSwapForm,
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
+  console.log(successSwapForm);
+
+  useEffect(() => {
+    if (successSwapForm) {
+      navigate(0);
+    }
+  }, [successSwapForm]);
 
   const handleFormSubmit = (data:RemoveLiquidFormData) => {
     const token1 = tokens.find((elem:TokenInfo) => elem.name === data.token1Label.value);
@@ -108,7 +118,6 @@ const RemoveLiquidForm = (): React.ReactElement => {
   const formButton = successWallet
     ? <Button type="submit" text="Вывести ликвидность" />
     : <Button type="button" text="Подключить кошелек" onPointerDown={handleConnectWallet} />;
-  console.log(submittingSwapForm);
   const spinner = (submittingWallet || submittingSwapForm) && <Spinner />;
 
   return (
