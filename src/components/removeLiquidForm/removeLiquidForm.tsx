@@ -50,7 +50,6 @@ const RemoveLiquidForm = (): React.ReactElement => {
     errorSwapForm,
     successSwapForm,
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
-  console.log(successSwapForm);
 
   useEffect(() => {
     if (successSwapForm) {

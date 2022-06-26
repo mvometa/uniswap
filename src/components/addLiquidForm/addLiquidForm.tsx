@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { OnChange } from 'react-final-form-listeners';
 
+import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../store/store';
 import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
@@ -29,14 +30,13 @@ declare global {
 
 const AddLiquidForm = (): React.ReactElement => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [fromTokenLabel, setToken1Label] = useState< TokenLabel | undefined >(undefined);
   const [toTokenLabel, setToken2Label] = useState< TokenLabel | undefined >(undefined);
   const [toTokenValue, setToTokenValue] = useState< string | undefined >(undefined);
   const [fromTokenValue, setTokenFromValue] = useState< string | undefined >(undefined);
   const [balance1token, setBalance1token] = useState< number | undefined >(undefined);
   const [balance2token, setBalance2token] = useState< number | undefined >(undefined);
-  // const [balance1Max, setBalance1Max] = useState< number | undefined >(undefined);
-  // const [balance2Max, setBalance2Max] = useState< number | undefined >(undefined);
   const [proportion, setProportion] = useState< string | undefined >(undefined);
 
   const {
@@ -53,7 +53,14 @@ const AddLiquidForm = (): React.ReactElement => {
   const {
     submittingSwapForm,
     errorSwapForm,
+    successSwapForm,
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
+
+  useEffect(() => {
+    if (successSwapForm) {
+      navigate(0);
+    }
+  }, [successSwapForm]);
 
   const handleFormSubmit = (data:SwapFormData) => {
     const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === data.fromTokenLabel.value);
