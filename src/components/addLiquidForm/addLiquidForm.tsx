@@ -77,20 +77,20 @@ const AddLiquidForm = (): React.ReactElement => {
       const tokenToIndex = tokens.findIndex((elem:TokenInfo) => elem.name === toTokenLabel?.value);
       const tokenFromBalance = tokens[tokenFromIndex].balance;
       const tokenToBalance = tokens[tokenToIndex].balance;
-      if (proportions?.proportion === 'any') {
+      const validDataToSetMax = tokenFromBalance && tokenToBalance && proportions.proportion;
+      if (proportions?.proportion === 'any' && validDataToSetMax) {
         setMax2token(tokenToBalance);
         setMax1token(tokenFromBalance);
-      } else if (tokenFromBalance && tokenToBalance && tokenFromBalance > tokenToBalance && proportions) {
-        console.log('here');
-        console.log(tokenFromBalance);
-        console.log(tokenToBalance);
-        console.log(proportions);
-        console.log(proportions.proportion);
+      } else if (validDataToSetMax && tokenFromBalance > tokenToBalance && proportions.proportion !== '1') {
         setMax2token(tokenToBalance);
         setMax1token(tokenToBalance * Number(proportions.proportion));
-      } else if (tokenFromBalance && tokenToBalance && tokenFromBalance < tokenToBalance && proportions) {
+      } else if (validDataToSetMax && tokenFromBalance < tokenToBalance && proportions.proportion !== '1') {
         setMax1token(tokenFromBalance);
         setMax2token(tokenFromBalance / Number(proportions.proportion));
+      } else if (validDataToSetMax && proportions.proportion === '1') {
+        const max = Math.min(tokenFromBalance, tokenToBalance);
+        setMax1token(max);
+        setMax2token(max);
       }
     }
   }, [successSwapForm, proportions, fromTokenLabel, toTokenLabel]);
