@@ -6,7 +6,7 @@ import { ERC20ABI, registryABI } from '../constants/abi';
 import BigNumber from '../constants/bigNumberConfig';
 import contracts from '../constants/contractConstants';
 
-type Proportion = {
+export type ProportionType = {
   proportion: string | undefined | 'any';
   token1Balance:string;
   token2Balance:string;
@@ -20,7 +20,7 @@ const getProportion = async (
   userWalletAdress: string,
   provider: ethers.providers.Web3Provider | undefined,
   signer: ethers.providers.JsonRpcSigner | undefined,
-):Promise< Proportion > => {
+):Promise< ProportionType > => {
   if (provider && signer) {
     const registryContract = new ethers.Contract(
       contracts.registry.address,

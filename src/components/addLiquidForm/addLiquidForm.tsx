@@ -37,6 +37,8 @@ const AddLiquidForm = (): React.ReactElement => {
   const [fromTokenValue, setTokenFromValue] = useState< string | undefined >(undefined);
   const [balance1token, setBalance1token] = useState< number | undefined >(undefined);
   const [balance2token, setBalance2token] = useState< number | undefined >(undefined);
+  const [max1token, setMax1token] = useState< number | undefined >(undefined);
+  const [max2token, setMax2token] = useState< number | undefined >(undefined);
   const [proportion, setProportion] = useState< string | undefined >(undefined);
 
   const {
@@ -82,6 +84,23 @@ const AddLiquidForm = (): React.ReactElement => {
     dispatch(submitConnectWalletForm(true));
   };
 
+  const setMax = (token1: TokenInfo, token2: TokenInfo):void => {
+    if (token1 && token2 && token1.balance && token2.balance) {
+      if (proportion === 'any') {
+        setMax2token(token2.balance);
+        setMax1token(token1.balance);
+        return;
+      }
+      if (token1.balance > token2.balance) {
+        setMax2token(token2.balance);
+        setMax1token(token2.balance * Number(proportion));
+      } else {
+        setMax1token(token1.balance);
+        setMax2token(token1.balance / Number(proportion));
+      }
+    }
+  };
+
   const handleOnChangeFromTokenValue = async (token1:string) => {
     const tokensAreChoosen = fromTokenLabel !== undefined && toTokenLabel !== undefined;
     const inputAreValid = token1.length > 0 && !Number.isNaN(Number(token1));
@@ -123,6 +142,7 @@ const AddLiquidForm = (): React.ReactElement => {
         } else if (pair.proportion === 'any') {
           setProportion('любая');
         }
+        setMax(tokens[tokenFrom], tokens[tokenTo]);
       }
     }
   };
@@ -146,6 +166,7 @@ const AddLiquidForm = (): React.ReactElement => {
         } else if (pair.proportion === 'any') {
           setProportion('любая');
         }
+        setMax(tokens[tokenFrom], tokens[tokenTo]);
       }
     }
   };
@@ -200,6 +221,10 @@ const AddLiquidForm = (): React.ReactElement => {
                 Баланс:
                 {balance1}
               </div>
+              <div className="swap-form__max">
+                МАКС:
+                {max1token}
+              </div>
             </div>
             <div className="swap-form__label-wrapper">
               <label className="swap-form__label">
@@ -232,6 +257,10 @@ const AddLiquidForm = (): React.ReactElement => {
               <div className="swap-form__balance">
                 Баланс:
                 {balance2}
+              </div>
+              <div className="swap-form__max">
+                МАКС:
+                {max2token}
               </div>
             </div>
             <span

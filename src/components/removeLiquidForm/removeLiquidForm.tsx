@@ -17,8 +17,8 @@ import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
 
 import './removeLiquidForm.scss';
 import validate from './validate';
-import getPairData from '../../api/getPairData';
 import { RemoveLiquidFormData } from './Types';
+import { submitProportions } from '../../store/pairsStore/pairsConnectActions';
 
 declare global {
   interface Window {
@@ -51,11 +51,19 @@ const RemoveLiquidForm = (): React.ReactElement => {
     successSwapForm,
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
 
+  const {
+    proportions,
+    submittingPairs,
+  } = { ...useSelector((state:RootState) => state.PairsConnectReducer) };
+
   useEffect(() => {
     if (successSwapForm) {
       navigate(0);
     }
-  }, [successSwapForm]);
+    if (proportions) {
+      setBalance(Number(proportions?.userBalance).toFixed(6));
+    }
+  }, [successSwapForm, proportions]);
 
   const handleFormSubmit = (data:RemoveLiquidFormData) => {
     const token1 = tokens.find((elem:TokenInfo) => elem.name === data.token1Label.value);
@@ -84,14 +92,14 @@ const RemoveLiquidForm = (): React.ReactElement => {
       setToken1Label(token1);
       if (toTokenLabel && token1.value !== toTokenLabel.value) {
         const tokenTo = tokens.findIndex((elem:TokenInfo) => elem.name === toTokenLabel.value);
-        const pair = await getPairData(
-          tokens[tokenFrom].adress,
-          tokens[tokenTo].adress,
-          adressWallet,
+        const dataToSubmit = {
+          token1adress: tokens[tokenFrom].adress,
+          token2adress: tokens[tokenTo].adress,
+          userWalletAdress: adressWallet,
           provider,
           signer,
-        );
-        setBalance(pair.userBalance);
+        };
+        dispatch(submitProportions(dataToSubmit));
       }
     }
   };
@@ -102,14 +110,17 @@ const RemoveLiquidForm = (): React.ReactElement => {
       setToken2Label(token2);
       if (fromTokenLabel && token2.value !== fromTokenLabel.value) {
         const tokenFrom = tokens.findIndex((elem:TokenInfo) => elem.name === fromTokenLabel.value);
-        const pair = await getPairData(
-          tokens[tokenFrom].adress,
-          tokens[tokenTo].adress,
-          adressWallet,
+        const dataToSubmit = {
+          token1adress: tokens[tokenFrom].adress,
+          token2adress: tokens[tokenTo].adress,
+          userWalletAdress: adressWallet,
           provider,
           signer,
-        );
-        setBalance(Number(pair.userBalance).toFixed(6));
+        };
+        if (proportions) {
+          setBalance(Number(proportions?.userBalance).toFixed(6));
+        }
+        dispatch(submitProportions(dataToSubmit));
       }
     }
   };
@@ -117,7 +128,7 @@ const RemoveLiquidForm = (): React.ReactElement => {
   const formButton = successWallet
     ? <Button type="submit" text="Вывести ликвидность" />
     : <Button type="button" text="Подключить кошелек" onPointerDown={handleConnectWallet} />;
-  const spinner = (submittingWallet || submittingSwapForm) && <Spinner />;
+  const spinner = (submittingWallet || submittingSwapForm || submittingPairs) && <Spinner />;
 
   return (
     <div className="swap-form">

@@ -1,5 +1,6 @@
 import { combineReducers, configureStore, Store } from '@reduxjs/toolkit';
 import createSagaMiddleware, { Task } from 'redux-saga';
+import PairsConnectReducer from './pairsStore/pairsConnectReducer';
 
 import RootSaga from './RootSaga';
 import SwapFormReducer from './swapFormStore/swapFormReducer';
@@ -14,6 +15,7 @@ export interface SagaStore extends Store {
 const rootReducer = combineReducers({
   WalletConnectReducer,
   SwapFormReducer,
+  PairsConnectReducer,
 });
 
 const store = configureStore({
