@@ -108,6 +108,10 @@
 
   &__max {
     color: $button-base-text-color;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 8px;
   }
 
   &__proportion {

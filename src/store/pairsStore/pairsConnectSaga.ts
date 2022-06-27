@@ -12,7 +12,6 @@ import {
 import { ProportionSagaType, SUBMIT_PROPORTIONS } from './Types';
 
 function* workerPairsConnectSaga(data: ProportionSagaType) {
-  console.log('inside saga');
   const { payload } = data;
   const {
     token1adress,
@@ -29,7 +28,6 @@ function* workerPairsConnectSaga(data: ProportionSagaType) {
     provider,
     signer,
   ));
-  console.log(pair);
   yield put(setSubmittingProportions(false));
   yield put(setProportions(pair));
 }

@@ -10,7 +10,7 @@ import { submitConnectWalletForm } from '../../store/walletStore/walletConnectAc
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
 import BigNumber from '../../constants/bigNumberConfig';
 import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
-import getPairData from '../../api/getPairData';
+import { submitProportions } from '../../store/pairsStore/pairsConnectActions';
 
 import Button from '../button/button';
 import Spinner from '../spinner/spinner';
@@ -58,11 +58,42 @@ const AddLiquidForm = (): React.ReactElement => {
     successSwapForm,
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
 
+  const {
+    proportions,
+    submittingPairs,
+  } = { ...useSelector((state:RootState) => state.PairsConnectReducer) };
+
   useEffect(() => {
     if (successSwapForm) {
       navigate(0);
     }
-  }, [successSwapForm]);
+    if (proportions !== undefined && proportions.proportion !== 'any') {
+      setProportion((proportions.proportion));
+    } else if (proportions !== undefined && proportions.proportion === 'any') {
+      setProportion('любая');
+    }
+    if (fromTokenLabel && toTokenLabel && proportions) {
+      const tokenFromIndex = tokens.findIndex((elem:TokenInfo) => elem.name === fromTokenLabel?.value);
+      const tokenToIndex = tokens.findIndex((elem:TokenInfo) => elem.name === toTokenLabel?.value);
+      const tokenFromBalance = tokens[tokenFromIndex].balance;
+      const tokenToBalance = tokens[tokenToIndex].balance;
+      if (proportions?.proportion === 'any') {
+        setMax2token(tokenToBalance);
+        setMax1token(tokenFromBalance);
+      } else if (tokenFromBalance && tokenToBalance && tokenFromBalance > tokenToBalance && proportions) {
+        console.log('here');
+        console.log(tokenFromBalance);
+        console.log(tokenToBalance);
+        console.log(proportions);
+        console.log(proportions.proportion);
+        setMax2token(tokenToBalance);
+        setMax1token(tokenToBalance * Number(proportions.proportion));
+      } else if (tokenFromBalance && tokenToBalance && tokenFromBalance < tokenToBalance && proportions) {
+        setMax1token(tokenFromBalance);
+        setMax2token(tokenFromBalance / Number(proportions.proportion));
+      }
+    }
+  }, [successSwapForm, proportions, fromTokenLabel, toTokenLabel]);
 
   const handleFormSubmit = (data:SwapFormData) => {
     const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === data.fromTokenLabel.value);
@@ -82,23 +113,6 @@ const AddLiquidForm = (): React.ReactElement => {
 
   const handleConnectWallet = async () => {
     dispatch(submitConnectWalletForm(true));
-  };
-
-  const setMax = (token1: TokenInfo, token2: TokenInfo):void => {
-    if (token1 && token2 && token1.balance && token2.balance) {
-      if (proportion === 'any') {
-        setMax2token(token2.balance);
-        setMax1token(token1.balance);
-        return;
-      }
-      if (token1.balance > token2.balance) {
-        setMax2token(token2.balance);
-        setMax1token(token2.balance * Number(proportion));
-      } else {
-        setMax1token(token1.balance);
-        setMax2token(token1.balance / Number(proportion));
-      }
-    }
   };
 
   const handleOnChangeFromTokenValue = async (token1:string) => {
@@ -130,19 +144,14 @@ const AddLiquidForm = (): React.ReactElement => {
       setToken1Label(token1);
       if (toTokenLabel && token1.value !== toTokenLabel.value) {
         const tokenTo = tokens.findIndex((elem:TokenInfo) => elem.name === toTokenLabel.value);
-        const pair = await getPairData(
-          tokens[tokenFrom].adress,
-          tokens[tokenTo].adress,
-          adressWallet,
+        const dataToSubmit = {
+          token1adress: tokens[tokenFrom].adress,
+          token2adress: tokens[tokenTo].adress,
+          userWalletAdress: adressWallet,
           provider,
           signer,
-        );
-        if (pair.proportion !== undefined && pair.proportion !== 'any') {
-          setProportion((pair.proportion));
-        } else if (pair.proportion === 'any') {
-          setProportion('любая');
-        }
-        setMax(tokens[tokenFrom], tokens[tokenTo]);
+        };
+        dispatch(submitProportions(dataToSubmit));
       }
     }
   };
@@ -154,19 +163,14 @@ const AddLiquidForm = (): React.ReactElement => {
       setToken2Label(token2);
       if (fromTokenLabel && token2.value !== fromTokenLabel.value) {
         const tokenFrom = tokens.findIndex((elem:TokenInfo) => elem.name === fromTokenLabel.value);
-        const pair = await getPairData(
-          tokens[tokenFrom].adress,
-          tokens[tokenTo].adress,
-          adressWallet,
+        const dataToSubmit = {
+          token1adress: tokens[tokenFrom].adress,
+          token2adress: tokens[tokenTo].adress,
+          userWalletAdress: adressWallet,
           provider,
           signer,
-        );
-        if (pair.proportion !== undefined && pair.proportion !== 'any') {
-          setProportion(pair.proportion);
-        } else if (pair.proportion === 'any') {
-          setProportion('любая');
-        }
-        setMax(tokens[tokenFrom], tokens[tokenTo]);
+        };
+        dispatch(submitProportions(dataToSubmit));
       }
     }
   };
@@ -175,7 +179,7 @@ const AddLiquidForm = (): React.ReactElement => {
     ? <Button type="submit" text="Добавить ликвидность" />
     : <Button type="button" text="Подключить кошелек" onPointerDown={handleConnectWallet} />;
 
-  const spinner = (submittingWallet || submittingSwapForm) && <Spinner />;
+  const spinner = (submittingWallet || submittingSwapForm || submittingPairs) && <Spinner />;
   const balance1 = balance1token === undefined ? null : Number(balance1token).toFixed(6);
   const balance2 = balance2token === undefined ? null : Number(balance2token).toFixed(6);
   const prop = proportion === undefined || ''
