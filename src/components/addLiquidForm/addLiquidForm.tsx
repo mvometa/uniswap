@@ -67,7 +67,7 @@ const AddLiquidForm = (): React.ReactElement => {
     if (successSwapForm) {
       navigate(0);
     }
-    if (proportions !== undefined && proportions.proportion !== 'any') {
+    if (proportions !== undefined && proportions.proportion !== 'any' && fromTokenLabel && toTokenLabel) {
       setProportion((proportions.proportion));
     } else if (proportions !== undefined && proportions.proportion === 'any') {
       setProportion('любая');
@@ -119,8 +119,9 @@ const AddLiquidForm = (): React.ReactElement => {
     const tokensAreChoosen = fromTokenLabel !== undefined && toTokenLabel !== undefined;
     const inputAreValid = token1.length > 0 && !Number.isNaN(Number(token1));
     if (inputAreValid && tokensAreChoosen) {
-      if (proportion !== undefined && proportion !== 'any') {
-        const resultToken2 = new BigNumber(token1).div(proportion).toString();
+      setTokenFromValue(token1);
+      if (proportions?.proportion !== undefined && proportions.proportion !== 'any') {
+        const resultToken2 = new BigNumber(token1).div(proportions.proportion).toString();
         setToTokenValue(resultToken2);
       }
     }

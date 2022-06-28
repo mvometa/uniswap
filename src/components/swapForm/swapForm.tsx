@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 import { OnChange } from 'react-final-form-listeners';
+
 import downArrow from './down-arrow.svg';
 import './swapForm.scss';
 import validate from './validate';
@@ -16,9 +17,11 @@ import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
 import { SwapFormData } from './Types';
 import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
+import BigNumber from '../../constants/bigNumberConfig';
 
 import Spinner from '../spinner/spinner';
 import { submitProportions } from '../../store/pairsStore/pairsConnectActions';
+import Offer from '../offer/offer';
 
 declare global {
   interface Window {
@@ -49,6 +52,7 @@ const SwapForm = ():React.ReactElement => {
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
 
   const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     proportions,
     submittingPairs,
   } = { ...useSelector((state:RootState) => state.PairsConnectReducer) };
@@ -57,8 +61,9 @@ const SwapForm = ():React.ReactElement => {
   const [balance2token, setBalance2token] = useState< number | undefined >(undefined);
   const [fromTokenLabel, setToken1Label] = useState< TokenLabel | undefined >(undefined);
   const [toTokenLabel, setToken2Label] = useState< TokenLabel | undefined >(undefined);
-
-  console.log(proportions);
+  const [toTokenValue, setToTokenValue] = useState< string | undefined >(undefined);
+  const [fromTokenValue, setTokenFromValue] = useState< string | undefined >(undefined);
+  const [slippage, setSlippage] = useState< string >('0');
 
   const handleFormSubmit = (data:SwapFormData) => {
     const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === data.fromTokenLabel.value);
@@ -97,8 +102,16 @@ const SwapForm = ():React.ReactElement => {
     }
   };
 
-  const handleMaxClick = () => {
-    console.log('handleMaxClick');
+  const handleOnChangeFromTokenValue = (token1:string) => {
+    const tokensAreChoosen = fromTokenLabel !== undefined && toTokenLabel !== undefined;
+    const inputAreValid = token1.length > 0 && !Number.isNaN(Number(token1));
+    if (inputAreValid && tokensAreChoosen) {
+      setTokenFromValue(token1);
+      if (proportions !== undefined && proportions.proportion !== 'any' && proportions.proportion) {
+        const resultToken2 = new BigNumber(token1).div(proportions.proportion).toString();
+        setToTokenValue(resultToken2);
+      }
+    }
   };
 
   const handlerOnChangeFromTokenLabel = (token1:TokenLabel) => {
@@ -139,22 +152,13 @@ const SwapForm = ():React.ReactElement => {
     }
   };
 
+  const handlerOnChangeSlippage = (slippageValue: string) => {
+    setSlippage(slippageValue);
+  };
+
   const spinner = (submittingWallet || submittingSwapForm || submittingPairs) && <Spinner />;
   const balance1 = balance1token === undefined ? null : Number(balance1token).toFixed(6);
   const balance2 = balance2token === undefined ? null : Number(balance2token).toFixed(6);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const maxButton = successWallet && (
-    <button
-      className="swap-form__max-button"
-      onClick={handleMaxClick}
-      type="button"
-    >
-      <span className="max-value">
-        {`Максимум: ${0}`}
-      </span>
-    </button>
-  );
 
   return (
     <div className="swap-form">
@@ -169,11 +173,15 @@ const SwapForm = ():React.ReactElement => {
                   name="fromTokenValue"
                   component="input"
                   type="text"
+                  initialValue={fromTokenValue}
                   placeholder="0.0"
                   className="swap-form__input"
                   validate={requiredNotEmpty}
                 />
                 <ErrorForm name="fromTokenValue" />
+                <OnChange name="fromTokenValue">
+                  {handleOnChangeFromTokenValue}
+                </OnChange>
               </label>
               <div className="select-wrapper select-wrapper_first">
                 <Field
@@ -202,6 +210,7 @@ const SwapForm = ():React.ReactElement => {
                   name="toTokenValue"
                   component="input"
                   type="text"
+                  initialValue={toTokenValue}
                   placeholder="0.0"
                   className="swap-form__input"
                   validate={requiredNotEmpty}
@@ -224,6 +233,14 @@ const SwapForm = ():React.ReactElement => {
                 Баланс:
                 {balance2}
               </div>
+              <Offer
+                value1={fromTokenValue}
+                value2={toTokenValue}
+                slippage={slippage}
+                value1Label={fromTokenLabel?.value}
+                value2Label={toTokenLabel?.value}
+                hidden={proportions?.proportion === undefined}
+              />
             </div>
             <Field name="slippage">
               {({ input, meta }) => (
@@ -239,6 +256,9 @@ const SwapForm = ():React.ReactElement => {
                 </label>
               )}
             </Field>
+            <OnChange name="slippage">
+              {handlerOnChangeSlippage}
+            </OnChange>
             <span
               className="swap-form__error"
               style={(errorWallet || errorSwapForm) ? { display: 'block' } : { display: 'none' }}
