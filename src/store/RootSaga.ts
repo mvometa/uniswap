@@ -2,6 +2,7 @@ import {
   all, call, CallEffect, spawn,
 } from '@redux-saga/core/effects';
 import { Saga } from '@redux-saga/types';
+import watchGlobalErrorSaga from './error/globalErrorSaga';
 import watchPairsConnectSaga from './pairsStore/pairsConnectSaga';
 import watchSwapFormSaga from './swapFormStore/swapFormSaga';
 
@@ -29,6 +30,7 @@ function* RootSaga(): Generator<any, any, any> {
     watchConnectWalletSaga,
     watchSwapFormSaga,
     watchPairsConnectSaga,
+    watchGlobalErrorSaga,
   ];
 
   const retrySagas = yield sagas.map((saga) => spawn(startSaga, saga));

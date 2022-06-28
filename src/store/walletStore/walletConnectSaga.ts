@@ -22,14 +22,17 @@ import { tokens } from '../../constants/tokenConstants';
 import getTokenName from '../../api/getTokenName';
 import { getBalanceOfToken } from '../../api/getBalance';
 import getFee from '../../api/getFee';
+import { setGlobalErrorDispatch } from '../error/globalErrorActions';
 
 function* workerConnectWalletSaga() {
   yield put(setSubmitting(true));
+  yield put(setGlobalErrorDispatch({ globalErrorMessage: '' }));
   const result: Error & EthersProviders = yield call(async () => connectMetaMask());
   if (result.constructor.name === 'Error') {
     yield put(setError(true));
     yield put(setSuccess(false));
     yield put(setErrorMessage(result.message));
+    yield put(setGlobalErrorDispatch({ globalErrorMessage: result.message }));
   } else {
     yield put(setSuccess(true));
     yield put(setWalletProvider(result.provider));

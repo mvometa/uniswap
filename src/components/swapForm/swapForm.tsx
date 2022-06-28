@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Field, FieldMetaState, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 import { OnChange } from 'react-final-form-listeners';
 
+import { useNavigate } from 'react-router-dom';
 import downArrow from './down-arrow.svg';
 import './swapForm.scss';
 import validate from './validate';
@@ -22,6 +23,7 @@ import BigNumber from '../../constants/bigNumberConfig';
 import Spinner from '../spinner/spinner';
 import { submitProportions } from '../../store/pairsStore/pairsConnectActions';
 import Offer from '../offer/offer';
+import parseUnits from '../../utils/parseUnits';
 
 declare global {
   interface Window {
@@ -32,6 +34,7 @@ declare global {
 
 const SwapForm = ():React.ReactElement => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     successWallet,
@@ -41,21 +44,25 @@ const SwapForm = ():React.ReactElement => {
     submittingWallet,
     errorWallet,
     tokens,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    fee,
     adressWallet,
   } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
 
   const {
     submittingSwapForm,
     errorSwapForm,
+    successSwapForm,
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
 
   const {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     proportions,
     submittingPairs,
   } = { ...useSelector((state:RootState) => state.PairsConnectReducer) };
+
+  useEffect(() => {
+    if (successSwapForm) {
+      navigate('/');
+    }
+  }, [successSwapForm]);
 
   const [balance1token, setBalance1token] = useState< number | undefined >(undefined);
   const [balance2token, setBalance2token] = useState< number | undefined >(undefined);
@@ -80,6 +87,8 @@ const SwapForm = ():React.ReactElement => {
       }));
     }
   };
+  console.log(parseUnits('0.092995716883665749006374996952121907316756452486335459237397766865124635170186946916981777817577').toString());
+  console.log(parseUnits('1').toString());
 
   const handleConnectWallet = async () => {
     dispatch(submitConnectWalletForm(true));
@@ -263,7 +272,7 @@ const SwapForm = ():React.ReactElement => {
               className="swap-form__error"
               style={(errorWallet || errorSwapForm) ? { display: 'block' } : { display: 'none' }}
             >
-              Error.
+              Ошибка.
             </span>
             {formButton}
           </form>

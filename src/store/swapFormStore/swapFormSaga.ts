@@ -7,9 +7,10 @@ import {
 import addLiquidity from '../../api/addLiquidity';
 import removeLiquidity from '../../api/removeLiquidity';
 import swapTokens from '../../api/swapTokens';
+import { setGlobalErrorDispatch } from '../error/globalErrorActions';
 import { submitConnectWalletForm } from '../walletStore/walletConnectActions';
 
-import { setSwapFormSubmitting, setSwapFormSuccess } from './swapFormActions';
+import { setSwapFormError, setSwapFormSubmitting, setSwapFormSuccess } from './swapFormActions';
 import { SagaSwapFormType, SUBMIT_SWAP_FORM } from './Types';
 
 function* workerSwapFormSaga(data: SagaSwapFormType) {
@@ -23,6 +24,7 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
     signer,
     balanceToRemove,
   } = payload;
+  yield put(setGlobalErrorDispatch({ globalErrorMessage: '' }));
   if (payload.type === 'add') {
     if (!fromTokenIndex.adress || !toTokenIndex.adress) {
       yield put(submitConnectWalletForm(true));
@@ -55,7 +57,7 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
   } else {
     yield put(setSwapFormSubmitting(true));
     if (payload.provider && payload.signer) {
-      yield call(async () => swapTokens(
+      const result: Error | undefined = yield call(async () => swapTokens(
         payload.fromTokenIndex?.adress,
         payload.toTokenIndex?.adress,
         payload.signer,
@@ -63,6 +65,14 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
         String(payload.fromTokenValue),
         String(payload.toTokenValue),
       ));
+      if (result && result.constructor.name === 'Error') {
+        yield put(setGlobalErrorDispatch({ globalErrorMessage: String(result.message) }));
+        yield put(setSwapFormError(true));
+      } else {
+        yield put(setSwapFormError(false));
+        yield put(setSwapFormSuccess(true));
+        yield put(setGlobalErrorDispatch({ globalErrorMessage: '' }));
+      }
     }
     yield put(setSwapFormSubmitting(false));
   }

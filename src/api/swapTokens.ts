@@ -36,25 +36,27 @@ const swapTokens = async (
       signer,
     );
 
-    const txTokenIn = await tokenFromContract.approve(contracts.router.address, parseUnits(tokenAmountFrom));
-    await txTokenIn.wait();
+    const txTokenFrom = await tokenFromContract.approve(contracts.router.address, parseUnits(tokenAmountFrom));
+    await txTokenFrom.wait();
 
     const routerContract = new ethers.Contract(
       contracts.router.address,
       routerABI,
       signer,
     );
-
+    console.log(routerContract);
     const txRouter = await routerContract.swapIn(tokenFromAdress, tokenToAdress, parseUnits(
       tokenAmountFrom,
     ), parseUnits(tokenAmountTo));
-
+    console.log(txRouter);
     await txRouter.wait();
   } catch (error) {
+    console.log('catch error');
+    console.log(error);
     if (isErrorLike(error)) {
       return new Error(error.message);
     }
-    return error;
+    return new Error(String(error));
   }
 
   return undefined;
