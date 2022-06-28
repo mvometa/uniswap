@@ -60,7 +60,7 @@ const RemoveLiquidForm = (): React.ReactElement => {
     if (successSwapForm) {
       navigate(0);
     }
-    if (proportions) {
+    if (proportions && proportions.userBalance) {
       setBalance(Number(proportions?.userBalance).toFixed(6));
     }
   }, [successSwapForm, proportions]);

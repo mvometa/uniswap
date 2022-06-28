@@ -37,8 +37,8 @@ const AddLiquidForm = (): React.ReactElement => {
   const [fromTokenValue, setTokenFromValue] = useState< string | undefined >(undefined);
   const [balance1token, setBalance1token] = useState< number | undefined >(undefined);
   const [balance2token, setBalance2token] = useState< number | undefined >(undefined);
-  const [max1token, setMax1token] = useState< number | undefined >(undefined);
-  const [max2token, setMax2token] = useState< number | undefined >(undefined);
+  const [max1token, setMax1token] = useState< string | undefined >(undefined);
+  const [max2token, setMax2token] = useState< string | undefined >(undefined);
   const [proportion, setProportion] = useState< string | undefined >(undefined);
 
   const {
@@ -79,18 +79,18 @@ const AddLiquidForm = (): React.ReactElement => {
       const tokenToBalance = tokens[tokenToIndex].balance;
       const validDataToSetMax = tokenFromBalance && tokenToBalance && proportions.proportion;
       if (proportions?.proportion === 'any' && validDataToSetMax) {
-        setMax2token(tokenToBalance);
-        setMax1token(tokenFromBalance);
+        setMax2token(Number(tokenToBalance).toFixed(6));
+        setMax1token(Number(tokenFromBalance).toFixed(6));
       } else if (validDataToSetMax && tokenFromBalance > tokenToBalance && proportions.proportion !== '1') {
-        setMax2token(tokenToBalance);
-        setMax1token(tokenToBalance * Number(proportions.proportion));
+        setMax2token(Number(tokenToBalance).toFixed(6));
+        setMax1token(Number(tokenToBalance * Number(proportions.proportion)).toFixed(6));
       } else if (validDataToSetMax && tokenFromBalance < tokenToBalance && proportions.proportion !== '1') {
-        setMax1token(tokenFromBalance);
-        setMax2token(tokenFromBalance / Number(proportions.proportion));
+        setMax1token(Number(tokenFromBalance).toFixed(6));
+        setMax2token(Number(tokenFromBalance / Number(proportions.proportion)).toFixed(6));
       } else if (validDataToSetMax && proportions.proportion === '1') {
         const max = Math.min(tokenFromBalance, tokenToBalance);
-        setMax1token(max);
-        setMax2token(max);
+        setMax1token(Number(max).toFixed(6));
+        setMax2token(Number(max).toFixed(6));
       }
     }
   }, [successSwapForm, proportions, fromTokenLabel, toTokenLabel]);

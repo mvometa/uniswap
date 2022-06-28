@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { ethers } from 'ethers';
 import makePairs from '../utils/makePairs';
 import getProportion, { ProportionType } from './getPairData';
