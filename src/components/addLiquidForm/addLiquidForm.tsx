@@ -115,7 +115,7 @@ const AddLiquidForm = (): React.ReactElement => {
     dispatch(submitConnectWalletForm(true));
   };
 
-  const handleOnChangeFromTokenValue = async (token1:string) => {
+  const handleOnChangeFromTokenValue = (token1:string) => {
     const tokensAreChoosen = fromTokenLabel !== undefined && toTokenLabel !== undefined;
     const inputAreValid = token1.length > 0 && !Number.isNaN(Number(token1));
     if (inputAreValid && tokensAreChoosen) {
@@ -137,7 +137,7 @@ const AddLiquidForm = (): React.ReactElement => {
     }
   };
 
-  const handlerOnChangeFromTokenLabel = async (token1:TokenLabel) => {
+  const handlerOnChangeFromTokenLabel = (token1:TokenLabel) => {
     if (token1) {
       const tokenFrom = tokens.findIndex((elem:TokenInfo) => elem.name === token1.value);
       setBalance1token(tokens[tokenFrom].balance);
