@@ -2,7 +2,6 @@ import { takeEvery, put, call } from 'redux-saga/effects';
 
 import {
   setError,
-  setErrorMessage,
   setFee,
   setSubmitting,
   setSuccess,
@@ -31,14 +30,12 @@ function* workerConnectWalletSaga() {
   if (result.constructor.name === 'Error') {
     yield put(setError(true));
     yield put(setSuccess(false));
-    yield put(setErrorMessage(result.message));
     yield put(setGlobalErrorDispatch({ globalErrorMessage: result.message }));
   } else {
     yield put(setSuccess(true));
     yield put(setWalletProvider(result.provider));
     yield put(setWalletSigner(result.signer));
     yield put(setError(false));
-    yield put(setErrorMessage(''));
     const fee: Fee | undefined = yield call(async () => getFee(result.provider));
     yield put(setFee(fee));
     const adress: string = yield call(async () => result.signer.getAddress());

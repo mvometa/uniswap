@@ -12,7 +12,6 @@ import {
   SET_WALLET_ADRESS,
   TokenLabel,
   SET_WALLET_TOKEN_LABELS,
-  SET_WALLET_ERROR_MESSAGE,
   SET_WALLET_TOKENS,
   TokenInfo,
   SET_WALLET_FEE,
@@ -41,11 +40,6 @@ const setTokens = (payload: Array<TokenInfo>): AnyAction => ({
 
 const setFee = (payload: FeeType): AnyAction => ({
   type: SET_WALLET_FEE,
-  payload,
-});
-
-const setErrorMessage = (payload: string): AnyAction => ({
-  type: SET_WALLET_ERROR_MESSAGE,
   payload,
 });
 
@@ -89,7 +83,6 @@ export {
   setWalletSigner,
   setWalletAdress,
   setTokenLabels,
-  setErrorMessage,
   setTokens,
   setFee,
 };
