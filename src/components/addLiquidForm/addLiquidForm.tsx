@@ -3,8 +3,8 @@ import { Field, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { OnChange } from 'react-final-form-listeners';
-
 import { useNavigate } from 'react-router-dom';
+
 import { RootState } from '../../store/store';
 import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
@@ -79,18 +79,28 @@ const AddLiquidForm = (): React.ReactElement => {
       const tokenToBalance = tokens[tokenToIndex].balance;
       const validDataToSetMax = tokenFromBalance && tokenToBalance && proportions.proportion;
       if (proportions?.proportion === 'any' && validDataToSetMax) {
-        setMax2token(Number(tokenToBalance).toFixed(6));
-        setMax1token(Number(tokenFromBalance).toFixed(6));
-      } else if (validDataToSetMax && tokenFromBalance > tokenToBalance && proportions.proportion !== '1') {
-        setMax2token(Number(tokenToBalance).toFixed(6));
-        setMax1token(Number(tokenToBalance * Number(proportions.proportion)).toFixed(6));
+        setMax2token(new BigNumber(tokenToBalance).decimalPlaces(5).toString());
+        setMax1token(new BigNumber(tokenFromBalance).decimalPlaces(5).toString());
+      } else if (
+        validDataToSetMax
+        && tokenFromBalance > tokenToBalance
+        && proportions.proportion !== '1'
+        && proportions.proportion
+      ) {
+        setMax2token(new BigNumber(tokenToBalance).decimalPlaces(5).toString());
+        setMax1token(
+          new BigNumber(tokenToBalance)
+            .multipliedBy(proportions.proportion)
+            .decimalPlaces(5)
+            .toString(),
+        );
       } else if (validDataToSetMax && tokenFromBalance < tokenToBalance && proportions.proportion !== '1') {
-        setMax1token(Number(tokenFromBalance).toFixed(6));
-        setMax2token(Number(tokenFromBalance / Number(proportions.proportion)).toFixed(6));
+        setMax1token(new BigNumber(tokenFromBalance).toFixed(6));
+        setMax2token(new BigNumber(tokenFromBalance / Number(proportions.proportion)).toFixed(6));
       } else if (validDataToSetMax && proportions.proportion === '1') {
         const max = Math.min(tokenFromBalance, tokenToBalance);
-        setMax1token(Number(max).toFixed(6));
-        setMax2token(Number(max).toFixed(6));
+        setMax1token(new BigNumber(max).decimalPlaces(5).toString());
+        setMax2token(new BigNumber(max).decimalPlaces(5).toString());
       }
     }
   }, [successSwapForm, proportions, fromTokenLabel, toTokenLabel]);
@@ -121,7 +131,7 @@ const AddLiquidForm = (): React.ReactElement => {
     if (inputAreValid && tokensAreChoosen) {
       setTokenFromValue(token1);
       if (proportions?.proportion !== undefined && proportions.proportion !== 'any') {
-        const resultToken2 = new BigNumber(token1).div(proportions.proportion).toString();
+        const resultToken2 = new BigNumber(token1).div(proportions.proportion).decimalPlaces(5).toString();
         setToTokenValue(resultToken2);
       }
     }
@@ -181,11 +191,11 @@ const AddLiquidForm = (): React.ReactElement => {
     : <Button type="button" text="Подключить кошелек" onPointerDown={handleConnectWallet} />;
 
   const spinner = (submittingWallet || submittingSwapForm || submittingPairs) && <Spinner />;
-  const balance1 = balance1token === undefined ? null : Number(balance1token).toFixed(6);
-  const balance2 = balance2token === undefined ? null : Number(balance2token).toFixed(6);
+  const balance1 = balance1token === undefined ? null : new BigNumber(balance1token).decimalPlaces(5).toString();
+  const balance2 = balance2token === undefined ? null : new BigNumber(balance2token).decimalPlaces(5).toString();
   const prop = proportion === undefined || ''
     ? null
-    : `Пропорция:${new BigNumber(proportion).decimalPlaces(6).toString()}`;
+    : `Пропорция:${new BigNumber(proportion).decimalPlaces(5).toString()}`;
 
   return (
     <div className="swap-form">
