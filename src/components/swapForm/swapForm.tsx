@@ -17,12 +17,12 @@ import { SwapFormData } from './Types';
 import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
 import BigNumber from '../../constants/bigNumberConfig';
-import parseUnits from '../../utils/parseUnits';
 
 import Button from '../button/button';
 import Spinner from '../spinner/spinner';
 import { submitProportions } from '../../store/pairsStore/pairsConnectActions';
 import Offer from '../offer/offer';
+import calculateMinOut from '../../utils/calculateMinOut';
 
 declare global {
   interface Window {
@@ -57,12 +57,6 @@ const SwapForm = ():React.ReactElement => {
     submittingPairs,
   } = { ...useSelector((state:RootState) => state.PairsConnectReducer) };
 
-  useEffect(() => {
-    if (successSwapForm) {
-      navigate(0);
-    }
-  }, [successSwapForm]);
-
   const [balance1token, setBalance1token] = useState< number | undefined >(undefined);
   const [balance2token, setBalance2token] = useState< number | undefined >(undefined);
   const [fromTokenLabel, setToken1Label] = useState< TokenLabel | undefined >(undefined);
@@ -70,6 +64,34 @@ const SwapForm = ():React.ReactElement => {
   const [toTokenValue, setToTokenValue] = useState< string | undefined >(undefined);
   const [fromTokenValue, setTokenFromValue] = useState< string | undefined >(undefined);
   const [slippage, setSlippage] = useState< string >('0');
+
+  useEffect(() => {
+    if (successSwapForm) {
+      navigate(0);
+    }
+    if (
+      proportions !== undefined
+      && proportions.proportion !== 'any'
+      && proportions.proportion
+      && fromTokenValue
+    ) {
+      const slippageFormatted = slippage === '' ? '0' : slippage;
+      const resultToken2 = new BigNumber(fromTokenValue).div(proportions.proportion).toString();
+      const minOut = new BigNumber(
+        calculateMinOut({
+          amountOut: resultToken2,
+          slippage: slippageFormatted,
+          decimals: 18,
+        }),
+      )
+        .decimalPlaces(5)
+        .toString();
+      setToTokenValue(minOut);
+    }
+  }, [successSwapForm, slippage, fromTokenValue]);
+
+  console.log('proportions');
+  console.log(proportions?.proportion);
 
   const handleFormSubmit = (data:SwapFormData) => {
     const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === data.fromTokenLabel.value);
@@ -86,8 +108,6 @@ const SwapForm = ():React.ReactElement => {
       }));
     }
   };
-  console.log(parseUnits('0.092995716883665749006374996952121907316756452486335459237397766865124635170186946916981777817577').toString());
-  console.log(parseUnits('1').toString());
 
   const handleConnectWallet = async () => {
     dispatch(submitConnectWalletForm(true));
@@ -117,7 +137,17 @@ const SwapForm = ():React.ReactElement => {
       setTokenFromValue(token1);
       if (proportions !== undefined && proportions.proportion !== 'any' && proportions.proportion) {
         const resultToken2 = new BigNumber(token1).div(proportions.proportion).toString();
-        setToTokenValue(resultToken2);
+        const slippageResult = slippage;
+        const minOut = new BigNumber(
+          calculateMinOut({
+            amountOut: resultToken2,
+            slippage: slippageResult,
+            decimals: 18,
+          }),
+        )
+          .decimalPlaces(5)
+          .toString();
+        setToTokenValue(minOut);
       }
     }
   };
@@ -242,8 +272,7 @@ const SwapForm = ():React.ReactElement => {
                 {balance2}
               </div>
               <Offer
-                value1={fromTokenValue}
-                value2={toTokenValue}
+                fromTokenValue={fromTokenValue}
                 slippage={slippage}
                 value1Label={fromTokenLabel?.value}
                 value2Label={toTokenLabel?.value}

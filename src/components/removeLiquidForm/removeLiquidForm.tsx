@@ -9,6 +9,7 @@ import { RootState } from '../../store/store';
 import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
 import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
+import BigNumber from '../../constants/bigNumberConfig';
 
 import Button from '../button/button';
 import Spinner from '../spinner/spinner';
@@ -58,12 +59,16 @@ const RemoveLiquidForm = (): React.ReactElement => {
 
   useEffect(() => {
     if (successSwapForm) {
+      setBalance(undefined);
       navigate(0);
     }
-    if (proportions && proportions.userBalance) {
-      setBalance(Number(proportions?.userBalance).toFixed(6));
+    if (fromTokenLabel === undefined && toTokenLabel === undefined) {
+      setBalance(undefined);
     }
-  }, [successSwapForm, proportions]);
+    if (proportions && proportions.userBalance) {
+      setBalance(new BigNumber(proportions.userBalance).decimalPlaces(5).toString());
+    }
+  }, [successSwapForm, proportions, setBalance]);
 
   const handleFormSubmit = (data:RemoveLiquidFormData) => {
     const token1 = tokens.find((elem:TokenInfo) => elem.name === data.token1Label.value);
@@ -74,8 +79,8 @@ const RemoveLiquidForm = (): React.ReactElement => {
         toTokenIndex: token2,
         fromTokenIndex: token1,
         type: 'get',
-        fromTokenValue: 0,
-        toTokenValue: 0,
+        fromTokenValue: '0',
+        toTokenValue: '0',
         provider,
         signer,
       }));

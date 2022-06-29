@@ -15,9 +15,9 @@ export type SwapFormSelectType = {
 };
 
 export type SwapFormData = {
-  fromTokenValue: number;
-  toTokenValue: number;
-  slippage: number;
+  fromTokenValue: string;
+  toTokenValue: string;
+  slippage: string;
   toTokenLabel: SwapFormSelectType;
   fromTokenLabel: SwapFormSelectType;
 };

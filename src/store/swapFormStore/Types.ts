@@ -19,9 +19,9 @@ export type SagaSwapFormType = {
 };
 
 export type SwapFormData = {
-  fromTokenValue: number;
-  toTokenValue: number;
-  slippage?: number;
+  fromTokenValue: string;
+  toTokenValue: string;
+  slippage?: string;
   balanceToRemove?: string;
   toTokenIndex: TokenInfo;
   fromTokenIndex: TokenInfo;

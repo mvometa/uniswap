@@ -7,18 +7,16 @@ import parseNumber from '../../utils/parseNumber';
 import './offer.scss';
 
 type OfferPropsType = {
-  value1: string | undefined;
+  fromTokenValue: string | undefined;
   value1Label: string | undefined;
   value2Label: string | undefined;
-  value2: string | undefined;
   hidden: boolean;
   slippage: string;
 };
 
 const Offer = (props: OfferPropsType) => {
   const {
-    value1,
-    value2,
+    fromTokenValue,
     hidden,
     value1Label,
     value2Label,
@@ -35,24 +33,29 @@ const Offer = (props: OfferPropsType) => {
 
   const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === value1Label);
   const tokenTo = tokens.find((elem:TokenInfo) => elem.name === value2Label);
+  const slippageFormatted = slippage === '' ? '0' : slippage;
+  let toTokenValue;
+  if (fromTokenValue && proportions?.proportion) {
+    toTokenValue = new BigNumber(fromTokenValue).div(proportions.proportion).toString();
+  }
   let comission;
-  if (tokenFrom && tokenTo && proportions && value1 && value2 && proportions && proportions.proportion) {
-    comission = `Комиссия: ${new BigNumber(value1)
-      .minus(new BigNumber(value2))
-      .times(new BigNumber(proportions.proportion))
+  if (tokenFrom && tokenTo && proportions && fromTokenValue && toTokenValue && proportions && proportions.proportion) {
+    comission = `Комиссия: ${new BigNumber(fromTokenValue)
+      .minus(new BigNumber(toTokenValue).times(new BigNumber(proportions.proportion)))
       .abs()
-      .decimalPlaces(6)} ${tokenTo?.name}`;
+      .decimalPlaces(5)
+      .toString()} ${tokenTo?.name}`;
   } else comission = '';
   let equationString;
-  if (value1 !== undefined && value2 !== undefined && value1Label && value2Label) {
-    equationString = `${parseNumber(value1)} ${value1Label} = ${parseNumber(value2)} ${value2Label}`;
+  if (fromTokenValue !== undefined && toTokenValue !== undefined && value1Label && value2Label) {
+    equationString = `${parseNumber(fromTokenValue)} ${value1Label} = ${parseNumber(toTokenValue)} ${value2Label}`;
   } else equationString = '';
   let minOffer;
-  if (slippage && value2 && tokenTo) {
+  if (toTokenValue && tokenTo) {
     minOffer = `Минимально получите: ${new BigNumber(
       calculateMinOut({
-        amountOut: value2,
-        slippage: Number(slippage),
+        amountOut: toTokenValue,
+        slippage: slippageFormatted,
         decimals: 18,
       }),
     )

@@ -23,7 +23,6 @@ const calculateSwapOut = ({
   if (balanceIn.lte(0)) {
     return '0';
   }
-
   const tenBigNumber = new BigNumber(10);
   const amountInBigNumber = new BigNumber(amountIn.toString());
   const balanceInBigNumber = new BigNumber(balanceIn.toString());

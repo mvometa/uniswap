@@ -26,7 +26,7 @@ const validate = (values: SwapFormData): Record<string, string> => {
     errors.toTokenValue = 'Пожалуйста введите числовое значение';
   }
 
-  if (values.slippage && values.slippage > 50) {
+  if (values.slippage && Number(values.slippage) > 50) {
     errors.slippage = 'Проскальзывание не может быть больше 50%';
   }
 

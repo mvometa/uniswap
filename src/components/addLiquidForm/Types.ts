@@ -13,8 +13,8 @@ export type SwapFormSelectType = {
 };
 
 export type SwapFormData = {
-  fromTokenValue: number;
-  toTokenValue: number;
+  fromTokenValue: string;
+  toTokenValue: string;
   toTokenLabel: SwapFormSelectType;
   fromTokenLabel: SwapFormSelectType;
 };
