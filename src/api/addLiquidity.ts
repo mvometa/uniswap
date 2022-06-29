@@ -8,8 +8,8 @@ import { tokens } from '../constants/tokenConstants';
 import isErrorLike from '../utils/isErrorLike';
 
 const addLiquidity = async (
-  token1value:number,
-  token2value:number,
+  token1value:string,
+  token2value:string,
   token1adress:string,
   token2adress:string,
   provider: ethers.providers.Web3Provider | undefined,
@@ -22,7 +22,7 @@ const addLiquidity = async (
         registryABI,
         provider,
       );
-      const pairAdress = await registryContract.getPair(tokens[0], tokens[1]);
+      const pairAdress = await registryContract.getPair(token1adress, token2adress);
       const hasPair = !/^0x0+$/.test(pairAdress);
       if (!hasPair) {
         return new Error('Cannot get pair adress');
@@ -51,8 +51,8 @@ const addLiquidity = async (
       const txRouter = await routerContract.addLiquidity(
         token1adress,
         token2adress,
-        parseUnits(token1value.toString()),
-        parseUnits(token2value.toString()),
+        parseUnits(token1value),
+        parseUnits(token2value),
       );
       await txRouter.wait();
       return undefined;
