@@ -23,7 +23,7 @@ export type SwapFormLiquidProps = {
   type: TypeLiquid;
 };
 
-export type TypeLiquid = 'add' | 'get';
+export type TypeLiquid = 'add' | 'get' | 'swap';
 
 export default FormData;
 export type { FormKey };

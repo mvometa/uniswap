@@ -44,15 +44,11 @@ const swapTokens = async (
       routerABI,
       signer,
     );
-    console.log(routerContract);
     const txRouter = await routerContract.swapIn(tokenFromAdress, tokenToAdress, parseUnits(
       tokenAmountFrom,
     ), parseUnits(tokenAmountTo));
-    console.log(txRouter);
     await txRouter.wait();
   } catch (error) {
-    console.log('catch error');
-    console.log(error);
     if (isErrorLike(error)) {
       return new Error(error.message);
     }
