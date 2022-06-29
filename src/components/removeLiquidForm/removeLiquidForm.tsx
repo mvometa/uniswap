@@ -182,7 +182,7 @@ const RemoveLiquidForm = (): React.ReactElement => {
               className="swap-form-remove__error"
               style={(errorWallet || errorSwapForm) ? { display: 'block' } : { display: 'none' }}
             >
-              Error.
+              Ошибка.
             </span>
             {formButton}
           </form>

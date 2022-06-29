@@ -272,7 +272,7 @@ const AddLiquidForm = (): React.ReactElement => {
               className="swap-form__error"
               style={(errorWallet || errorSwapForm) ? { display: 'block' } : { display: 'none' }}
             >
-              Error.
+              Ошибка.
             </span>
             {formButton}
           </form>

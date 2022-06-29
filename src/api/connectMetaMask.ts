@@ -39,7 +39,7 @@ const connectMetaMask = async ():Promise< Error | EthersProviders > => {
     });
     return { provider, signer };
   } catch (error) {
-    return <globalThis.Error>error;
+    return new Error(String(error));
   }
 };
 
