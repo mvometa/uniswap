@@ -29,9 +29,11 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
     if (!fromTokenIndex.adress || !toTokenIndex.adress) {
       yield put(submitConnectWalletForm(true));
     }
+    yield put(setGlobalErrorDispatch({ globalErrorMessage: '' }));
+    yield put(setSwapFormError(false));
     yield put(setSwapFormSuccess(false));
     yield put(setSwapFormSubmitting(true));
-    yield call(async () => addLiquidity(
+    const result: Error | undefined = yield call(async () => addLiquidity(
       fromTokenValue,
       toTokenValue,
       fromTokenIndex?.adress,
@@ -39,23 +41,42 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
       provider,
       signer,
     ));
+    if (result?.constructor.name === 'Error') {
+      yield put(setSwapFormSuccess(false));
+      yield put(setSwapFormError(true));
+      yield put(setGlobalErrorDispatch({ globalErrorMessage: String(result.message) }));
+    } else {
+      yield put(setSwapFormSuccess(true));
+      yield put(setSwapFormError(false));
+    }
     yield put(setSwapFormSubmitting(false));
   } else if (payload.type === 'get') {
     if (!fromTokenIndex.adress || !toTokenIndex.adress) {
       yield put(submitConnectWalletForm(true));
     }
+    yield put(setGlobalErrorDispatch({ globalErrorMessage: '' }));
+    yield put(setSwapFormError(false));
     yield put(setSwapFormSuccess(false));
     yield put(setSwapFormSubmitting(true));
-    yield call(async () => removeLiquidity(
+    const result: Error | undefined = yield call(async () => removeLiquidity(
       fromTokenIndex?.adress,
       toTokenIndex?.adress,
       balanceToRemove,
       signer,
     ));
-    yield put(setSwapFormSuccess(true));
+    if (result?.constructor.name === 'Error') {
+      yield put(setSwapFormError(true));
+      yield put(setSwapFormSuccess(false));
+      yield put(setGlobalErrorDispatch({ globalErrorMessage: String(result.message) }));
+    } else {
+      yield put(setSwapFormSuccess(true));
+      yield put(setSwapFormError(true));
+    }
     yield put(setSwapFormSubmitting(false));
   } else {
+    yield put(setGlobalErrorDispatch({ globalErrorMessage: '' }));
     yield put(setSwapFormSubmitting(true));
+    yield put(setSwapFormError(false));
     if (payload.provider && payload.signer) {
       const result: Error | undefined = yield call(async () => swapTokens(
         payload.fromTokenIndex?.adress,
@@ -68,6 +89,7 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
       if (result && result.constructor.name === 'Error') {
         yield put(setGlobalErrorDispatch({ globalErrorMessage: String(result.message) }));
         yield put(setSwapFormError(true));
+        yield put(setGlobalErrorDispatch({ globalErrorMessage: String(result.message) }));
       } else {
         yield put(setSwapFormError(false));
         yield put(setSwapFormSuccess(true));
