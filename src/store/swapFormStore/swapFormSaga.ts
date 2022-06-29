@@ -29,7 +29,6 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
     if (!fromTokenIndex.adress || !toTokenIndex.adress) {
       yield put(submitConnectWalletForm(true));
     }
-    yield put(setGlobalErrorDispatch({ globalErrorMessage: '' }));
     yield put(setSwapFormError(false));
     yield put(setSwapFormSuccess(false));
     yield put(setSwapFormSubmitting(true));
@@ -74,7 +73,6 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
     }
     yield put(setSwapFormSubmitting(false));
   } else {
-    yield put(setGlobalErrorDispatch({ globalErrorMessage: '' }));
     yield put(setSwapFormSubmitting(true));
     yield put(setSwapFormError(false));
     if (payload.provider && payload.signer) {
@@ -89,11 +87,10 @@ function* workerSwapFormSaga(data: SagaSwapFormType) {
       if (result && result.constructor.name === 'Error') {
         yield put(setGlobalErrorDispatch({ globalErrorMessage: String(result.message) }));
         yield put(setSwapFormError(true));
-        yield put(setGlobalErrorDispatch({ globalErrorMessage: String(result.message) }));
+        yield put(setSwapFormSuccess(false));
       } else {
         yield put(setSwapFormError(false));
         yield put(setSwapFormSuccess(true));
-        yield put(setGlobalErrorDispatch({ globalErrorMessage: '' }));
       }
     }
     yield put(setSwapFormSubmitting(false));

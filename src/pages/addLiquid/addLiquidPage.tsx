@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
@@ -9,6 +9,7 @@ import { submitConnectWalletForm } from '../../store/walletStore/walletConnectAc
 
 import './addLiquidPage.scss';
 import RemoveLiquidForm from '../../components/removeLiquidForm/removeLiquidForm';
+import { RootState } from '../../store/store';
 
 type LiquidPageProps = {
   type: TypeLiquid;
@@ -16,10 +17,16 @@ type LiquidPageProps = {
 
 const LiquidPage = (props: LiquidPageProps):React.ReactElement => {
   const { type } = props;
+
   const dispatch = useDispatch();
+
   const handlerConnectWallet = () => {
     dispatch(submitConnectWalletForm(true));
   };
+
+  const {
+    globalErrorMessage,
+  } = { ...useSelector((state:RootState) => state.GlobalErrorReducer) };
 
   const form = type === 'add' ? <AddLiquidForm /> : <RemoveLiquidForm />;
 
@@ -27,6 +34,7 @@ const LiquidPage = (props: LiquidPageProps):React.ReactElement => {
     <>
       <Header handlerConnectWallet={handlerConnectWallet} />
       <main className="uniswap">
+        <div className="global-error">{globalErrorMessage}</div>
         {form}
       </main>
       <div id="background-radial-gradient" />

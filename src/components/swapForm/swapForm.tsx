@@ -2,15 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Field, FieldMetaState, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-
 import { OnChange } from 'react-final-form-listeners';
-
 import { useNavigate } from 'react-router-dom';
+
 import downArrow from './down-arrow.svg';
 import './swapForm.scss';
 import validate from './validate';
 
-import Button from '../button/button';
 import { submitConnectWalletForm } from '../../store/walletStore/walletConnectActions';
 import { RootState } from '../../store/store';
 import SelectAdapter from '../selectAdapter/selectAdapter';
@@ -19,11 +17,12 @@ import { SwapFormData } from './Types';
 import { submitSwapForm } from '../../store/swapFormStore/swapFormActions';
 import { TokenInfo, TokenLabel } from '../../store/walletStore/Types';
 import BigNumber from '../../constants/bigNumberConfig';
+import parseUnits from '../../utils/parseUnits';
 
+import Button from '../button/button';
 import Spinner from '../spinner/spinner';
 import { submitProportions } from '../../store/pairsStore/pairsConnectActions';
 import Offer from '../offer/offer';
-import parseUnits from '../../utils/parseUnits';
 
 declare global {
   interface Window {
@@ -60,7 +59,7 @@ const SwapForm = ():React.ReactElement => {
 
   useEffect(() => {
     if (successSwapForm) {
-      navigate('/');
+      navigate(0);
     }
   }, [successSwapForm]);
 
