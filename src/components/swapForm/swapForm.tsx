@@ -90,9 +90,6 @@ const SwapForm = ():React.ReactElement => {
     }
   }, [successSwapForm, slippage, fromTokenValue]);
 
-  console.log('proportions');
-  console.log(proportions?.proportion);
-
   const handleFormSubmit = (data:SwapFormData) => {
     const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === data.fromTokenLabel.value);
     const tokenTo = tokens.find((elem:TokenInfo) => elem.name === data.toTokenLabel.value);
