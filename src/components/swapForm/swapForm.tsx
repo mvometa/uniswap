@@ -85,7 +85,6 @@ const SwapForm = ():React.ReactElement => {
           decimals: 18,
         }),
       )
-        .decimalPlaces(5)
         .toString();
       setToTokenValue(minOut);
     }
@@ -141,6 +140,8 @@ const SwapForm = ():React.ReactElement => {
           }),
         )
           .toString();
+        console.log('minOut');
+        console.log(minOut);
         setToTokenValue(minOut);
       }
     }
