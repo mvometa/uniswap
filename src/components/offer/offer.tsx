@@ -31,21 +31,12 @@ const Offer = (props: OfferPropsType) => {
     proportions,
   } = { ...useSelector((state:RootState) => state.PairsConnectReducer) };
 
-  const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === value1Label);
   const tokenTo = tokens.find((elem:TokenInfo) => elem.name === value2Label);
   const slippageFormatted = slippage === '' ? '0' : slippage;
   let toTokenValue;
   if (fromTokenValue && proportions?.proportion) {
     toTokenValue = new BigNumber(fromTokenValue).div(proportions.proportion).toString();
   }
-  let comission;
-  if (tokenFrom && tokenTo && proportions && fromTokenValue && toTokenValue && proportions && proportions.proportion) {
-    comission = `Комиссия: ${new BigNumber(fromTokenValue)
-      .minus(new BigNumber(toTokenValue).times(new BigNumber(proportions.proportion)))
-      .abs()
-      .decimalPlaces(5)
-      .toString()} ${tokenTo?.name}`;
-  } else comission = '';
   let equationString;
   if (fromTokenValue !== undefined && toTokenValue !== undefined && value1Label && value2Label) {
     equationString = `${parseNumber(fromTokenValue)} ${value1Label} = ${parseNumber(toTokenValue)} ${value2Label}`;
@@ -66,7 +57,6 @@ const Offer = (props: OfferPropsType) => {
   return hidden ? null : (
     <div className="offer">
       <span className="offer__equasion">{equationString}</span>
-      <span className="offer__comission">{comission}</span>
       <span className="offer__min">{minOffer}</span>
     </div>
   );
