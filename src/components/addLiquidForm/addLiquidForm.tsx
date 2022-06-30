@@ -20,6 +20,7 @@ import { ErrorForm, requiredNotEmpty } from '../errorForm/errorForm';
 import './addLiquidForm.scss';
 import validate from './validate';
 import { SwapFormData } from './Types';
+import parseBigNumber from '../../utils/parseBigNumber';
 
 declare global {
   interface Window {
@@ -108,12 +109,12 @@ const AddLiquidForm = (): React.ReactElement => {
   const handleFormSubmit = (data:SwapFormData) => {
     const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === data.fromTokenLabel.value);
     const tokenTo = tokens.find((elem:TokenInfo) => elem.name === data.toTokenLabel.value);
-    if (tokenFrom && tokenTo) {
+    if (tokenFrom && tokenTo && fromTokenValue && toTokenValue) {
       dispatch(submitSwapForm({
         fromTokenIndex: tokenFrom,
         toTokenIndex: tokenTo,
-        toTokenValue: data.toTokenValue,
-        fromTokenValue: data.fromTokenValue,
+        toTokenValue,
+        fromTokenValue,
         provider,
         signer,
         type: 'add',
@@ -131,19 +132,8 @@ const AddLiquidForm = (): React.ReactElement => {
     if (inputAreValid && tokensAreChoosen) {
       setTokenFromValue(token1);
       if (proportions?.proportion !== undefined && proportions.proportion !== 'any') {
-        const resultToken2 = new BigNumber(token1).div(proportions.proportion).decimalPlaces(5).toString();
+        const resultToken2 = new BigNumber(token1).div(proportions.proportion).toString();
         setToTokenValue(resultToken2);
-      }
-    }
-  };
-
-  const handlerOnChangeToTokenValue = async (token2:string) => {
-    const tokensAreChoosen = fromTokenLabel !== undefined && toTokenLabel !== undefined;
-    const inputAreValid = token2.length > 0 && !Number.isNaN(Number(token2));
-    if (inputAreValid && tokensAreChoosen) {
-      if (proportion !== undefined && proportion !== 'any') {
-        const resultToken1 = new BigNumber(token2).multipliedBy(proportion).toString();
-        setTokenFromValue(resultToken1);
       }
     }
   };
@@ -210,7 +200,7 @@ const AddLiquidForm = (): React.ReactElement => {
                   name="fromTokenValue"
                   component="input"
                   type="text"
-                  initialValue={fromTokenValue}
+                  initialValue={parseBigNumber(fromTokenValue)}
                   placeholder="0.0"
                   className="swap-form__input"
                   validate={requiredNotEmpty}
@@ -247,7 +237,7 @@ const AddLiquidForm = (): React.ReactElement => {
                   name="toTokenValue"
                   component="input"
                   type="text"
-                  initialValue={toTokenValue}
+                  initialValue={parseBigNumber(toTokenValue)}
                   placeholder="0.0"
                   className="swap-form__input"
                   validate={requiredNotEmpty}
@@ -264,9 +254,6 @@ const AddLiquidForm = (): React.ReactElement => {
                 <ErrorForm name="toTokenLabel" />
                 <OnChange name="toTokenLabel">
                   {handlerOnChangeToTokenLabel}
-                </OnChange>
-                <OnChange name="toTokenValue">
-                  {handlerOnChangeToTokenValue}
                 </OnChange>
               </div>
               <div className="swap-form__balance">

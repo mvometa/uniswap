@@ -38,7 +38,6 @@ const addLiquidity = async (
         signer,
       );
       const txToken1 = await token1Contract.approve(contracts.router.address, parseUnits(token1value.toString()));
-      await txToken1.wait();
 
       const token2Contract = new ethers.Contract(
         token2adress,
@@ -46,6 +45,8 @@ const addLiquidity = async (
         signer,
       );
       const txToken2 = await token2Contract.approve(contracts.router.address, parseUnits(token2value.toString()));
+
+      await txToken1.wait();
       await txToken2.wait();
 
       const txRouter = await routerContract.addLiquidity(
