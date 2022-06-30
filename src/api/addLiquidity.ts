@@ -8,14 +8,17 @@ import { tokens } from '../constants/tokenConstants';
 import isErrorLike from '../utils/isErrorLike';
 
 const addLiquidity = async (
-  token1value:string,
-  token2value:string,
+  token1value:string | undefined,
+  token2value:string | undefined,
   token1adress:string,
   token2adress:string,
   provider: ethers.providers.Web3Provider | undefined,
   signer: ethers.Signer | undefined,
 ) => {
   try {
+    if (token1value === undefined || token2value === undefined) {
+      return new Error('Tokens amount not defined');
+    }
     if (provider && signer) {
       const registryContract = new ethers.Contract(
         contracts.registry.address,

@@ -23,6 +23,7 @@ import Spinner from '../spinner/spinner';
 import { submitProportions } from '../../store/pairsStore/pairsConnectActions';
 import Offer from '../offer/offer';
 import calculateMinOut from '../../utils/calculateMinOut';
+import parseBigNumber from '../../utils/parseBigNumber';
 
 declare global {
   interface Window {
@@ -97,9 +98,9 @@ const SwapForm = ():React.ReactElement => {
       dispatch(submitSwapForm({
         toTokenIndex: tokenTo,
         fromTokenIndex: tokenFrom,
-        toTokenValue: data.toTokenValue,
-        fromTokenValue: data.fromTokenValue,
-        slippage: data.slippage,
+        toTokenValue,
+        fromTokenValue,
+        slippage,
         provider,
         signer,
       }));
@@ -125,7 +126,11 @@ const SwapForm = ():React.ReactElement => {
     const inputAreValid = token1.length > 0 && !Number.isNaN(Number(token1));
     if (inputAreValid && tokensAreChoosen) {
       setTokenFromValue(token1);
-      if (proportions !== undefined && proportions.proportion !== 'any' && proportions.proportion) {
+      if (
+        proportions !== undefined
+        && proportions.proportion !== 'any'
+        && proportions.proportion
+      ) {
         const resultToken2 = new BigNumber(token1).div(proportions.proportion).toString();
         const slippageResult = slippage;
         const minOut = new BigNumber(
@@ -135,7 +140,6 @@ const SwapForm = ():React.ReactElement => {
             decimals: 18,
           }),
         )
-          .decimalPlaces(5)
           .toString();
         setToTokenValue(minOut);
       }
@@ -237,7 +241,7 @@ const SwapForm = ():React.ReactElement => {
                   name="toTokenValue"
                   component="input"
                   type="text"
-                  initialValue={toTokenValue}
+                  initialValue={parseBigNumber(toTokenValue)}
                   placeholder="0.0"
                   className="swap-form__input"
                   validate={requiredNotEmpty}

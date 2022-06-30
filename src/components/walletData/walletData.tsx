@@ -17,7 +17,7 @@ const WalletData = (props: HeaderProps) => {
   const connectWallet = successWallet
     ? (
       <div className="connect-wallet">
-        Connected.
+        Кошелек подключен.
       </div>
     )
     : <Button text="Подключить кошелек" type="button" onPointerDown={handlerConnectWallet} />;
