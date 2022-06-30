@@ -16,11 +16,11 @@ export type EthersProviders = {
 
 const connectMetaMask = async ():Promise< Error | EthersProviders > => {
   if (window?.ethereum === undefined) {
-    return new Error('Ethereum is undefined, plaese install MetaMask');
+    return new Error('Пожалуйста установите MetaMask');
   }
 
   if (Number(window.ethereum.networkVersion) !== chainIDs['Rinkeby Test Network']) {
-    return new Error("Ethereum network isn't rinkeby");
+    return new Error('Пожалуйста установите тестовую сеть rinkeby');
   }
 
   try {
