@@ -120,13 +120,6 @@ const SwapForm = ():React.ReactElement => {
     && <span className="swap-form__error">{meta.error}</span>
   );
 
-  const handleSelectChangeTokenFrom = (item:TokenLabel) => {
-    if (item) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const index = tokens.findIndex((elem:TokenInfo) => elem.name === item.value);
-    }
-  };
-
   const handleOnChangeFromTokenValue = (token1:string) => {
     const tokensAreChoosen = fromTokenLabel !== undefined && toTokenLabel !== undefined;
     const inputAreValid = token1.length > 0 && !Number.isNaN(Number(token1));
@@ -224,7 +217,6 @@ const SwapForm = ():React.ReactElement => {
                   component={SelectAdapter}
                   options={tokenLabels}
                   validate={requiredNotEmpty}
-                  onSelectCallback={handleSelectChangeTokenFrom}
                 />
                 <ErrorForm name="fromTokenLabel" />
                 <OnChange name="fromTokenLabel">
