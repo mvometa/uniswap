@@ -177,7 +177,7 @@ const AddLiquidForm = (): React.ReactElement => {
   };
 
   const formButton = successWallet
-    ? <Button type="submit" text="Добавить ликвидность" />
+    ? <Button type="submit" text={submittingSwapForm ? 'Идет транзакция' : 'Добавить ликвидность'} />
     : <Button type="button" text="Подключить кошелек" onPointerDown={handleConnectWallet} />;
 
   const spinner = (submittingWallet || submittingSwapForm || submittingPairs) && <Spinner />;

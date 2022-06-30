@@ -111,7 +111,7 @@ const SwapForm = ():React.ReactElement => {
   };
 
   const formButton = successWallet
-    ? <Button type="submit" text="Поменять пару" />
+    ? <Button type="submit" text={submittingSwapForm ? 'Идет транзакция' : 'Поменять пару'} />
     : <Button type="button" text="Подключить кошелек" onPointerDown={handleConnectWallet} />;
 
   const validationBlock = (meta: FieldMetaState<number>) => (

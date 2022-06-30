@@ -131,7 +131,7 @@ const RemoveLiquidForm = (): React.ReactElement => {
   };
 
   const formButton = successWallet
-    ? <Button type="submit" text="Вывести ликвидность" />
+    ? <Button type="submit" text={submittingSwapForm ? 'Идет транзакция' : 'Вывести ликвидность'} />
     : <Button type="button" text="Подключить кошелек" onPointerDown={handleConnectWallet} />;
   const spinner = (submittingWallet || submittingSwapForm || submittingPairs) && <Spinner />;
 
