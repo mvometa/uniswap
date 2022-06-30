@@ -17,9 +17,6 @@ const swapTokens = async (
   tokenAmountFrom:string,
   tokenAmountTo: string,
 ) => {
-  console.log('inside swap tokens');
-  console.log(tokenAmountFrom);
-  console.log(tokenAmountTo);
   try {
     const registryContract = new ethers.Contract(
       contracts.registry.address,
