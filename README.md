@@ -15,7 +15,7 @@ Functional:
 
 ## Demo
 
-[demo](https://vadimm34.beget.tech/)
+[demo](http://vadimm34.beget.tech/)
 
 Useful links:
 
