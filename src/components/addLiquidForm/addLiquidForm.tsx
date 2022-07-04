@@ -40,7 +40,7 @@ const AddLiquidForm = (): React.ReactElement => {
   const [balance2token, setBalance2token] = useState< number | undefined >(undefined);
   const [max1token, setMax1token] = useState< string | undefined >(undefined);
   const [max2token, setMax2token] = useState< string | undefined >(undefined);
-  const [proportion, setProportion] = useState< string | undefined >(undefined);
+  const [proportionStateValue, setProportion] = useState< string | undefined >(undefined);
 
   const {
     successWallet,
@@ -183,9 +183,9 @@ const AddLiquidForm = (): React.ReactElement => {
   const spinner = (submittingWallet || submittingSwapForm || submittingPairs) && <Spinner />;
   const balance1 = balance1token === undefined ? null : new BigNumber(balance1token).decimalPlaces(5).toString();
   const balance2 = balance2token === undefined ? null : new BigNumber(balance2token).decimalPlaces(5).toString();
-  const prop = proportion === undefined || ''
+  const prop = proportionStateValue === undefined || ''
     ? null
-    : `Пропорция:${new BigNumber(proportion).decimalPlaces(5).toString()}`;
+    : `Пропорция:${new BigNumber(proportionStateValue).decimalPlaces(5).toString()}`;
 
   return (
     <div className="swap-form">
