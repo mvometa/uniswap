@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 
 import chainIDs from '../constants/chainIDs';
+import isErrorLike from '../utils/isErrorLike';
 
 declare global {
   interface Window {
@@ -12,6 +13,12 @@ declare global {
 export type EthersProviders = {
   provider: ethers.providers.Web3Provider;
   signer: ethers.providers.JsonRpcSigner;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type MetaMaskErrorType = {
+  code: number;
+  message: string;
 };
 
 const connectMetaMask = async ():Promise< Error | EthersProviders > => {
@@ -39,7 +46,10 @@ const connectMetaMask = async ():Promise< Error | EthersProviders > => {
     });
     return { provider, signer };
   } catch (error) {
-    return new Error(String(error));
+    if (isErrorLike(error)) {
+      return new Error(error.message);
+    }
+    return new Error('MetaMask error');
   }
 };
 
