@@ -60,7 +60,7 @@ const AddLiquidForm = (): React.ReactElement => {
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
 
   const {
-    proportions,
+    proportion,
     submittingPairs,
   } = { ...useSelector((state:RootState) => state.PairsConnectReducer) };
 
@@ -68,43 +68,43 @@ const AddLiquidForm = (): React.ReactElement => {
     if (successSwapForm) {
       navigate(0);
     }
-    if (proportions !== undefined && proportions.proportion !== 'any' && fromTokenLabel && toTokenLabel) {
-      setProportion((proportions.proportion));
-    } else if (proportions !== undefined && proportions.proportion === 'any') {
+    if (proportion !== undefined && proportion.value !== 'any' && fromTokenLabel && toTokenLabel) {
+      setProportion((proportion.value));
+    } else if (proportion !== undefined && proportion.value === 'any') {
       setProportion('любая');
     }
-    if (fromTokenLabel && toTokenLabel && proportions) {
+    if (fromTokenLabel && toTokenLabel && proportion) {
       const tokenFromIndex = tokens.findIndex((elem:TokenInfo) => elem.name === fromTokenLabel?.value);
       const tokenToIndex = tokens.findIndex((elem:TokenInfo) => elem.name === toTokenLabel?.value);
       const tokenFromBalance = tokens[tokenFromIndex].balance;
       const tokenToBalance = tokens[tokenToIndex].balance;
-      const validDataToSetMax = tokenFromBalance && tokenToBalance && proportions.proportion;
-      if (proportions?.proportion === 'any' && validDataToSetMax) {
+      const validDataToSetMax = tokenFromBalance && tokenToBalance && proportion.value;
+      if (proportion?.value === 'any' && validDataToSetMax) {
         setMax2token(new BigNumber(tokenToBalance).decimalPlaces(5).toString());
         setMax1token(new BigNumber(tokenFromBalance).decimalPlaces(5).toString());
       } else if (
         validDataToSetMax
         && tokenFromBalance > tokenToBalance
-        && proportions.proportion !== '1'
-        && proportions.proportion
+        && proportion.value !== '1'
+        && proportion.value
       ) {
         setMax2token(new BigNumber(tokenToBalance).decimalPlaces(5).toString());
         setMax1token(
           new BigNumber(tokenToBalance)
-            .multipliedBy(proportions.proportion)
+            .multipliedBy(proportion.value)
             .decimalPlaces(5)
             .toString(),
         );
-      } else if (validDataToSetMax && tokenFromBalance < tokenToBalance && proportions.proportion !== '1') {
+      } else if (validDataToSetMax && tokenFromBalance < tokenToBalance && proportion.value !== '1') {
         setMax1token(new BigNumber(tokenFromBalance).toFixed(6));
-        setMax2token(new BigNumber(tokenFromBalance / Number(proportions.proportion)).toFixed(6));
-      } else if (validDataToSetMax && proportions.proportion === '1') {
+        setMax2token(new BigNumber(tokenFromBalance / Number(proportion.value)).toFixed(6));
+      } else if (validDataToSetMax && proportion.value === '1') {
         const max = Math.min(tokenFromBalance, tokenToBalance);
         setMax1token(new BigNumber(max).decimalPlaces(5).toString());
         setMax2token(new BigNumber(max).decimalPlaces(5).toString());
       }
     }
-  }, [successSwapForm, proportions, fromTokenLabel, toTokenLabel]);
+  }, [successSwapForm, proportion, fromTokenLabel, toTokenLabel]);
 
   const handleFormSubmit = (data:SwapFormData) => {
     const tokenFrom = tokens.find((elem:TokenInfo) => elem.name === data.fromTokenLabel.value);
@@ -131,8 +131,8 @@ const AddLiquidForm = (): React.ReactElement => {
     const inputAreValid = token1.length > 0 && !Number.isNaN(Number(token1));
     if (inputAreValid && tokensAreChoosen) {
       setTokenFromValue(token1);
-      if (proportions?.proportion !== undefined && proportions.proportion !== 'any') {
-        const resultToken2 = new BigNumber(token1).div(proportions.proportion).toString();
+      if (proportion?.value !== undefined && proportion.value !== 'any') {
+        const resultToken2 = new BigNumber(token1).div(proportion.value).toString();
         setToTokenValue(resultToken2);
       }
     }

@@ -6,7 +6,7 @@ import PairsConnectionState, {
 } from './Types';
 
 const initialState: PairsConnectionState = {
-  proportions: undefined,
+  proportion: undefined,
   submittingPairs: false,
   errorPairs: false,
   successPairs: false,
@@ -26,12 +26,12 @@ const PairsConnectReducer = (
     case SUBMIT_PROPORTIONS:
       return {
         ...state,
-        proportions: action.payload,
+        proportion: action.payload,
       };
     case SET_WALLET_PROPORTIONS:
       return {
         ...state,
-        proportions: action.payload,
+        proportion: action.payload,
       };
     default:
       return state;

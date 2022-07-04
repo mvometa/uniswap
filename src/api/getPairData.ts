@@ -7,7 +7,7 @@ import BigNumber from '../constants/bigNumberConfig';
 import contracts from '../constants/contractConstants';
 
 export type ProportionType = {
-  proportion: string | undefined | 'any';
+  value: string | undefined | 'any';
   token1Balance:string;
   token2Balance:string;
   pairAdress: string;
@@ -31,7 +31,7 @@ const getProportion = async (
     const hasPair = !/^0x0+$/.test(pairAdress);
     if (!hasPair) {
       return {
-        proportion: undefined,
+        value: undefined,
         token1Balance: '',
         token2Balance: '',
         pairAdress: '',
@@ -66,7 +66,7 @@ const getProportion = async (
     if (isProportionUndefined) {
       return {
         pairAdress,
-        proportion: 'any',
+        value: 'any',
         token1Balance,
         token2Balance,
         userBalance: '',
@@ -78,7 +78,7 @@ const getProportion = async (
     const proportion = new BigNumber(formattedBalanceOfToken1)
       .div(formattedBalanceOfToken2).toString();
     return {
-      proportion,
+      value: proportion,
       token1Balance: formattedBalanceOfToken1,
       token2Balance: formattedBalanceOfToken2,
       pairAdress,
@@ -86,7 +86,7 @@ const getProportion = async (
     };
   }
   return {
-    proportion: undefined,
+    value: undefined,
     token1Balance: '',
     token2Balance: '',
     pairAdress: '',

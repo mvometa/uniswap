@@ -54,7 +54,7 @@ const SwapForm = ():React.ReactElement => {
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
 
   const {
-    proportions,
+    proportion,
     submittingPairs,
   } = { ...useSelector((state:RootState) => state.PairsConnectReducer) };
 
@@ -71,13 +71,13 @@ const SwapForm = ():React.ReactElement => {
       navigate(0);
     }
     if (
-      proportions !== undefined
-      && proportions.proportion !== 'any'
-      && proportions.proportion
+      proportion !== undefined
+      && proportion.value !== 'any'
+      && proportion.value
       && fromTokenValue
     ) {
       const slippageFormatted = slippage === '' ? '0' : slippage;
-      const resultToken2 = new BigNumber(fromTokenValue).div(proportions.proportion).toString();
+      const resultToken2 = new BigNumber(fromTokenValue).div(proportion.value).toString();
       const minOut = new BigNumber(
         calculateMinOut({
           amountOut: resultToken2,
@@ -126,11 +126,11 @@ const SwapForm = ():React.ReactElement => {
     if (inputAreValid && tokensAreChoosen) {
       setTokenFromValue(token1);
       if (
-        proportions !== undefined
-        && proportions.proportion !== 'any'
-        && proportions.proportion
+        proportion !== undefined
+        && proportion.value !== 'any'
+        && proportion.value
       ) {
-        const resultToken2 = new BigNumber(token1).div(proportions.proportion).toString();
+        const resultToken2 = new BigNumber(token1).div(proportion.value).toString();
         const slippageResult = slippage;
         const minOut = new BigNumber(
           calculateMinOut({
@@ -140,8 +140,6 @@ const SwapForm = ():React.ReactElement => {
           }),
         )
           .toString();
-        console.log('minOut');
-        console.log(minOut);
         setToTokenValue(minOut);
       }
     }
@@ -270,7 +268,7 @@ const SwapForm = ():React.ReactElement => {
                 slippage={slippage}
                 value1Label={fromTokenLabel?.value}
                 value2Label={toTokenLabel?.value}
-                hidden={proportions?.proportion === undefined}
+                hidden={proportion?.value === undefined}
               />
             </div>
             <Field name="slippage">

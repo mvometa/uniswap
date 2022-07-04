@@ -28,14 +28,14 @@ const Offer = (props: OfferPropsType) => {
   } = { ...useSelector((state:RootState) => state.WalletConnectReducer) };
 
   const {
-    proportions,
+    proportion,
   } = { ...useSelector((state:RootState) => state.PairsConnectReducer) };
 
   const tokenTo = tokens.find((elem:TokenInfo) => elem.name === value2Label);
   const slippageFormatted = slippage === '' ? '0' : slippage;
   let toTokenValue;
-  if (fromTokenValue && proportions?.proportion) {
-    toTokenValue = new BigNumber(fromTokenValue).div(proportions.proportion).toString();
+  if (fromTokenValue && proportion?.value) {
+    toTokenValue = new BigNumber(fromTokenValue).div(proportion.value).toString();
   }
   let equationString;
   if (fromTokenValue !== undefined && toTokenValue !== undefined && value1Label && value2Label) {

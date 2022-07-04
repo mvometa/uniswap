@@ -53,7 +53,7 @@ const RemoveLiquidForm = (): React.ReactElement => {
   } = { ...useSelector((state:RootState) => state.SwapFormReducer) };
 
   const {
-    proportions,
+    proportion,
     submittingPairs,
   } = { ...useSelector((state:RootState) => state.PairsConnectReducer) };
 
@@ -65,10 +65,10 @@ const RemoveLiquidForm = (): React.ReactElement => {
     if (fromTokenLabel === undefined && toTokenLabel === undefined) {
       setBalance(undefined);
     }
-    if (proportions && proportions.userBalance) {
-      setBalance(new BigNumber(proportions.userBalance).decimalPlaces(5).toString());
+    if (proportion && proportion.userBalance) {
+      setBalance(new BigNumber(proportion.userBalance).decimalPlaces(5).toString());
     }
-  }, [successSwapForm, proportions, setBalance]);
+  }, [successSwapForm, proportion, setBalance]);
 
   const handleFormSubmit = (data:RemoveLiquidFormData) => {
     const token1 = tokens.find((elem:TokenInfo) => elem.name === data.token1Label.value);
@@ -122,8 +122,8 @@ const RemoveLiquidForm = (): React.ReactElement => {
           provider,
           signer,
         };
-        if (proportions) {
-          setBalance(Number(proportions?.userBalance).toFixed(6));
+        if (proportion) {
+          setBalance(Number(proportion?.userBalance).toFixed(6));
         }
         dispatch(submitProportions(dataToSubmit));
       }

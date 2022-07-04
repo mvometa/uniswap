@@ -9,7 +9,7 @@ type PairsConnectionState = {
   submittingPairs: boolean;
   errorPairs: boolean;
   successPairs:boolean;
-  proportions: ProportionType | undefined;
+  proportion: ProportionType | undefined;
 };
 
 export type ProportionsFormType = {
